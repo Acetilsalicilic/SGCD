@@ -1,1 +1,1 @@
-# SGCD-App
+# Sistema de Gestion de Consultas Dentales
