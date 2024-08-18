@@ -1,1 +1,1 @@
-# Sistema de Gestion de Consultas Dentales
+# Sistema de Gestion de Consultas Dentales (SGCD)
