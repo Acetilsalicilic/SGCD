@@ -4,6 +4,10 @@
  */
 package interfaces;
 
+import Records.Cita;
+import Records.Lugar;
+import Records.Medico;
+import Records.Paciente;
 import Records.Sucursal;
 
 /**
@@ -11,5 +15,9 @@ import Records.Sucursal;
  * @author W10
  */
 public interface DAO {
-    public Sucursal getSucursal(String nombre);
+    public Sucursal getSucursal(String ID);
+    public Medico getMedico(String ID);
+    public Paciente getPaciente(String ID);
+    public Lugar getLugar(String ID);
+    public Cita getCita(String ID);
 }

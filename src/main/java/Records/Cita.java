@@ -4,10 +4,12 @@
  */
 package Records;
 
+import java.time.LocalDateTime;
+
 /**
  *
  * @author W10
  */
-public record Sucursal(String ID, String nombre, Lugar lugar) {
+public record Cita(String ID, LocalDateTime fecha, Paciente paciente, Medico medico, Sucursal sucursal) {
 
 }

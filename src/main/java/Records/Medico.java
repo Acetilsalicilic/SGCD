@@ -8,6 +8,6 @@ package Records;
  *
  * @author W10
  */
-public record Sucursal(String ID, String nombre, Lugar lugar) {
+public record Medico(String ID, String nombre, String especialidad, Sucursal sucursal) {
 
 }
