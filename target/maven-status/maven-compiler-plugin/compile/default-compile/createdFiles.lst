@@ -1,2 +1,12 @@
-com\sgcd\sgcd\resources\JakartaEE10Resource.class
+Records\Sucursal.class
 com\sgcd\sgcd\JakartaRestConfiguration.class
+Records\Lugar.class
+servlets\MainServlet.class
+interfaces\DAO.class
+Records\Medico.class
+com\sgcd\sgcd\resources\JakartaEE10Resource.class
+Records\Cita.class
+servlets\GetSucursalServlet.class
+DAO\ProxyDAO.class
+Records\Paciente.class
+servlets\APIServlet.class
