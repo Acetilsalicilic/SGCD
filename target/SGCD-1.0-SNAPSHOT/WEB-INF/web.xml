@@ -12,10 +12,8 @@
         <servlet-name>GetSucursalServlet</servlet-name>
         <servlet-class>servlets.GetSucursalServlet</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>MainServlet</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
+
+<!--
     <servlet-mapping>
         <servlet-name>APIServlet</servlet-name>
         <url-pattern>/api</url-pattern>
@@ -24,6 +22,7 @@
         <servlet-name>GetSucursalServlet</servlet-name>
         <url-pattern>/api/sucursal</url-pattern>
     </servlet-mapping>
+        -->
     <session-config>
         <session-timeout>
             30

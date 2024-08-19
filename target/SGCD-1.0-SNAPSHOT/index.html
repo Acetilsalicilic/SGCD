@@ -3,8 +3,30 @@
     <head>
         <title>Start Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script>
+            const getSucursal = () => {
+                const $sucursal_p = document.getElementById('sucursal-p')
+                const $sucursal_b = document.getElementById('get-sucursal')
+                const $id_input = document.getElementById('id-input')
+                
+                $sucursal_b.addEventListener('click', () => {
+                    const id = $id_input.value
+                    fetch(`/api/sucursal?id=${id}`).then(response => response.text()).then(json => {
+                        $sucursal_p.innerText = json
+                        console.log(json)
+                    })
+                    console.log('fetched')
+                })
+            }
+        </script>
     </head>
     <body>
         <h1>Hello World!</h1>
+        <input type="text" id="id-input">
+        <input type="button" value="Obtener sucursal placeholder" name="get-sucursal" id="get-sucursal"/>
+        <p id="sucursal-p">text</p>
+        <script>
+            getSucursal()
+        </script>
     </body>
 </html>
