@@ -2,11 +2,11 @@
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <servlet>
         <servlet-name>APIServlet</servlet-name>
-        <servlet-class>servlets.APIServlet</servlet-class>
+        <servlet-class>apiServlets.APIServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>GetSucursalServlet</servlet-name>
-        <servlet-class>servlets.SucursalServlet</servlet-class>
+        <servlet-class>apiServlets.SucursalServlet</servlet-class>
     </servlet>
     <!--
     <servlet-mapping>
