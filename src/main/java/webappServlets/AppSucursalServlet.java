@@ -40,7 +40,7 @@ public class AppSucursalServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher("/PostSucursal.jsp").forward(request, response);
     }
 
     /**

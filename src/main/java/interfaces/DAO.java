@@ -20,4 +20,6 @@ public interface DAO {
     public Paciente getPaciente(String ID);
     public Lugar getLugar(String ID);
     public Cita getCita(String ID);
+    
+    public void addSucursal(Sucursal sucursal);
 }

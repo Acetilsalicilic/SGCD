@@ -16,14 +16,18 @@ import java.util.ArrayList;
  *
  * @author W10
  */
-public class ProxyDAO implements DAO {
-
-    @Override
-    public Sucursal getSucursal(String ID) {
-        ArrayList<Sucursal> sucList = new ArrayList<>();
+public final class ProxyDAO implements DAO {
+    private ArrayList<Sucursal> sucList = new ArrayList<>();
+    private static ProxyDAO instance = new ProxyDAO();
+    
+    {
         sucList.add(new Sucursal("1", "primero", new Lugar("id", "direccion", "ciudad")));
         sucList.add(new Sucursal("2", "segundo", new Lugar("id", "direccion", "ciudad")));
         sucList.add(new Sucursal("3", "tercero", new Lugar("id", "direccion", "ciudad")));
+    }
+
+    @Override
+    public Sucursal getSucursal(String ID) {
         
         for (var sucursal: sucList) {
             if (sucursal.ID().equals(ID)) return sucursal;
@@ -52,4 +56,12 @@ public class ProxyDAO implements DAO {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
+    @Override
+    public void addSucursal(Sucursal sucursal) {
+        sucList.add(sucursal);
+    }
+    
+    public static ProxyDAO getInstance() {
+        return instance;
+    }
 }
