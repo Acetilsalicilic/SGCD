@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * @author W10
  */
 @WebServlet("/api/sucursal")
-public class GetSucursalServlet extends HttpServlet {
+public class SucursalServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
