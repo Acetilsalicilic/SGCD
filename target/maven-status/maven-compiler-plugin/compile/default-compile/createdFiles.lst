@@ -4,9 +4,11 @@ com\sgcd\sgcd\JakartaRestConfiguration.class
 Records\Lugar.class
 apiServlets\APIServlet.class
 webappServlets\AppSucursalServlet.class
+apiServlets\SetConnection.class
 interfaces\DAO.class
 Records\Medico.class
 com\sgcd\sgcd\resources\JakartaEE10Resource.class
 Records\Cita.class
 DAO\ProxyDAO.class
 Records\Paciente.class
+nativeDB\MySQLConnection.class

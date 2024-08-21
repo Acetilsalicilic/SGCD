@@ -39,6 +39,7 @@
     <body>
         <h1>Crear sucursal</h1>
         <div>
+            <a href="/">Volver</a>
             <label for="id-input">ID</label>
             <input type="text" id="id-input" name="id">
             
