@@ -4,6 +4,7 @@
  */
 package apiServlets;
 
+import DAO.JdbcDao;
 import DAO.ProxyDAO;
 import Records.Sucursal;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,7 +52,9 @@ public class SucursalServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            GeneralDAO pxdao = ProxyDAO.getInstance();
+            //GeneralDAO pxdao = ProxyDAO.getInstance();
+            JdbcDao.init("jdbc:mysql://localhost:3306/jdbcdb", "root", "pass");
+            GeneralDAO pxdao = JdbcDao.instance();
             var sc = pxdao.getSucursal(ID);
             var json = new ObjectMapper().writeValueAsString(sc);
             System.out.println(json);
