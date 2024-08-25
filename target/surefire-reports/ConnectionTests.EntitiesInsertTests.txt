@@ -1,4 +1,16 @@
 -------------------------------------------------------------------------------
 Test set: ConnectionTests.EntitiesInsertTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.004 s -- in ConnectionTests.EntitiesInsertTests
+Tests run: 2, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 1.734 s <<< FAILURE! -- in ConnectionTests.EntitiesInsertTests
+ConnectionTests.EntitiesInsertTests.insertLugar -- Time elapsed: 0.742 s <<< ERROR!
+java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '1' for key 'lugares.PRIMARY'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:109)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.StatementImpl.executeUpdateInternal(StatementImpl.java:1537)
+	at com.mysql.cj.jdbc.StatementImpl.executeLargeUpdate(StatementImpl.java:2384)
+	at com.mysql.cj.jdbc.StatementImpl.executeUpdate(StatementImpl.java:1410)
+	at ConnectionTests.EntitiesInsertTests.insertLugar(EntitiesInsertTests.java:59)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+

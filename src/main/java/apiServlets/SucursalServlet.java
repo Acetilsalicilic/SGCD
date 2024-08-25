@@ -7,7 +7,6 @@ package apiServlets;
 import DAO.ProxyDAO;
 import Records.Sucursal;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import interfaces.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import interfaces.GeneralDAO;
 
 
 /**
@@ -51,7 +51,7 @@ public class SucursalServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            DAO pxdao = ProxyDAO.getInstance();
+            GeneralDAO pxdao = ProxyDAO.getInstance();
             var sc = pxdao.getSucursal(ID);
             var json = new ObjectMapper().writeValueAsString(sc);
             System.out.println(json);

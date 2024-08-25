@@ -9,14 +9,14 @@ import Records.Lugar;
 import Records.Medico;
 import Records.Paciente;
 import Records.Sucursal;
-import interfaces.DAO;
 import java.util.ArrayList;
+import interfaces.GeneralDAO;
 
 /**
  *
  * @author W10
  */
-public final class ProxyDAO implements DAO {
+public final class ProxyDAO implements GeneralDAO {
     private ArrayList<Sucursal> sucList = new ArrayList<>();
     private static ProxyDAO instance = new ProxyDAO();
     

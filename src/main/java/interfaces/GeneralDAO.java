@@ -14,7 +14,7 @@ import Records.Sucursal;
  *
  * @author W10
  */
-public interface DAO {
+public interface GeneralDAO {
     public Sucursal getSucursal(String ID);
     public Medico getMedico(String ID);
     public Paciente getPaciente(String ID);

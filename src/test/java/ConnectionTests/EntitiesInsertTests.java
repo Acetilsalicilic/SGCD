@@ -58,4 +58,12 @@ public class EntitiesInsertTests {
         
         var rs = stmt.executeUpdate(query);
     }
+    
+    @Test
+    public void insertSucursal() throws SQLException {
+        var st = cn.createStatement();
+        
+        String query = "INSERT INTO sucursales VALUES ('3', '2', 'TERCERA SUCURSAL')";
+        var rs = st.executeUpdate(query);
+    }
 }
