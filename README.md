@@ -1,4 +1,4 @@
 # Sistema de Gestion de Consultas Dentales (SGCD)
-## Ivan prototype branch
+## MAIN
 
-Esta rama tiene prototipos del sistema creados por Ivan.
+Esta rama tiene la construccion oficial del sistema SGCD.
