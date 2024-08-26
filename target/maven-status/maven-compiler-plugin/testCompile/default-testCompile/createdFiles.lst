@@ -1,3 +1,4 @@
-ConnectionTests\EntitiesInsertTests.class
 ConnectionTests\ConnectionTests.class
+ConnectionTests\EntitiesInsertTests.class
+JdbcDaoTests\GetTests.class
 ConnectionTests\EntitiesSelectTests.class

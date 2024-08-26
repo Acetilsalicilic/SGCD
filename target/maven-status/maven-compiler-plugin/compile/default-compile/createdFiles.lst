@@ -1,14 +1,12 @@
 Records\Sucursal.class
 apiServlets\SucursalServlet.class
-com\sgcd\sgcd\JakartaRestConfiguration.class
 Records\Lugar.class
 apiServlets\APIServlet.class
 webappServlets\AppSucursalServlet.class
 interfaces\GeneralDAO.class
-apiServlets\SetConnection.class
+interfaces\SQLQuery.class
 DAO\JdbcDao.class
 Records\Medico.class
-com\sgcd\sgcd\resources\JakartaEE10Resource.class
 Records\Cita.class
 DAO\ProxyDAO.class
 Records\Paciente.class
