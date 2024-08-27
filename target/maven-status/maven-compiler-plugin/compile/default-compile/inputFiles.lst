@@ -1,3 +1,4 @@
+C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\interfaces\SQLPreparedUpdate.java
 C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\Records\Lugar.java
 C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\nativeDB\MySQLConnection.java
 C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\DAO\JdbcDao.java
@@ -9,5 +10,6 @@ C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\interfaces\GeneralDAO
 C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\apiServlets\SucursalServlet.java
 C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\apiServlets\APIServlet.java
 C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\Records\Medico.java
+C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\interfaces\SQLUpdate.java
 C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\DAO\ProxyDAO.java
 C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\interfaces\SQLQuery.java

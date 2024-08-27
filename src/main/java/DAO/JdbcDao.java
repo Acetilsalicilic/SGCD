@@ -10,7 +10,9 @@ import Records.Medico;
 import Records.Paciente;
 import Records.Sucursal;
 import interfaces.GeneralDAO;
+import interfaces.SQLPreparedUpdate;
 import interfaces.SQLQuery;
+import interfaces.SQLUpdate;
 import java.sql.Connection;
 import java.sql.SQLException;
 import nativeDB.MySQLConnection;
@@ -47,7 +49,7 @@ public class JdbcDao implements GeneralDAO {
     }
     
     //----------------------------------ACTUAL DATA ACCESS LOGIC---------------
-    private Object inStatement(SQLQuery query) {
+    private Object inStatementQuery(SQLQuery query) {
         try (var st = cn.createStatement()) {
             return query.doQuery(st);
         } catch (SQLException e) {
@@ -55,11 +57,29 @@ public class JdbcDao implements GeneralDAO {
             return null;
         } 
     }
+    
+    private void inStatementUpdate(SQLUpdate update) {
+        try (var st = cn.createStatement()) {
+            update.doUpdate(st);
+        } catch (SQLException e) {
+            System.out.println("ERROR: Error while trying to update:" + e);
+        }
+    }
+    
+    private boolean inPreparedUpdate(SQLPreparedUpdate update) {
+        try {
+            update.doUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("ERROR: Error while trying to update:" + e);
+            return false;
+        }
+    }
 
     @Override
     public Sucursal getSucursal(String ID) {
-        return (Sucursal) inStatement((st) -> {
-            String query = "SELECT sucursales.id AS suc_id, sucursales.nombre, lugares.id AS lug_id, lugares.ciudad, lugares.direccion FROM sucursales INNER JOIN lugares ON sucursales.lugar_id=lugares.id WHERE sucursales.id="+ID+";";
+        return (Sucursal) inStatementQuery((st) -> {
+            String query = "SELECT sucursales.id AS suc_id, sucursales.nombre, lugares.id AS lug_id, lugares.ciudad, lugares.direccion FROM sucursales INNER JOIN lugares ON sucursales.lugar_id=lugares.id WHERE sucursales.id='"+ID+"';";
             var rs = st.executeQuery(query);
             
             rs.next();
@@ -78,7 +98,7 @@ public class JdbcDao implements GeneralDAO {
 
     @Override
     public Medico getMedico(String ID) {
-        return (Medico) inStatement((st) -> {
+        return (Medico) inStatementQuery((st) -> {
             var query = "select \n" +
                 "	medicos.id as med_id, \n" +
                 "	medicos.nombre as med_nom, \n" +
@@ -93,7 +113,7 @@ public class JdbcDao implements GeneralDAO {
                 "	sucursales on sucursales.id = medicos.id_sucursal\n" +
                 "inner join\n" +
                 "	lugares on sucursales.lugar_id = lugares.id\n" +
-                "where medicos.id=" + ID + ";";
+                "where medicos.id='" + ID + "';";
             
             var rs = st.executeQuery(query);
             rs.next();
@@ -117,13 +137,44 @@ public class JdbcDao implements GeneralDAO {
 
     @Override
     public Paciente getPaciente(String ID) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return (Paciente) inStatementQuery((st) -> {
+            var rs = st.executeQuery("select\n" +
+                "	pacientes.id as pac_id,\n" +
+                "	pacientes.nombre as pac_nom,\n" +
+                "	sucursales.id as suc_id,\n" +
+                "	sucursales.nombre as suc_nom,\n" +
+                "	lugares.id as lug_id,\n" +
+                "	lugares.ciudad,\n" +
+                "	lugares.direccion\n" +
+                "from pacientes\n" +
+                "inner join\n" +
+                "	sucursales on sucursales.id = pacientes.id_sucursal\n" +
+                "inner join \n" +
+                "	lugares on lugares.id = sucursales.lugar_id\n" +
+                "where pacientes.id = '" + ID + "';");
+            
+            rs.next();
+            
+            return new Paciente(
+                    rs.getString("pac_id"),
+                    rs.getString("pac_nom"),
+                    new Sucursal(
+                            rs.getString("suc_id"),
+                            rs.getString("suc_nom"),
+                            new Lugar(
+                                    rs.getString("lug_id"),
+                                    rs.getString("direccion"),
+                                    rs.getString("ciudad")
+                            )
+                    )
+            );
+        });
     }
 
     @Override
     public Lugar getLugar(String ID) {
-        return (Lugar) inStatement((st) -> {
-            String query = "SELECT * FROM lugares WHERE id="+ID+";";
+        return (Lugar) inStatementQuery((st) -> {
+            String query = "SELECT * FROM lugares WHERE id='"+ID+"';";
             var rs = st.executeQuery(query);
             
             rs.next();
@@ -142,11 +193,23 @@ public class JdbcDao implements GeneralDAO {
 
     @Override
     public Cita getCita(String ID) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return (Cita) inStatementQuery((st) -> {
+            var rs = st.executeQuery(""); //TODO: HACER EL FAKIN SQL ///////////////////////////
+            return null;
+        });
     }
 
     @Override
-    public void addSucursal(Sucursal sucursal) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean addSucursal(Sucursal sucursal) {
+        return inPreparedUpdate(() -> {
+            var stmt = cn.prepareStatement("INSERT INTO sucursales VALUES (?, ?, ?)");
+            
+            stmt.setString(1, sucursal.ID());
+            stmt.setString(2, sucursal.lugar().id());
+            stmt.setString(3, sucursal.nombre());
+            
+            stmt.executeUpdate();
+            stmt.close();
+        });
     }
 }

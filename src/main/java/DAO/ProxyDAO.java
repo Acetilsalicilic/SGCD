@@ -57,8 +57,9 @@ public final class ProxyDAO implements GeneralDAO {
     }
     
     @Override
-    public void addSucursal(Sucursal sucursal) {
+    public boolean addSucursal(Sucursal sucursal) {
         sucList.add(sucursal);
+        return true;
     }
     
     public static ProxyDAO getInstance() {

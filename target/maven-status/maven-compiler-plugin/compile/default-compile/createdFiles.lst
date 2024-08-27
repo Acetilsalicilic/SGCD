@@ -4,8 +4,10 @@ Records\Lugar.class
 apiServlets\APIServlet.class
 webappServlets\AppSucursalServlet.class
 interfaces\GeneralDAO.class
+interfaces\SQLPreparedUpdate.class
 interfaces\SQLQuery.class
 DAO\JdbcDao.class
+interfaces\SQLUpdate.class
 Records\Medico.class
 Records\Cita.class
 DAO\ProxyDAO.class

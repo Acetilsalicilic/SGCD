@@ -21,5 +21,5 @@ public interface GeneralDAO {
     public Lugar getLugar(String ID);
     public Cita getCita(String ID);
     
-    public void addSucursal(Sucursal sucursal);
+    public boolean addSucursal(Sucursal sucursal);
 }

@@ -1,13 +1,19 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
+ */
 package JdbcDaoTests;
 
 import DAO.JdbcDao;
 import Records.Lugar;
+import Records.Sucursal;
 import java.sql.Connection;
 import nativeDB.MySQLConnection;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
@@ -16,12 +22,12 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
  * @author W10
  */
 @TestInstance(Lifecycle.PER_CLASS)
-public class GetTests {
+public class AddTests {
     Connection cn;
     MySQLConnection sqlCn;
     JdbcDao jdbcDao;
     
-    public GetTests() {
+    public AddTests() {
     }
     
     @BeforeAll
@@ -36,32 +42,19 @@ public class GetTests {
     }
     
     @Test
-    public void getLugar() {
-        var newLugar = jdbcDao.getLugar("1");
-        assertEquals(newLugar, new Lugar("1", "ciudad", "direccion"));
+    public void addSucursalFail() {
+        var sucursal = new Sucursal("4", "Programatically", new Lugar("100", "direccion", "ciudad"));
+        var rs = jdbcDao.addSucursal(sucursal);
+        
+        assertFalse(rs);
     }
     
     @Test
-    public void getMedico() {
-        var newMedico = jdbcDao.getMedico("1");
-        System.out.println(newMedico);
+    @Disabled
+    public void addSucursal() {
+        var sucursal = new Sucursal("4", "Programatically", new Lugar("1", "direccion", "ciudad"));
+        var rs = jdbcDao.addSucursal(sucursal);
         
-        assertNotNull(newMedico);
-    }
-    
-    @Test
-    public void getSucursal() {
-        var newSucursal = jdbcDao.getMedico("1");
-        System.out.println(newSucursal);
-        
-        assertNotNull(newSucursal);
-    }
-    
-    @Test
-    public void getPaciente() {
-        var newPaciente = jdbcDao.getPaciente("test");
-        System.out.println("paciente test: " + newPaciente);
-        
-        assertNotNull(newPaciente);
+        assertTrue(rs);
     }
 }
