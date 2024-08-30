@@ -3,6 +3,7 @@ apiServlets\SucursalServlet.class
 apiServlets\APIServlet.class
 Records\Usuario.class
 webappServlets\AppSucursalServlet.class
+apiServlets\PacienteServlet.class
 interfaces\GeneralDAO.class
 interfaces\SQLQuery.class
 DAO\JdbcDao.class

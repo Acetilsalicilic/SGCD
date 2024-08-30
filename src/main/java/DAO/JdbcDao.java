@@ -96,7 +96,20 @@ public class JdbcDao implements GeneralDAO {
     @Override
     public Paciente getPaciente(String ID) {
         return (Paciente) inStatementQuery((st) -> {
-            return null;
+            var rs = st.executeQuery("SELECT * FROM pacientes WHERE id='" + ID + "';");
+            rs.next();
+            
+            String usuarioNombre = rs.getString("usuario");
+            Usuario usuario = getUsuario(usuarioNombre);
+            
+            return new Paciente(
+                    rs.getString("id"),
+                    rs.getString("nombre"),
+                    rs.getString("apellidos"),
+                    rs.getString("telefono"),
+                    rs.getString("direccion"),
+                    usuario
+            );
         });
     }
 

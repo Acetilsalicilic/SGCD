@@ -5,6 +5,7 @@
 package requestProcessing;
 
 import DAO.JdbcDao;
+import Records.Paciente;
 import Records.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import interfaces.ProcessRequestMethod;
@@ -42,6 +43,18 @@ public final class ProcessRequest {
 
             String json = mapper.writeValueAsString(usuario);
             out.print(json);
+        }
+    };
+    
+    public static ProcessRequestMethod getPaciente = (req, res) -> {
+        setResponse(res);
+        
+        try (var out = res.getWriter()) {
+            String id = req.getParameter("id");
+            
+            Paciente paciente = dao.getPaciente(id);
+            
+            out.print(mapper.writeValueAsString(paciente));
         }
     };
 }
