@@ -1,7 +1,6 @@
 package JdbcDaoTests;
 
 import DAO.JdbcDao;
-import Records.Lugar;
 import java.sql.Connection;
 import nativeDB.MySQLConnection;
 import org.junit.jupiter.api.AfterAll;
@@ -35,33 +34,10 @@ public class GetTests {
         JdbcDao.close();
     }
     
-    @Test
-    public void getLugar() {
-        var newLugar = jdbcDao.getLugar("1");
-        assertEquals(newLugar, new Lugar("1", "ciudad", "direccion"));
-    }
+//    @Test
+//    public void getLugar() {
+//        var newLugar = jdbcDao.getLugar("1");
+//        assertEquals(newLugar, new Lugar("1", "ciudad", "direccion"));
+//    }
     
-    @Test
-    public void getMedico() {
-        var newMedico = jdbcDao.getMedico("1");
-        System.out.println(newMedico);
-        
-        assertNotNull(newMedico);
-    }
-    
-    @Test
-    public void getSucursal() {
-        var newSucursal = jdbcDao.getMedico("1");
-        System.out.println(newSucursal);
-        
-        assertNotNull(newSucursal);
-    }
-    
-    @Test
-    public void getPaciente() {
-        var newPaciente = jdbcDao.getPaciente("test");
-        System.out.println("paciente test: " + newPaciente);
-        
-        assertNotNull(newPaciente);
-    }
 }

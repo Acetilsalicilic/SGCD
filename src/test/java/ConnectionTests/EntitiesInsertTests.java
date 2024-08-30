@@ -52,21 +52,4 @@ public class EntitiesInsertTests {
     public void tearDown() {
     }
     
-    @Test
-    @Disabled
-    public void insertLugar() throws SQLException {
-        var stmt = cn.createStatement();
-        String query = "INSERT INTO lugares VALUES ('1', 'ciudad', 'direccion');";
-        
-        var rs = stmt.executeUpdate(query);
-    }
-    
-    @Test
-    @Disabled
-    public void insertSucursal() throws SQLException {
-        var st = cn.createStatement();
-        
-        String query = "INSERT INTO sucursales VALUES ('3', '2', 'TERCERA SUCURSAL')";
-        var rs = st.executeUpdate(query);
-    }
 }

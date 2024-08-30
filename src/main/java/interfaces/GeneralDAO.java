@@ -5,21 +5,17 @@
 package interfaces;
 
 import Records.Cita;
-import Records.Lugar;
 import Records.Medico;
 import Records.Paciente;
-import Records.Sucursal;
+import Records.Usuario;
 
 /**
  *
  * @author W10
  */
 public interface GeneralDAO {
-    public Sucursal getSucursal(String ID);
     public Medico getMedico(String ID);
     public Paciente getPaciente(String ID);
-    public Lugar getLugar(String ID);
     public Cita getCita(String ID);
-    
-    public boolean addSucursal(Sucursal sucursal);
+    public Usuario getUsuario(String usuario);
 }

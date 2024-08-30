@@ -5,8 +5,6 @@
 package JdbcDaoTests;
 
 import DAO.JdbcDao;
-import Records.Lugar;
-import Records.Sucursal;
 import java.sql.Connection;
 import nativeDB.MySQLConnection;
 import org.junit.jupiter.api.AfterAll;
@@ -41,20 +39,20 @@ public class AddTests {
         JdbcDao.close();
     }
     
-    @Test
-    public void addSucursalFail() {
-        var sucursal = new Sucursal("4", "Programatically", new Lugar("100", "direccion", "ciudad"));
-        var rs = jdbcDao.addSucursal(sucursal);
-        
-        assertFalse(rs);
-    }
-    
-    @Test
-    @Disabled
-    public void addSucursal() {
-        var sucursal = new Sucursal("4", "Programatically", new Lugar("1", "direccion", "ciudad"));
-        var rs = jdbcDao.addSucursal(sucursal);
-        
-        assertTrue(rs);
-    }
+//    @Test
+//    public void addSucursalFail() {
+//        var sucursal = new Sucursal("4", "Programatically", new Lugar("100", "direccion", "ciudad"));
+//        var rs = jdbcDao.addSucursal(sucursal);
+//        
+//        assertFalse(rs);
+//    }
+//    
+//    @Test
+//    @Disabled
+//    public void addSucursal() {
+//        var sucursal = new Sucursal("4", "Programatically", new Lugar("1", "direccion", "ciudad"));
+//        var rs = jdbcDao.addSucursal(sucursal);
+//        
+//        assertTrue(rs);
+//    }
 }
