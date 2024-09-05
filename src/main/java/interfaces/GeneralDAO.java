@@ -18,4 +18,10 @@ public interface GeneralDAO {
     public Paciente getPaciente(String ID);
     public Cita getCita(String ID);
     public Usuario getUsuario(String usuario);
+    
+    public int deleteUsuario(String id);
+    
+    public int modifyUsuario(Usuario usuario);
+    
+    public int createUsuario(Usuario usuario);
 }

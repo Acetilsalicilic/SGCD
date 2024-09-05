@@ -12,5 +12,5 @@ import java.sql.Statement;
  * @author W10
  */
 public interface SQLUpdate {
-    public void doUpdate(Statement st) throws SQLException;
+    public int doUpdate(Statement st) throws SQLException;
 }

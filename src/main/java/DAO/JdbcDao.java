@@ -57,34 +57,14 @@ public class JdbcDao implements GeneralDAO {
         } 
     }
     
-    private void inStatementUpdate(SQLUpdate update) {
+    private int inStatementUpdate(SQLUpdate update) {
         try (var st = cn.createStatement()) {
-            update.doUpdate(st);
+           return update.doUpdate(st);
         } catch (SQLException e) {
             System.out.println("ERROR: Error while trying to update:" + e);
+            return -1;
         }
     }
-
-
-//    @Override
-//    public Sucursal getSucursal(String ID) {
-//        return (Sucursal) inStatementQuery((st) -> {
-//            String query = "SELECT sucursales.id AS suc_id, sucursales.nombre, lugares.id AS lug_id, lugares.ciudad, lugares.direccion FROM sucursales INNER JOIN lugares ON sucursales.lugar_id=lugares.id WHERE sucursales.id='"+ID+"';";
-//            var rs = st.executeQuery(query);
-//            
-//            rs.next();
-//        
-//            String suc_id, nombre, lug_id, ciudad, direccion;
-//
-//            suc_id = rs.getString("suc_id");
-//            nombre = rs.getString("nombre");
-//            lug_id = rs.getString("lug_id");
-//            ciudad = rs.getString("ciudad");
-//            direccion = rs.getString("direccion");
-//
-//            return new Sucursal(suc_id, nombre, new Lugar(lug_id, ciudad, direccion));
-//        });
-//    }
 
     @Override
     public Medico getMedico(String ID) {
@@ -113,25 +93,6 @@ public class JdbcDao implements GeneralDAO {
         });
     }
 
-//    @Override
-//    public Lugar getLugar(String ID) {
-//        return (Lugar) inStatementQuery((st) -> {
-//            String query = "SELECT * FROM lugares WHERE id='"+ID+"';";
-//            var rs = st.executeQuery(query);
-//            
-//            rs.next();
-//            
-//            //Parse
-//            
-//            String id, direccion, ciudad;
-//            
-//            id = rs.getString("id");
-//            direccion = rs.getString("direccion");
-//            ciudad = rs.getString("ciudad");
-//            
-//            return new Lugar(id, direccion, ciudad);
-//        });
-//    }
 
     @Override
     public Cita getCita(String ID) {
@@ -143,19 +104,6 @@ public class JdbcDao implements GeneralDAO {
         });
     }
 
-//    @Override
-//    public boolean addSucursal(Sucursal sucursal) {
-//        return inPreparedUpdate(() -> {
-//            var stmt = cn.prepareStatement("INSERT INTO sucursales VALUES (?, ?, ?)");
-//            
-//            stmt.setString(1, sucursal.ID());
-//            stmt.setString(2, sucursal.lugar().id());
-//            stmt.setString(3, sucursal.nombre());
-//            
-//            stmt.executeUpdate();
-//            stmt.close();
-//        });
-//    }
 
     @Override
     public Usuario getUsuario(String usuario) {
@@ -166,5 +114,25 @@ public class JdbcDao implements GeneralDAO {
             
             return new Usuario(rs.getString("usuario"), rs.getString("contra"), rs.getString("tipo"));
         });
+    }
+    
+    //--------------------DELETE-----------------------------
+    
+    @Override
+    public int deleteUsuario(String id) {
+        return inStatementUpdate((st) -> {
+            return st.executeUpdate("DELETE FROM usuarios WHERE usuario='" + id + "'");
+        });
+    }
+    
+    //--------------------MODIFY-----------------------------
+    @Override
+    public int modifyUsuario(Usuario usuario) {
+        return 1;
+    }
+    //--------------------CREATE-----------------------------
+    @Override
+    public int createUsuario(Usuario usuario) {
+        return 1;
     }
 }

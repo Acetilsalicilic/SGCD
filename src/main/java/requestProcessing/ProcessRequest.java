@@ -46,6 +46,24 @@ public final class ProcessRequest {
         }
     };
     
+    public static ProcessRequestMethod deleteUsuario = (req, res) -> {
+        setResponse(res);
+        
+        try (var out = res.getWriter()) {
+            String id = req.getParameter("id");
+            
+            int rs = dao.deleteUsuario(id);
+            
+            if (rs == -1) {
+                out.print("{\"error\":\"couldn't delete\"}");
+            } else if (rs == 0) {
+                out.print("{\"error\":\"no rows deleted\"}");
+            } else {
+                out.print("{\"success\":\"" + rs + "\"}");
+            }
+        }
+    };
+    
     public static ProcessRequestMethod getPaciente = (req, res) -> {
         setResponse(res);
         
