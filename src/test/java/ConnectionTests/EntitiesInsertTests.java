@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
@@ -51,19 +52,4 @@ public class EntitiesInsertTests {
     public void tearDown() {
     }
     
-    @Test
-    public void insertLugar() throws SQLException {
-        var stmt = cn.createStatement();
-        String query = "INSERT INTO lugares VALUES ('1', 'ciudad', 'direccion');";
-        
-        var rs = stmt.executeUpdate(query);
-    }
-    
-    @Test
-    public void insertSucursal() throws SQLException {
-        var st = cn.createStatement();
-        
-        String query = "INSERT INTO sucursales VALUES ('3', '2', 'TERCERA SUCURSAL')";
-        var rs = st.executeUpdate(query);
-    }
 }

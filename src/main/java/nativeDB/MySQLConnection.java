@@ -7,8 +7,6 @@ package nativeDB;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -18,6 +16,7 @@ public class MySQLConnection {
     private String url;
     private String defaultUrl = "jdbc:mysql://localhost:3306/jdbcdb";
     Connection cn;
+    
     public MySQLConnection(String url, String username, String password) throws IllegalStateException {
         System.out.println("Connecting to mysql...");
         try {
