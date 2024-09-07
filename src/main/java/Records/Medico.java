@@ -8,6 +8,6 @@ package Records;
  *
  * @author W10
  */
-public record Medico(String ID, String nombre, String apellidos, String especialidad, Usuario usuario) {
+public record Medico(Integer id, String nombre, String apellidos, String especialidad, Usuario usuario) {
 
 }

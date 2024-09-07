@@ -20,9 +20,9 @@ import nativeDB.MySQLConnection;
  * @author W10
  */
 public class JdbcDao implements GeneralDAO {
-    private static JdbcDao instance;
+    private static JdbcDao instance; //JdbcDao instance
     private MySQLConnection mySqlConnection;
-    private Connection cn;
+    private Connection cn; // Conexión a base de datos
     
     //-----------------------SINGLETON METHODS---------------------------
     private JdbcDao(String url, String username, String password) {
