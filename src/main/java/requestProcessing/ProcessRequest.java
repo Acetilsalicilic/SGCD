@@ -32,6 +32,15 @@ public final class ProcessRequest {
     public static ProcessRequestMethod getUsuario = (request, response) -> {
         setResponse(response);
         
+        var session = request.getSession(false);
+        
+        if (session == null || session.getAttribute("auth").equals("false")) {
+            try (var out = response.getWriter()) {
+                out.print("{\"error\":\"no auth\"}");
+                return;
+            }
+        }
+        
         try (var out = response.getWriter()) {
             String id = request.getParameter("id");
             

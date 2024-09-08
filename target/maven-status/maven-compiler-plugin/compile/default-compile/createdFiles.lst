@@ -6,6 +6,7 @@ DAO\UsuarioDAO.class
 apiServlets\APIServlet.class
 Records\Usuario.class
 DAO\AbstractEntityDAO.class
+apiServlets\AuthServlet.class
 webappServlets\AppSucursalServlet.class
 apiServlets\PacienteServlet.class
 interfaces\GeneralDAO.class
