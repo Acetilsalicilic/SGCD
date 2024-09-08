@@ -1,12 +1,15 @@
+DAO\EntityDAOPool.class
 apiServlets\UsuarioServlet.class
 apiServlets\SucursalServlet.class
+Records\Consulta.class
+DAO\UsuarioDAO.class
 apiServlets\APIServlet.class
 Records\Usuario.class
+DAO\AbstractEntityDAO.class
 webappServlets\AppSucursalServlet.class
 apiServlets\PacienteServlet.class
 interfaces\GeneralDAO.class
 interfaces\SQLQuery.class
-DAO\JdbcDao.class
 interfaces\SQLUpdate.class
 Records\Medico.class
 Records\Cita.class

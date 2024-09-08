@@ -5,11 +5,7 @@
 
 package apiServlets;
 
-import DAO.JdbcDao;
-import Records.Usuario;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -21,9 +17,8 @@ import requestProcessing.ProcessRequest;
  *
  * @author W10
  */
-@WebServlet(name="UsuarioServlet", urlPatterns={"/api/usuarios"})
+@WebServlet(name="UsuarioServlet", urlPatterns={"/api/usuario"})
 public class UsuarioServlet extends HttpServlet {
-
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -46,6 +41,5 @@ public class UsuarioServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }

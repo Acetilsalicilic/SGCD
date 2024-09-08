@@ -4,15 +4,11 @@
  */
 package requestProcessing;
 
-import DAO.JdbcDao;
-import Records.Paciente;
+import DAO.EntityDAOPool;
 import Records.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import interfaces.ProcessRequestMethod;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  *
@@ -23,9 +19,9 @@ public final class ProcessRequest {
     private static String username = "root";
     private static String password = "pass";
     static {
-        JdbcDao.init(url, username, password);
+        EntityDAOPool.init(url, username, password);
     }
-    private static JdbcDao dao = JdbcDao.instance();
+    private static EntityDAOPool pool = EntityDAOPool.instance();
     private static ObjectMapper mapper = new ObjectMapper();
     
     private static void setResponse(HttpServletResponse response) {
@@ -39,7 +35,7 @@ public final class ProcessRequest {
         try (var out = response.getWriter()) {
             String id = request.getParameter("id");
             
-            Usuario usuario = dao.getUsuario(id);
+            Usuario usuario = pool.getUsuarioDAO().getById(Integer.parseInt(id));
 
             String json = mapper.writeValueAsString(usuario);
             out.print(json);
@@ -51,8 +47,8 @@ public final class ProcessRequest {
         
         try (var out = res.getWriter()) {
             String id = req.getParameter("id");
-            
-            int rs = dao.deleteUsuario(id);
+
+            int rs = pool.getUsuarioDAO().deleteById(Integer.parseInt(id));
             
             if (rs == -1) {
                 out.print("{\"error\":\"couldn't delete\"}");
@@ -68,11 +64,7 @@ public final class ProcessRequest {
         setResponse(res);
         
         try (var out = res.getWriter()) {
-            String id = req.getParameter("id");
             
-            Paciente paciente = dao.getPaciente(id);
-            
-            out.print(mapper.writeValueAsString(paciente));
         }
     };
 }
