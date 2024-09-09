@@ -63,12 +63,13 @@ public class PacienteDAO extends AbstractEntityDAO {
     }
     
     public ArrayList<Paciente> getByNombre(String nombre) {
-        return (ArrayList<Paciente>) inStatementQuery((st) -> {
-            var pacientes = getAll();
+        var pacientes = getAll();
             
-            var filteredPacientes = pacientes.stream().filter(paciente -> paciente.nombre().contains(nombre));
-            return filteredPacientes.collect(Collectors.toCollection(ArrayList::new));
-        });
+        var filteredPacientes = pacientes.stream().filter(
+                    paciente -> paciente.nombre().toLowerCase().contains(nombre.toLowerCase())
+            );
+        
+        return filteredPacientes.collect(Collectors.toCollection(ArrayList::new));
     }
     
     public int create(Paciente paciente) {
