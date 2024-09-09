@@ -8,16 +8,16 @@
         <servlet-name>GetSucursalServlet</servlet-name>
         <servlet-class>apiServlets.SucursalServlet</servlet-class>
     </servlet>
-    <!--
+    <servlet>
+        <servlet-name>Auth</servlet-name>
+        <jsp-file>/main-page/Login.jsp</jsp-file>
+    </servlet>
+    
     <servlet-mapping>
-        <servlet-name>APIServlet</servlet-name>
-        <url-pattern>/api</url-pattern>
+        <servlet-name>Auth</servlet-name>
+        <url-pattern>/auth</url-pattern> <!-- Any URL you want here -->
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>GetSucursalServlet</servlet-name>
-        <url-pattern>/api/sucursal</url-pattern>
-    </servlet-mapping>
-        -->
+    
     <session-config>
         <session-timeout>
             30

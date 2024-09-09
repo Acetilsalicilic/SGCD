@@ -26,6 +26,7 @@ public class EntityDAOPool {
         
         //------------DAO Instantiation-----------
         usuarioDao = new UsuarioDAO(con);
+        pacienteDao = new PacienteDAO(con);
 
     }
     
@@ -44,9 +45,14 @@ public class EntityDAOPool {
     //---------------DAO Variables--------------
     
     private UsuarioDAO usuarioDao;
+    private PacienteDAO pacienteDao;
     
     //--------------Get DAO Methods-------------
     public UsuarioDAO getUsuarioDAO() {
         return usuarioDao;
+    }
+    
+    public PacienteDAO getPacienteDAO() {
+        return pacienteDao;
     }
 }

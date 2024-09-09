@@ -63,4 +63,18 @@ public class UsuarioDAOTests {
         
         assertEquals(1, result);
     }
+    
+    @Test
+    public void getAll() {
+        var dao = instance.getUsuarioDAO();
+        
+        var rs = dao.getAll();
+        
+        assertNotNull(rs);
+        
+        System.out.println("User from all");
+        for (Usuario usr : rs) {
+            System.out.println("user: " + usr);
+        }
+    }
 }

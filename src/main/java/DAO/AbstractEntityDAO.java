@@ -4,6 +4,7 @@
  */
 package DAO;
 
+import interfaces.PreparedSQLUpdate;
 import interfaces.SQLQuery;
 import interfaces.SQLUpdate;
 import java.sql.Connection;
@@ -33,6 +34,15 @@ public class AbstractEntityDAO {
             return update.doUpdate(st);
         } catch (SQLException e) {
             System.out.println("ERROR: Error while trying to update:" + e);
+            return -1;
+        }
+    }
+    
+    protected int preparedUpdate(PreparedSQLUpdate pUpdate) {
+        try {
+            return pUpdate.doUpdate(con);
+        } catch (SQLException e) {
+            System.out.println("ERROR: Error while trying to update (prepared update):" + e);
             return -1;
         }
     }

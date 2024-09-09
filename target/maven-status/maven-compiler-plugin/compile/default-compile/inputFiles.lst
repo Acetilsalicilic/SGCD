@@ -5,7 +5,9 @@ C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\Records\Paciente.java
 C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\interfaces\ProcessRequestMethod.java
 C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\Records\Cita.java
 C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\apiServlets\UsuarioServlet.java
+C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\DAO\PacienteDAO.java
 C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\webappServlets\AppSucursalServlet.java
+C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\interfaces\PreparedSQLUpdate.java
 C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\Records\Consulta.java
 C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\apiServlets\AuthServlet.java
 C:\Users\W10\Documents\NetBeansProjects\SGCD\src\main\java\DAO\AbstractEntityDAO.java

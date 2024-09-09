@@ -1,3 +1,4 @@
+EntityDaoTests\PacienteDAOTests.class
 ConnectionTests\ConnectionTests.class
 EntityDaoTests\UsuarioDAOTests.class
 ConnectionTests\EntitiesInsertTests.class

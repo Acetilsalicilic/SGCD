@@ -6,6 +6,7 @@ package DAO;
 
 import Records.Usuario;
 import java.sql.Connection;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,6 +15,34 @@ import java.sql.Connection;
 public class UsuarioDAO extends AbstractEntityDAO {
     public UsuarioDAO(Connection con) {
         super(con);
+    }
+    
+    public ArrayList<Usuario> getAll() {
+        return (ArrayList<Usuario>) inStatementQuery((st) -> {
+            var usuarios = new ArrayList<Usuario>();
+            
+            var rs = st.executeQuery("select\n" +
+                "	usuarios.nombre_usuario as usuario,\n" +
+                "	usuarios.id_usuario as id,\n" +
+                "	usuarios.contrasena as contrasena,\n" +
+                "	tipo_usuario.desc_tipo as tipo\n" +
+                "from\n" +
+                "	usuarios\n" +
+                "inner join\n" +
+                "	tipo_usuario\n" +
+                "	on tipo_usuario.id_tipo = usuarios.id_tipo_usuario;");
+            
+            while (rs.next()) {
+                usuarios.add(new Usuario(
+                        rs.getInt("id"),
+                        rs.getString("usuario"),
+                        rs.getString("contrasena"),
+                        rs.getString("tipo")
+                ));
+            }
+            
+            return usuarios;
+        });
     }
     
     public Usuario getById(Integer id) {
