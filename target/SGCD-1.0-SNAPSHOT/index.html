@@ -11,7 +11,7 @@
                 
                 $sucursal_b.addEventListener('click', () => {
                     const id = $id_input.value
-                    fetch(`/api/sucursal?id=${id}`).then(response => response.text()).then(json => {
+                    fetch(`/api/usuario?id=${id}`).then(response => response.text()).then(json => {
                         $sucursal_p.innerText = json
                         console.log(json)
                     })
@@ -24,6 +24,7 @@
     <body>
         <h1>Hello World!</h1>
         <a href="/sucursal">Post sucursal</a>
+        <a href="/SessionTestPage.html">Test session</a>
         <input type="text" id="id-input">
         <input type="button" value="Obtener sucursal placeholder" name="get-sucursal" id="get-sucursal"/>
         <p id="sucursal-p">text</p>

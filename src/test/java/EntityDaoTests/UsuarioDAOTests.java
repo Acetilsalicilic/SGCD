@@ -5,10 +5,12 @@
 package EntityDaoTests;
 
 import DAO.EntityDAOPool;
+import Records.Usuario;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
@@ -40,5 +42,25 @@ public class UsuarioDAOTests {
         var rs = instance.getUsuarioDAO().getById(1);
         System.out.println(rs);
         assertNotNull(rs);
+    }
+    
+    @Test
+    @Disabled
+    public void insert() {
+        var dao = instance.getUsuarioDAO();
+        
+        int result = dao.create(new Usuario(2, "test", "test", "admin"));
+        
+        assertEquals(result, 1);
+    }
+    
+    @Test
+    @Disabled
+    public void update() {
+        var dao = instance.getUsuarioDAO();
+        
+        int result = dao.update(new Usuario(2, "asd", "asd", "admin"));
+        
+        assertEquals(1, result);
     }
 }

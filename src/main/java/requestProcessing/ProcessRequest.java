@@ -42,9 +42,16 @@ public final class ProcessRequest {
         }
         
         try (var out = response.getWriter()) {
-            String id = request.getParameter("id");
+            int id;
             
-            Usuario usuario = pool.getUsuarioDAO().getById(Integer.parseInt(id));
+            try {
+                id = Integer.parseInt(request.getParameter("id"));
+            } catch (Exception e) {
+                out.print("null");
+                return;
+            }
+            
+            Usuario usuario = pool.getUsuarioDAO().getById(id);
 
             String json = mapper.writeValueAsString(usuario);
             out.print(json);

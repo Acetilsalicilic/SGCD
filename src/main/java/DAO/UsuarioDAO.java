@@ -29,7 +29,7 @@ public class UsuarioDAO extends AbstractEntityDAO {
                 "	tipo_usuario\n" +
                 "	on tipo_usuario.id_tipo = usuarios.id_tipo_usuario \n" +
                 "where\n" +
-"	usuarios.id_usuario = 1;");
+"	usuarios.id_usuario = " + id + ";");
             
             rs.next();
             return new Usuario(
@@ -44,6 +44,33 @@ public class UsuarioDAO extends AbstractEntityDAO {
     public int deleteById(Integer id) {
         return inStatementUpdate((st) -> {
             return st.executeUpdate("DELETE FROM usuarios WHERE id=" + id + ";");
+        });
+    }
+    
+    public int update(Usuario usuario) {
+        return inStatementUpdate((st) -> {
+            var rs = st.executeQuery("select id_tipo from tipo_usuario where desc_tipo = '" + usuario.tipo() + "';");
+            rs.next();
+            var id_tipo = rs.getInt("id_tipo");
+            return st.executeUpdate("UPDATE usuarios SET " + 
+                    "id_usuario=" + usuario.id() + 
+                    ", id_tipo_usuario='" + id_tipo +
+                    "', nombre_usuario='" + usuario.nombre_usuario() +
+                    "', contrasena='" + usuario.contrasena() +
+                    "' WHERE id_usuario=" + usuario.id() + ";");
+        });
+    }
+    
+    public int create(Usuario usuario) {
+        return inStatementUpdate((st) -> {
+            var rs = st.executeQuery("SELECT id_tipo FROM tipo_usuario WHERE desc_tipo='" + usuario.tipo() + "';");
+            rs.next();
+            var id_tipo = rs.getInt("id_tipo");
+            return st.executeUpdate("INSERT INTO usuarios VALUES (" +
+                    usuario.id() + ", " +
+                    id_tipo + ", " +
+                    "'" + usuario.nombre_usuario() + "', " +
+                    "'" + usuario.contrasena() + "');");
         });
     }
 }
