@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public final class ProcessRequest {
     private static String url = "jdbc:mysql://localhost:3306/lab4";
     private static String username = "root";
-    private static String password = "pass";
+    private static String password = "";
     static {
         EntityDAOPool.init(url, username, password);
     }
@@ -58,23 +58,23 @@ public final class ProcessRequest {
         }
     };
     
-    public static ProcessRequestMethod deleteUsuario = (req, res) -> {
-        setResponse(res);
-        
-        try (var out = res.getWriter()) {
-            String id = req.getParameter("id");
-
-            int rs = pool.getUsuarioDAO().deleteById(Integer.parseInt(id));
-            
-            if (rs == -1) {
-                out.print("{\"error\":\"couldn't delete\"}");
-            } else if (rs == 0) {
-                out.print("{\"error\":\"no rows deleted\"}");
-            } else {
-                out.print("{\"success\":\"" + rs + "\"}");
-            }
-        }
-    };
+//    public static ProcessRequestMethod deleteUsuario = (req, res) -> {
+//        setResponse(res);
+//        
+//        try (var out = res.getWriter()) {
+//            String id = req.getParameter("id");
+//
+//            int rs = pool.getUsuarioDAO().deleteById(Integer.parseInt(id));
+//            
+//            if (rs == -1) {
+//                out.print("{\"error\":\"couldn't delete\"}");
+//            } else if (rs == 0) {
+//                out.print("{\"error\":\"no rows deleted\"}");
+//            } else {
+//                out.print("{\"success\":\"" + rs + "\"}");
+//            }
+//        }
+//    };
     
     public static ProcessRequestMethod getPaciente = (req, res) -> {
         setResponse(res);

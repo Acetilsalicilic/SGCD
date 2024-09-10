@@ -14,7 +14,7 @@ import java.sql.SQLException;
  */
 public class MySQLConnection {
     private String url;
-    private String defaultUrl = "jdbc:mysql://localhost:3306/jdbcdb";
+    private String defaultUrl = "jdbc:mysql://localhost:3306/lab4";
     Connection cn;
     
     public MySQLConnection(String url, String username, String password) throws IllegalStateException {
@@ -27,7 +27,7 @@ public class MySQLConnection {
         }
         try {
             cn = DriverManager.getConnection(url, username, password);
-            System.out.println("Connection established!");
+            System.out.println("Connection establisheds!");
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot connect", e);
         }
@@ -41,8 +41,8 @@ public class MySQLConnection {
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException("Cannot load driver", e);
         }
-        try (Connection cn = DriverManager.getConnection(url,"root", "pass")) {
-            System.out.println("Connection established!");
+        try (Connection cn = DriverManager.getConnection(url,"root", "")) {
+            System.out.println("Connection establisheds!");
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot connect", e);
         }

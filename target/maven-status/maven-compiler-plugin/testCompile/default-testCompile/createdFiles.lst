@@ -1,3 +1,4 @@
+EntityDaoTests\CitaDAOTest.class
 EntityDaoTests\PacienteDAOTests.class
 ConnectionTests\ConnectionTests.class
 EntityDaoTests\UsuarioDAOTests.class

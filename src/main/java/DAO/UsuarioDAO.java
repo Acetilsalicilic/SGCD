@@ -17,89 +17,82 @@ public class UsuarioDAO extends AbstractEntityDAO {
         super(con);
     }
     
+    public Usuario getById(Integer id) {
+        return (Usuario) inStatementQuery((st) -> {
+            
+            var rs = st.executeQuery(
+                "SELECT usuarios.id_usuario, usuarios.id_tipo_usuario, usuarios.nombre_usuario, usuarios.contrasena, tipo_usuario.desc_tipo " +
+                "FROM usuarios " +
+                "INNER JOIN tipo_usuario ON tipo_usuario.id_tipo = usuarios.id_tipo_usuario " +
+                "WHERE usuarios.id_usuario = " + id + ";"
+            );
+            
+            rs.next();
+            
+            return new Usuario(
+                rs.getInt("id_usuario"),
+                rs.getInt("id_tipo_usuario"),
+                rs.getString("nombre_usuario"),
+                rs.getString("contrasena"),
+                rs.getString("desc_tipo")
+            );
+        });
+    }
+    
     public ArrayList<Usuario> getAll() {
         return (ArrayList<Usuario>) inStatementQuery((st) -> {
+            
             var usuarios = new ArrayList<Usuario>();
             
-            var rs = st.executeQuery("select\n" +
-                "	usuarios.nombre_usuario as usuario,\n" +
-                "	usuarios.id_usuario as id,\n" +
-                "	usuarios.contrasena as contrasena,\n" +
-                "	tipo_usuario.desc_tipo as tipo\n" +
-                "from\n" +
-                "	usuarios\n" +
-                "inner join\n" +
-                "	tipo_usuario\n" +
-                "	on tipo_usuario.id_tipo = usuarios.id_tipo_usuario;");
+            var rs = st.executeQuery(
+                "SELECT usuarios.id_usuario, usuarios.id_tipo_usuario, usuarios.nombre_usuario, usuarios.contrasena, tipo_usuario.desc_tipo " +
+                "FROM usuarios " +
+                "INNER JOIN tipo_usuario ON tipo_usuario.id_tipo = usuarios.id_tipo_usuario;"     
+            );
             
-            while (rs.next()) {
-                usuarios.add(new Usuario(
-                        rs.getInt("id"),
-                        rs.getString("usuario"),
-                        rs.getString("contrasena"),
-                        rs.getString("tipo")
+            while(rs.next()){
+                usuarios.add(new Usuario (
+                    rs.getInt("id_usuario"),
+                    rs.getInt("id_tipo_usuario"),
+                    rs.getString("nombre_usuario"),
+                    rs.getString("contrasena"),
+                    rs.getString("desc_tipo")
                 ));
             }
             
             return usuarios;
-        });
-    }
-    
-    public Usuario getById(Integer id) {
-        return (Usuario) inStatementQuery((st) -> {
-            var rs = st.executeQuery("select\n" +
-                "	usuarios.nombre_usuario as usuario,\n" +
-                "	usuarios.id_usuario as id,\n" +
-                "	usuarios.contrasena,\n" +
-                "	tipo_usuario.desc_tipo as tipo\n" +
-                "from\n" +
-                "	usuarios\n" +
-                "inner join\n" +
-                "	tipo_usuario\n" +
-                "	on tipo_usuario.id_tipo = usuarios.id_tipo_usuario \n" +
-                "where\n" +
-"	usuarios.id_usuario = " + id + ";");
             
-            rs.next();
-            return new Usuario(
-                    rs.getInt("id"),
-                    rs.getString("usuario"),
-                    rs.getString("contrasena"),
-                    rs.getString("tipo")
-            );
         });
     }
     
     public int deleteById(Integer id) {
         return inStatementUpdate((st) -> {
-            return st.executeUpdate("DELETE FROM usuarios WHERE id=" + id + ";");
+            return st.executeUpdate("DELETE FROM usuarios WHERE id_usuario=" + id + ";");
         });
     }
     
     public int update(Usuario usuario) {
-        return inStatementUpdate((st) -> {
-            var rs = st.executeQuery("select id_tipo from tipo_usuario where desc_tipo = '" + usuario.tipo() + "';");
-            rs.next();
-            var id_tipo = rs.getInt("id_tipo");
-            return st.executeUpdate("UPDATE usuarios SET " + 
-                    "id_usuario=" + usuario.id() + 
-                    ", id_tipo_usuario='" + id_tipo +
-                    "', nombre_usuario='" + usuario.nombre_usuario() +
-                    "', contrasena='" + usuario.contrasena() +
-                    "' WHERE id_usuario=" + usuario.id() + ";");
+        return inStatementUpdate((st)-> {
+           return st.executeUpdate(
+                "UPDATE usuarios SET " + 
+                "id_tipo_usuario=" + usuario.id_tipo_usuario() +
+                ", nombre_usuario='" + usuario.nombre_usuario() +
+                "', contrasena='" + usuario.contrasena() +
+                "' WHERE id_usuario=" + usuario.id_usuario() + ";"
+            );
         });
     }
-    
-    public int create(Usuario usuario) {
-        return inStatementUpdate((st) -> {
-            var rs = st.executeQuery("SELECT id_tipo FROM tipo_usuario WHERE desc_tipo='" + usuario.tipo() + "';");
-            rs.next();
-            var id_tipo = rs.getInt("id_tipo");
-            return st.executeUpdate("INSERT INTO usuarios VALUES (" +
-                    usuario.id() + ", " +
-                    id_tipo + ", " +
-                    "'" + usuario.nombre_usuario() + "', " +
-                    "'" + usuario.contrasena() + "');");
-        });
-    }
+        
+//    public int create(Usuario usuario) {
+//        return inStatementUpdate((st) -> {
+//            var rs = st.executeQuery("SELECT id_tipo FROM tipo_usuario WHERE desc_tipo='" + usuario.tipo() + "';");
+//            rs.next();
+//            var id_tipo = rs.getInt("id_tipo");
+//            return st.executeUpdate("INSERT INTO usuarios VALUES (" +
+//                    usuario.id_usuario() + ", " +
+//                    id_tipo + ", " +
+//                    "'" + usuario.nombre_usuario() + "', " +
+//                    "'" + usuario.contrasena() + "');");
+//        });
+//    }
 }

@@ -19,9 +19,9 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
  * @author W10
  */
 public class ConnectionTests {
-    String url = "jdbc:mysql://localhost:3306/jdbcdb";
+    String url = "jdbc:mysql://localhost:3306/lab4";
     String username = "root";
-    String pass = "pass";
+    String pass = "";
     
     public ConnectionTests() {
     }

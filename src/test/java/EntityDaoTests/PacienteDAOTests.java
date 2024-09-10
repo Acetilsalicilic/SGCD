@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
+// TODO: CAMBIAR NOMBRE DB AL HACER PRUEBAS
+
 /**
  *
  * @author W10
@@ -28,7 +30,7 @@ public class PacienteDAOTests {
     
     @BeforeAll
     public void setUpClass() {
-        EntityDAOPool.init("jdbc:mysql://localhost:3306/lab4", "root", "pass");
+        EntityDAOPool.init("jdbc:mysql://localhost:3306/lab4", "root", "");
         instance = EntityDAOPool.instance();
     }
     
@@ -51,27 +53,27 @@ public class PacienteDAOTests {
         }
     }
     
-    @Test
-    @Disabled
-    public void create() {
-        var dao = instance.getPacienteDAO();
-        
-        var paciente = new Paciente(
-                5,
-                "jast",
-                "test test",
-                "12345678890",
-                "direccion",
-                new Usuario(
-                        2,
-                        "asd",
-                        "asd",
-                        "admin"
-                )
-        );
-        
-        var rs = dao.create(paciente);
-        
-        assertEquals(1, rs);
-    }
+//    @Test
+//    @Disabled
+//    public void create() {
+//        var dao = instance.getPacienteDAO();
+//        
+//        var paciente = new Paciente(
+//                5,
+//                "jast",
+//                "test test",
+//                "12345678890",
+//                "direccion",
+//                new Usuario(
+//                        2,
+//                        "asd",
+//                        "asd",
+//                        "admin"
+//                )
+//        );
+//        
+//        var rs = dao.create(paciente);
+//        
+//        assertEquals(1, rs);
+//    }
 }

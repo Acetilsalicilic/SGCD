@@ -28,7 +28,8 @@ public class EntityDAOPool {
         usuarioDao = new UsuarioDAO(con);
         pacienteDao = new PacienteDAO(con);
         medicoDao = new MedicoDAO(con);
-
+        citaDao = new CitaDAO(con);
+        
     }
     
     public static void close() {
@@ -48,6 +49,7 @@ public class EntityDAOPool {
     private UsuarioDAO usuarioDao;
     private PacienteDAO pacienteDao;
     private MedicoDAO medicoDao;
+    private CitaDAO citaDao;
     
     //--------------Get DAO Methods-------------
     public UsuarioDAO getUsuarioDAO() {
@@ -60,5 +62,9 @@ public class EntityDAOPool {
     
     public MedicoDAO getMedicoDAO() {
         return medicoDao;
+    }
+    
+    public CitaDAO getCitaDAO() {
+        return citaDao;
     }
 }

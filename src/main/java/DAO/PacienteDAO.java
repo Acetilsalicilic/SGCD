@@ -76,8 +76,8 @@ public class PacienteDAO extends AbstractEntityDAO {
         return preparedUpdate((con) -> {
             var st = con.prepareStatement("INSERT INTO pacientes VALUES (?, ?, ?, ?, ?, ?);");
             
-            st.setInt(1, paciente.id());
-            st.setInt(2, paciente.usuario().id());
+            st.setInt(1, paciente.id_paciente());
+            st.setInt(2, paciente.usuario().id_usuario());
             st.setString(3, paciente.nombre());
             st.setString(4, paciente.apellidos());
             st.setString(5, paciente.telefono());
@@ -99,8 +99,8 @@ public class PacienteDAO extends AbstractEntityDAO {
         return preparedUpdate((con) -> {
             var st = con.prepareStatement("UPDATE pacientes SET id_paciente=?, id_usuario=?, nombre=?, apellidos=?, telefono=?, direccion=? WHERE id_paciente=?;");
 
-            st.setInt(1, paciente.id());
-            st.setInt(2, paciente.usuario().id());
+            st.setInt(1, paciente.id_paciente());
+            st.setInt(2, paciente.usuario().id_usuario());
             st.setString(3, paciente.nombre());
             st.setString(4, paciente.apellidos());
             st.setString(5, paciente.telefono());
