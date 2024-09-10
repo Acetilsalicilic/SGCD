@@ -3,34 +3,24 @@
     <head>
         <title>Start Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script>
-            const getSucursal = () => {
-                const $sucursal_p = document.getElementById('sucursal-p')
-                const $sucursal_b = document.getElementById('get-sucursal')
-                const $id_input = document.getElementById('id-input')
-                
-                $sucursal_b.addEventListener('click', () => {
-                    const id = $id_input.value
-                    fetch(`/api/usuario?id=${id}`).then(response => response.text()).then(json => {
-                        $sucursal_p.innerText = json
-                        console.log(json)
-                    })
-                    console.log('fetched')
-                    $id_input.value = ''
-                })
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
             }
-        </script>
+            .main-div {
+                display: flex;
+                flex-direction: column;
+            }
+        </style>
     </head>
     <body>
-        <h1>Hello World!</h1>
-        <a href="/auth">Login</a>
-        <a href="/sucursal">Post sucursal</a>
-        <a href="/SessionTestPage.html">Test session</a>
-        <input type="text" id="id-input">
-        <input type="button" value="Obtener sucursal placeholder" name="get-sucursal" id="get-sucursal"/>
-        <p id="sucursal-p">text</p>
-        <script>
-            getSucursal()
-        </script>
+        <h1>Inicio</h1>
+        
+        <div class="main-div">
+            <a href="/auth">Login</a>
+            <a href="/sucursal">Post sucursal</a>
+            <a href="/SessionTestPage.html">Test session</a>
+        </div>
     </body>
 </html>

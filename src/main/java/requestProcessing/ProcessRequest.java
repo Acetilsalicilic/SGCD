@@ -83,4 +83,28 @@ public final class ProcessRequest {
             
         }
     };
+
+    public static ProcessRequestMethod authUser = (req, res) -> {
+        String user = req.getParameter("user");
+        String pass = req.getParameter("password");
+
+        var usuarios = pool.getUsuarioDAO().getAll();
+        for (var usuario : usuarios) {
+            if (usuario.nombre_usuario().equals(user) && usuario.contrasena().equals(pass)) {
+                var session = req.getSession(true);
+                session.setAttribute("auth", usuario.tipo());
+                if (usuario.tipo().equals("admin")) {
+                    res.sendRedirect("/usuarios");
+                }
+                if (usuario.tipo().equals("paciente")) {
+                    res.sendRedirect("/inicio-paciente");
+                }
+                break;
+            }
+        }
+
+        if (req.getSession().getAttribute("auth") == null) {
+            res.sendRedirect("/");
+        }
+    };
 }

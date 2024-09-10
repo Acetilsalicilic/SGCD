@@ -12,10 +12,28 @@
         <servlet-name>Auth</servlet-name>
         <jsp-file>/main-page/Login.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>SeeUsers</servlet-name>
+        <jsp-file>/admin-pages/SeeUsers.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>InicioPaciente</servlet-name>
+        <jsp-file>/paciente/InicioPaciente.jsp</jsp-file>
+    </servlet>
     
     <servlet-mapping>
         <servlet-name>Auth</servlet-name>
         <url-pattern>/auth</url-pattern> <!-- Any URL you want here -->
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>SeeUsers</servlet-name>
+        <url-pattern>/usuarios</url-pattern> <!-- Any URL you want here -->
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>InicioPaciente</servlet-name>
+        <url-pattern>/inicio-paciente</url-pattern> <!-- Any URL you want here -->
     </servlet-mapping>
     
     <session-config>

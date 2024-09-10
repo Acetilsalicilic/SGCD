@@ -5,6 +5,7 @@ Records\Consulta.class
 DAO\UsuarioDAO.class
 apiServlets\APIServlet.class
 Records\Usuario.class
+DAO\MedicoDAO.class
 interfaces\PreparedSQLUpdate.class
 DAO\AbstractEntityDAO.class
 apiServlets\AuthServlet.class
