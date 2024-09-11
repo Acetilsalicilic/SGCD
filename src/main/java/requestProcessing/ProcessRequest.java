@@ -94,10 +94,10 @@ public final class ProcessRequest {
                 var session = req.getSession(true);
                 session.setAttribute("auth", usuario.tipo());
                 if (usuario.tipo().equals("admin")) {
-                    res.sendRedirect("/usuarios");
+                    res.sendRedirect("/admin");
                 }
                 if (usuario.tipo().equals("paciente")) {
-                    res.sendRedirect("/inicio-paciente");
+                    res.sendRedirect("/paciente");
                 }
                 break;
             }

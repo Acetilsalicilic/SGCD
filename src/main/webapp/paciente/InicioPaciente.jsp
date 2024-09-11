@@ -13,10 +13,12 @@
         <%
             if (session.getAttribute("auth") == null || !session.getAttribute("auth").equals("paciente")) {
                 response.sendRedirect("/");
-            }
+    }
+
         %>
     </head>
     <body>
         <h1>Paciente</h1>
+        <input type="datetime-local" name="" id="" step="1800" min="30">
     </body>
 </html>

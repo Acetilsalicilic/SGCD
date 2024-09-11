@@ -1,40 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
-    <servlet>
-        <servlet-name>APIServlet</servlet-name>
-        <servlet-class>apiServlets.APIServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>GetSucursalServlet</servlet-name>
-        <servlet-class>apiServlets.SucursalServlet</servlet-class>
-    </servlet>
+    <!--                    OTHERS                   -->
     <servlet>
         <servlet-name>Auth</servlet-name>
         <jsp-file>/main-page/Login.jsp</jsp-file>
     </servlet>
-    <servlet>
-        <servlet-name>SeeUsers</servlet-name>
-        <jsp-file>/admin-pages/SeeUsers.jsp</jsp-file>
-    </servlet>
+    <!--                  PACIENTES                  -->
     <servlet>
         <servlet-name>InicioPaciente</servlet-name>
         <jsp-file>/paciente/InicioPaciente.jsp</jsp-file>
     </servlet>
+    <!--                  ADMIN                      -->
     
+    <servlet>
+        <servlet-name>SeeUsers</servlet-name>
+        <jsp-file>/admin-pages/SeeUsers.jsp</jsp-file>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>InicioAdmin</servlet-name>
+        <jsp-file>/admin-pages/InicioAdmin.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>GestPac</servlet-name>
+        <jsp-file>/admin-pages/GestionarPacientes.jsp</jsp-file>
+    </servlet>
+    
+    
+    
+    <!--                    OTHERS                   -->
     <servlet-mapping>
         <servlet-name>Auth</servlet-name>
         <url-pattern>/auth</url-pattern> <!-- Any URL you want here -->
     </servlet-mapping>
     
+    <!--                  PACIENTES                  -->
+    <servlet-mapping>
+        <servlet-name>InicioPaciente</servlet-name>
+        <url-pattern>/paciente</url-pattern> <!-- Any URL you want here -->
+    </servlet-mapping>
+    
+    <!--                  ADMIN                      -->
     <servlet-mapping>
         <servlet-name>SeeUsers</servlet-name>
-        <url-pattern>/usuarios</url-pattern> <!-- Any URL you want here -->
+        <url-pattern>/admin/usuarios</url-pattern> <!-- Any URL you want here -->
     </servlet-mapping>
     
     <servlet-mapping>
-        <servlet-name>InicioPaciente</servlet-name>
-        <url-pattern>/inicio-paciente</url-pattern> <!-- Any URL you want here -->
+        <servlet-name>InicioAdmin</servlet-name>
+        <url-pattern>/admin</url-pattern> <!-- Any URL you want here -->
     </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>GestPac</servlet-name>
+        <url-pattern>/admin/pacientes</url-pattern> <!-- Any URL you want here -->
+    </servlet-mapping>
+
     
     <session-config>
         <session-timeout>

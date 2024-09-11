@@ -53,8 +53,8 @@
         <div class="all-container">
 
             <h1>Usuarios existentes</h1>
-            <a href="/">Volver a inicio</a>
-            <form action="/usuarios" class="form">
+            <a href="/admin">Volver a inicio</a>
+            <form action="/admin/usuarios" class="form">
                 <label for="query">Introduce el parametro de busqueda</label>
                 <input type="text" name="query" id="query-input">
                 <button type="submit">Buscar</button>
