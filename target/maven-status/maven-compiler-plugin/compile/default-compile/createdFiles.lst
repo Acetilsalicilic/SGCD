@@ -14,13 +14,17 @@ interfaces\GeneralDAO.class
 interfaces\SQLUpdate.class
 Records\Medico.class
 Records\Cita.class
+DAO\EspecialidadDAO.class
 Records\Servicio.class
 requestProcessing\ProcessRequest.class
 interfaces\ProcessRequestMethod.class
 nativeDB\MySQLConnection.class
 interfaces\PreparedSQLUpdate.class
 DAO\AbstractEntityDAO.class
+DAO\TipoUsuarioDAO.class
 webappServlets\AppSucursalServlet.class
+Records\TipoUsuario.class
 DAO\PacienteDAO.class
 interfaces\SQLQuery.class
+DAO\ServicioDAO.class
 Records\Paciente.class

@@ -8,6 +8,6 @@ package Records;
  *
  * @author Vega
  */
-public record Servicio (Integer id_servicio, String desc_servicio) {
-       
+public record TipoUsuario (Integer id_tipo, String desc_tipo) {
+    
 }

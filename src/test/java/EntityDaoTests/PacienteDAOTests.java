@@ -40,18 +40,32 @@ public class PacienteDAOTests {
     }
     
     @Test
-    public void getByName() {
-        var dao = instance.getPacienteDAO();
-        
-        var rs = dao.getByNombre("ast");
+    public void getPacienteById() {
+        var rs = instance.getPacienteDAO().getById(1);
+        System.out.println(rs);
         assertNotNull(rs);
-        
-        assertFalse(rs.isEmpty());
-        
-        for (var pac : rs) {
-            System.out.println("paciente: " + pac);
-        }
     }
+    
+    @Test
+    public void getAllPacientes() {
+        var rs = instance.getPacienteDAO().getAll();
+        System.out.println(rs);
+        assertNotNull(rs);
+    }
+    
+//    @Test
+//    public void getByName() {
+//        var dao = instance.getPacienteDAO();
+//        
+//        var rs = dao.getByNombre("ast");
+//        assertNotNull(rs);
+//        
+//        assertFalse(rs.isEmpty());
+//        
+//        for (var pac : rs) {
+//            System.out.println("paciente: " + pac);
+//        }
+//    }
     
 //    @Test
 //    @Disabled

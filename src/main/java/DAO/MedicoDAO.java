@@ -6,6 +6,7 @@ package DAO;
 
 import Records.Medico;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -19,68 +20,78 @@ public class MedicoDAO extends AbstractEntityDAO {
         super(con);
     }
     
-//    public ArrayList<Medico> getAll() {
-//        return (ArrayList<Medico>) inStatementQuery((st) -> {
-//            var medicos = new ArrayList<Medico>();
-//            
-//            var rs = st.executeQuery("select\n" +
-//                "	medicos.id_medico as id,\n" +
-//                "	medicos.id_usuario as id_usuario,\n" +
-//                "	medicos.nombre as nombre,\n" +
-//                "	medicos.apellidos as apellidos,\n" +
-//                "	especialidades.desc_espe as especialidad\n" +
-//                "from\n" +
-//                "	medicos \n" +
-//                "inner join\n" +
-//                "	especialidades\n" +
-//                "	on medicos.id_especialidad = especialidades.id_especialidad");
-//            
-//            while (rs.next()) {
-//                var usuario = EntityDAOPool.instance().getUsuarioDAO().getById(rs.getInt("id_usuario"));
-//                medicos.add(new Medico(
-//                        rs.getInt("id"),
-//                        rs.getString("nombre"),
-//                        rs.getString("apellidos"),
-//                        rs.getString("especialidad"),
-//                        usuario
-//                ));
-//            }
-//            
-//            return null;
-//        });
-//    }
-//    
-//    public Medico getById(int id) {
-//        return (Medico) inStatementQuery((st) -> {
-//            var rs = st.executeQuery("select\n" +
-//                "	medicos.id_medico as id,\n" +
-//                "	medicos.id_usuario as id_usuario,\n" +
-//                "	medicos.nombre as nombre,\n" +
-//                "	medicos.apellidos as apellidos,\n" +
-//                "	especialidades.desc_espe as especialidad\n" +
-//                "from\n" +
-//                "	medicos \n" +
-//                "inner join\n" +
-//                "	especialidades\n" +
-//                "	on medicos.id_especialidad = especialidades.id_especialidad\n" +
-//                "where medicos.id_medico = " + id + ";");
-//            
-//            rs.next();
-//            
-//            int id_usuario = rs.getInt("id_usuario");
-//            
-//            var usuario = EntityDAOPool.instance().getUsuarioDAO().getById(id_usuario);
-//            
-//            return new Medico(
-//                    rs.getInt("id"),
-//                    rs.getString("nombre"),
-//                    rs.getString("apellidos"),
-//                    rs.getString("especialidad"),
-//                    usuario
-//            );
-//        });
-//    }
-//    
+    public Medico getById(Integer id_medico) {
+        return (Medico) inStatementQuery((st) -> {
+            String medicoByIdQuery =
+                "SELECT " + 
+                "medicos.id_medico, " + 
+                "medicos.id_usuario, " + 
+                "medicos.id_especialidad, " +
+                "medicos.nombre AS nombre_medico, " +
+                "medicos.apellidos AS apellidos_medico, " +
+                "especialidades.id_especialidad, " +
+                "especialidades.desc_espe " + 
+                "FROM medicos " + 
+                "INNER JOIN especialidades ON medicos.id_especialidad = especialidades.id_especialidad " +
+                "WHERE medicos.id_usuario = ?;"
+            ;
+            try (PreparedStatement medicoByIdStmt = st.getConnection().prepareStatement(medicoByIdQuery)) {
+                medicoByIdStmt.setInt(1, id_medico);
+                
+                try (var medicoById = medicoByIdStmt.executeQuery()) {
+                    if (medicoById.next()) {
+                        var usuario = EntityDAOPool.instance().getUsuarioDAO().getById(medicoById.getInt("id_usuario"));
+                        var especialidad = EntityDAOPool.instance().getEspecialidadDAO().getTypeEspecialidad(medicoById.getInt("id_especialidad"));
+                        return new Medico (
+                            medicoById.getInt("id_medico"),
+                            usuario,
+                            especialidad,
+                            medicoById.getString("nombre_medico"),
+                            medicoById.getString("apellidos_medico")
+                        );
+                    } else {
+                        return null;
+                    }
+                }
+            }
+        });
+    }
+    
+    public ArrayList<Medico> getAll() {
+        return (ArrayList<Medico>) inStatementQuery((st) -> {
+            var medicos = new ArrayList<Medico>();
+            String medicosAllQuery = 
+                "SELECT " + 
+                "medicos.id_medico, " + 
+                "medicos.id_usuario, " + 
+                "medicos.id_especialidad, " +
+                "medicos.nombre AS nombre_medico, " +
+                "medicos.apellidos AS apellidos_medico, " +
+                "especialidades.id_especialidad, " +
+                "especialidades.desc_espe " + 
+                "FROM medicos " + 
+                "INNER JOIN especialidades ON medicos.id_especialidad = especialidades.id_especialidad;"
+            ;
+            try (PreparedStatement medicosAllStmt = st.getConnection().prepareStatement(medicosAllQuery)) {
+                try (var medicosAll = medicosAllStmt.executeQuery()){
+                    while(medicosAll.next()){
+                        var usuario = EntityDAOPool.instance().getUsuarioDAO().getById(medicosAll.getInt("id_usuario"));
+                        var especialidad = EntityDAOPool.instance().getEspecialidadDAO().getTypeEspecialidad(medicosAll.getInt("id_especialidad"));
+                        medicos.add(
+                            new Medico (
+                                medicosAll.getInt("id_medico"),
+                                    usuario,
+                                especialidad,
+                                medicosAll.getString("nombre_medico"),
+                                medicosAll.getString("apellidos_medico")
+                        ));
+                    }
+                    return medicos;
+                }
+            }
+        });
+    }
+    
 //    public ArrayList<Medico> getByNombre(String nombre) {
 //        var medicos = getAll();
 //            

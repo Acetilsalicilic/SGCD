@@ -5,7 +5,9 @@
 package EntityDaoTests;
 
 import DAO.EntityDAOPool;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,9 +18,9 @@ import org.junit.jupiter.api.TestInstance;
  * @author Vega
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CitaDAOTest {
+public class TipoUsuarioDAOTest {
     
-    public CitaDAOTest() {
+    public TipoUsuarioDAOTest() {
     }
     
     private EntityDAOPool instance;
@@ -30,15 +32,14 @@ public class CitaDAOTest {
     }
     
     @AfterAll
-    public static void tearDownClass() {
+    public void tearDownClass() {
         EntityDAOPool.close();
     }
     
-    @Test 
-    public void newMethod() {
-        var rs = instance.getCitaDAO().getAllCitas(1);
+    @Test
+    public void tipoUsuario() {
+        var rs = instance.getTipoUsuarioDAO().getTypeUser(1);
         System.out.println(rs);
         assertNotNull(rs);
     }
-    
 }

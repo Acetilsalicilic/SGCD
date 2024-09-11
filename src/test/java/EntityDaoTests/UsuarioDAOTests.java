@@ -60,7 +60,7 @@ public class UsuarioDAOTests {
     public void update() {
         var dao = instance.getUsuarioDAO();
         
-        int result = dao.update(new Usuario(1, 1, "vega1Act2", "12344pas"));
+        int result = dao.update(new Usuario(1, 2, "vega1Act22.2", "12344pas"));
         
         assertEquals(1, result);
     }

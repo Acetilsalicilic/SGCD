@@ -1,6 +1,10 @@
+EntityDaoTests\EspecialidadDAOTest.class
 EntityDaoTests\CitaDAOTest.class
-EntityDaoTests\PacienteDAOTests.class
+EntityDaoTests\ServicioDAOTest.class
 ConnectionTests\ConnectionTests.class
+EntityDaoTests\MedicoDAOTest.class
+EntityDaoTests\TipoUsuarioDAOTest.class
+EntityDaoTests\PacienteDAOTests.class
 EntityDaoTests\UsuarioDAOTests.class
 ConnectionTests\EntitiesInsertTests.class
 ConnectionTests\EntitiesSelectTests.class

@@ -1,5 +1,6 @@
 C:\Users\Vega\Documents\NetBeansProjects\SGCD\src\main\java\interfaces\PreparedSQLUpdate.java
 C:\Users\Vega\Documents\NetBeansProjects\SGCD\src\main\java\webappServlets\AppSucursalServlet.java
+C:\Users\Vega\Documents\NetBeansProjects\SGCD\src\main\java\DAO\EspecialidadDAO.java
 C:\Users\Vega\Documents\NetBeansProjects\SGCD\src\main\java\Records\Especialidad.java
 C:\Users\Vega\Documents\NetBeansProjects\SGCD\src\main\java\DAO\PacienteDAO.java
 C:\Users\Vega\Documents\NetBeansProjects\SGCD\src\main\java\apiServlets\SucursalServlet.java
@@ -22,5 +23,6 @@ C:\Users\Vega\Documents\NetBeansProjects\SGCD\src\main\java\interfaces\ProcessRe
 C:\Users\Vega\Documents\NetBeansProjects\SGCD\src\main\java\interfaces\SQLUpdate.java
 C:\Users\Vega\Documents\NetBeansProjects\SGCD\src\main\java\apiServlets\AuthServlet.java
 C:\Users\Vega\Documents\NetBeansProjects\SGCD\src\main\java\interfaces\GeneralDAO.java
+C:\Users\Vega\Documents\NetBeansProjects\SGCD\src\main\java\DAO\ServicioDAO.java
 C:\Users\Vega\Documents\NetBeansProjects\SGCD\src\main\java\DAO\MedicoDAO.java
 C:\Users\Vega\Documents\NetBeansProjects\SGCD\src\main\java\interfaces\SQLQuery.java
