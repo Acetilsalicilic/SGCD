@@ -74,14 +74,13 @@ public class PacienteDAO extends AbstractEntityDAO {
     
     public int create(Paciente paciente) {
         return preparedUpdate((con) -> {
-            var st = con.prepareStatement("INSERT INTO pacientes VALUES (?, ?, ?, ?, ?, ?);");
-            
-            st.setInt(1, paciente.id());
-            st.setInt(2, paciente.usuario().id());
-            st.setString(3, paciente.nombre());
-            st.setString(4, paciente.apellidos());
-            st.setString(5, paciente.telefono());
-            st.setString(6, paciente.direccion());
+            var st = con.prepareStatement("INSERT INTO pacientes (id_usuario, nombre, apellidos, telefono, direccion) VALUES (?, ?, ?, ?, ?);");
+
+            st.setInt(1, paciente.usuario().id());
+            st.setString(2, paciente.nombre());
+            st.setString(3, paciente.apellidos());
+            st.setString(4, paciente.telefono());
+            st.setString(5, paciente.direccion());
             
             st.execute();
             
@@ -97,14 +96,13 @@ public class PacienteDAO extends AbstractEntityDAO {
     
     public int update(Paciente paciente) {
         return preparedUpdate((con) -> {
-            var st = con.prepareStatement("UPDATE pacientes SET id_paciente=?, id_usuario=?, nombre=?, apellidos=?, telefono=?, direccion=? WHERE id_paciente=?;");
+            var st = con.prepareStatement("UPDATE pacientes SET id_usuario=?, nombre=?, apellidos=?, telefono=?, direccion=? WHERE id_paciente=?;");
 
-            st.setInt(1, paciente.id());
-            st.setInt(2, paciente.usuario().id());
-            st.setString(3, paciente.nombre());
-            st.setString(4, paciente.apellidos());
-            st.setString(5, paciente.telefono());
-            st.setString(6, paciente.direccion());
+            st.setInt(1, paciente.usuario().id());
+            st.setString(2, paciente.nombre());
+            st.setString(3, paciente.apellidos());
+            st.setString(4, paciente.telefono());
+            st.setString(5, paciente.direccion());
             
             st.execute();
             

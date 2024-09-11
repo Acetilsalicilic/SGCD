@@ -46,25 +46,43 @@
                 flex-direction: row;
                 justify-content: space-between;
             }
+
+            .crear-paciente {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .crear-paciente-container {
+                display: flex;
+                flex-direction: column;
+            }
         </style>
         <%
+            //                       AUTHORIZATION
             if (session == null || !session.getAttribute("auth").equals("admin")) {
                 response.sendRedirect("/");
+            }
+
+            //                      CONFIRMATION
+            if (request.getAttribute("create-status") != null) {
+                out.print("<script>alert('Status de la creacion de paciente: " + request.getAttribute("create-status") + "')</script>");
             }
         %>
     </head>
     <body>
         <div class="all-container">
 
-            <h1>Usuarios existentes</h1>
+            <h1>Pacientes existentes</h1>
             <a href="/admin">Volver a inicio</a>
             <form action="/admin/pacientes" class="form">
                 <label for="query">Introduce el parametro de busqueda</label>
-                <input type="text" name="query" id="query-input">
+                <%
+                    out.println("<input type=\"text\" name=\"query\" id=\"query-input\" value=\"" + (request.getParameter("query") != null ? request.getParameter("query") : "") + "\">");
+                %>
                 <label>Tipo de busqueda</label>
 
                 <label for="radio-1">Por nombre</label>
-                <input type="radio" id="radio-1" name="tipo" value="nombre">
+                <input type="radio" id="radio-1" name="tipo" value="nombre" checked="">
 
                 <label for="radio-1">Por id</label>
                 <input type="radio" id="radio-2" name="tipo" value="id">
@@ -83,24 +101,20 @@
                         var usuarios = dao.getAll();
 
                         if (query != null) {
-                                Stream<Paciente> filteredPacientes = null;
-
                                 if (tipo.equals("nombre")) {
-                                    filteredPacientes = usuarios.stream().filter(usr -> usr.nombre().toLowerCase().contains(query.toLowerCase()));
+                                    usuarios = dao.getByNombre(query);
                                 }
                                 if (tipo.equals("id")) {
-                                    if (Utils.isNumeric(query))
-                                            filteredPacientes = usuarios.stream().filter(pac -> pac.id().intValue() == Integer.parseInt(query));
-                                        else
-                                            filteredPacientes = null;
-
+                                    if (Utils.isNumeric(query) && dao.getById(Integer.parseInt(query)) != null) {
+                                        usuarios.clear();
+                                        usuarios.add(dao.getById(Integer.parseInt(query)));
+                                    } else {
+                                        System.out.println("Query is not numeric!");
+                                        usuarios = new ArrayList<Paciente>();
+                                    }
                                 }
+                            }
 
-    if (filteredPacientes == null)
-        usuarios = new ArrayList<>();
-    else
-        usuarios = filteredPacientes.collect(Collectors.toCollection(ArrayList::new));
-                        }
 
                         if (usuarios.isEmpty()) {
                             out.println("<p>No se encontraron pacientes con el " + tipo + " \"" + query + "\"</p>");
@@ -116,6 +130,27 @@
 
 
                     %>
+                    <li class="usuario-element crear-paciente">
+                        <form action="/api/pacientes" method="post" class="crear-paciente">
+                            <div class="crear-paciente-container">
+
+                                <label for="nombre-input">Nombre del paciente</label>
+                                <input type="text" name="nombre" id="nombre-input">
+    
+                                <label for="apellidos-input">Apellidos</label>
+                                <input type="text" name="apellidos" id="appellidos-inpit">
+    
+                                <label for="telefono-input">Telefono</label>
+                                <input type="text" name="telefono" id="telefono-input">
+    
+                                <label for="direccion-input">Direccion</label>
+                                <input type="text" name="direccion" id="direccion-input">
+    
+                                <input type="submit" value="Crear paciente">
+                                <input type="reset" value="Limpiar campos">
+                            </div>
+                        </form>
+                    </li>
                 </ul>
             </div>
 

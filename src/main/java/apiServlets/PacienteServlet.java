@@ -5,13 +5,12 @@
 
 package apiServlets;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import requestProcessing.ProcessRequest;
 
 /**
@@ -25,7 +24,7 @@ public class PacienteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        ProcessRequest.getPaciente.process(request, response);
+//        ProcessRequest.getPaciente.process(request, response);
     }
 
     /**
@@ -38,7 +37,7 @@ public class PacienteServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-
+        ProcessRequest.postPaciente.process(request, response);
     }
 
     @Override
