@@ -4,6 +4,7 @@
     Author     : W10
 --%>
 
+<%@page import="util.Utils"%>
 <%@page import="Records.Paciente"%>
 <%@page import="java.util.stream.Stream"%>
 <%@page import="Records.Usuario"%>
@@ -88,12 +89,10 @@
                                     filteredPacientes = usuarios.stream().filter(usr -> usr.nombre().toLowerCase().contains(query.toLowerCase()));
                                 }
                                 if (tipo.equals("id")) {
-                                        try {
+                                    if (Utils.isNumeric(query))
                                             filteredPacientes = usuarios.stream().filter(pac -> pac.id().intValue() == Integer.parseInt(query));
-
-                                        } catch (Exception e) {
+                                        else
                                             filteredPacientes = null;
-                                        }
 
                                 }
 
@@ -110,6 +109,7 @@
                                 out.println("<li class=\"usuario-element\">"
                                         + "<div class=\"usuario-row\"><p>Nombre de paciente:</p><p>" + usuario.nombre() + "</p></div>"
                                                 + "<div class=\"usuario-row\"><p>Apellidos:</p><p>" + usuario.apellidos() + "</p></div>"
+                                                        + "<div class=\"usuario-row\"><p>ID:</p><p>" + usuario.id() + "</p></div>"
                                         + "</li>");
                             }
                         }
