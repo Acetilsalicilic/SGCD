@@ -5,6 +5,7 @@
 package EntityDaoTests;
 
 import DAO.EntityDAOPool;
+import Records.TipoUsuario;
 import Records.Usuario;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -39,6 +40,16 @@ public class UsuarioDAOTests {
         EntityDAOPool.close();
     }
     
+    // Create User Test
+    @Test 
+    public void create() {
+        var rs = instance.getUsuarioDAO().create(new Usuario(14, 1, "vegaInsert", "1234"));
+        System.out.println("ID User Created: " + rs);
+        assertNotNull(rs);
+    }
+    
+    // Get Users Test (Read)
+    
     @Test
     public void select() {
         var rs = instance.getUsuarioDAO().getById(1);
@@ -46,37 +57,29 @@ public class UsuarioDAOTests {
         assertNotNull(rs);
     }
     
-//    @Test
-//    @Disabled
-//    public void insert() {
-//        var dao = instance.getUsuarioDAO();
-//        
-//        int result = dao.create(new Usuario(2, 2, "vega2", "veguita"));
-//        
-//        assertEquals(result, 1);
-//    }
-    
-    @Test
-    public void update() {
-        var dao = instance.getUsuarioDAO();
-        
-        int result = dao.update(new Usuario(1, 2, "vega1Act22.2", "12344pas"));
-        
-        assertEquals(1, result);
-    }
-    
     @Test
     public void getAll() {
-        var dao = instance.getUsuarioDAO();
-        
-        var rs = dao.getAll();
-        
-        assertNotNull(rs);
-        
-        System.out.println("User from all");
+        var rs = instance.getUsuarioDAO().getAll();
+        System.out.println("Getting All Users");
         for (Usuario usr : rs) {
-            System.out.println("user: " + usr);
+            System.out.println("User: " + usr);
         }
+        assertNotNull(rs);
     }
     
+    // Update Usuario Test 
+    @Test
+    public void update() {
+        var rs = instance.getUsuarioDAO().update(new Usuario (13, 2, "vegaUpdate", "vegaUpdatePass"));
+        System.out.println(rs);
+        assertNotNull(rs);
+    }
+    
+    // Delete Usuario Test
+    @Test
+    public void delete() {
+       var rs = instance.getUsuarioDAO().deleteById(14);
+        System.out.println(rs);
+        assertNotNull(rs);
+    }
 }
