@@ -1,15 +1,25 @@
+<%@page import="Auth.Authorize"%>
 <!DOCTYPE html>
+<%
+    //-----------AUTH-------------
+     if (!Authorize.authPermission(session, "admin")) {
+        response.sendRedirect("/");
+    }
+%>
 <html>
     <head>
         <link rel="stylesheet" href="../estilos/navbar.css" />
         <link rel="stylesheet" href="../estilos/admin/inicioAdmin.css" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Inicio administrador</title>
+        
     </head>
     <body>
         <div class="navbar">
             <div class="nav-logo">
-                <img src="../img/logo-sgcd.jpg" alt="" id="nav-logo-img" />
+                <a href="/">
+                    <img src="../img/logo-sgcd.jpg" alt="" id="nav-logo-img" />
+                </a>
             </div>
 
             <div class="nav-element-container">
