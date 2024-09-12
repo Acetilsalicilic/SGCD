@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../estilos/navbar.css" />
+        <link rel="stylesheet" href="../estilos/main/login.css" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Iniciar sesion</title>
+    </head>
+    <body>
+        <div class="navbar">
+            <div class="nav-logo">
+                <a href="/">
+                    <img src="../img/logo-sgcd.jpg" alt="" id="nav-logo-img" />
+                </a>
+            </div>
+
+            <div class="nav-element-container">
+                <div class="nav-element">
+                    <a href="/" class="nav-link">Inicio</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-container">
+            <div class="form-div">
+                <h1 class="form-title">Iniciar sesion</h1>
+
+                <form action="/api/auth" method="post" id="form">
+                    <div class="form-container">
+                        <label for="user" class="form-label">Usuario</label>
+                        <input
+                            type="text"
+                            name="user"
+                            id="user-input"
+                            class="form-input"
+                            placeholder="Nombre de usuario"
+                        />
+
+                        <label for="text" class="form-label">Contrasena</label>
+                        <input
+                            type="password"
+                            name="password"
+                            id="password-input"
+                            class="form-input"
+                            placeholder="Contrasena"
+                        />
+
+                        <button type="submit" class="submit-button">
+                            Iniciar sesion
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
