@@ -63,6 +63,8 @@
             const showError = () => {
                 if (errorShown) return;
 
+                errorShown = true;
+
                 const $form = document.getElementById("form");
                 const $form_div = $form.parentNode;
 
