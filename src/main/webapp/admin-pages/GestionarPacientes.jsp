@@ -4,6 +4,7 @@
     Author     : W10
 --%>
 
+<%@page import="Auth.Authorize"%>
 <%@page import="util.Utils"%>
 <%@page import="Records.Paciente"%>
 <%@page import="java.util.stream.Stream"%>
@@ -133,10 +134,10 @@
         </style>
         <%
             //                       AUTHORIZATION
-            if (session == null && !session.getAttribute("auth").equals("admin")) {
+            if (!Authorize.authPermission(session, "admin")) {
                 response.sendRedirect("/");
             }
-
+            
             //                      CONFIRMATION
             if (request.getAttribute("create-status") != null) {
                 out.print("<script>alert('Status de la creacion de paciente: " + request.getAttribute("create-status") + "')</script>");

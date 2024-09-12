@@ -16,6 +16,7 @@ Records\Cita.class
 requestProcessing\ProcessRequest.class
 interfaces\ProcessRequestMethod.class
 nativeDB\MySQLConnection.class
+Auth\Authorize.class
 interfaces\PreparedSQLUpdate.class
 DAO\AbstractEntityDAO.class
 webappServlets\AppSucursalServlet.class

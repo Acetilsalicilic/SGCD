@@ -4,6 +4,7 @@
     Author     : W10
 --%>
 
+<%@page import="Auth.Authorize"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.stream.Collectors"%>
 <%@page import="DAO.EntityDAOPool"%>
@@ -44,9 +45,9 @@
             }
         </style>
         <%
-            if (session == null || !session.getAttribute("auth").equals("admin")) {
-                    response.sendRedirect("/");
-                }
+            if (!Authorize.authPermission(session, "admin")) {
+                response.sendRedirect("/");
+            }
         %>
     </head>
     <body>

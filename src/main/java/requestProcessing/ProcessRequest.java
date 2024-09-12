@@ -4,12 +4,15 @@
  */
 package requestProcessing;
 
+import static Auth.Authorize.authPermission;
 import DAO.EntityDAOPool;
 import Records.Paciente;
 import Records.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import interfaces.ProcessRequestMethod;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import util.Utils;
 
 /**
@@ -31,18 +34,61 @@ public final class ProcessRequest {
         response.setCharacterEncoding("UTF-8");
     }
 
+    //--------------AUTH METHODS---------------
+    private static boolean authAccess(HttpServletRequest req, HttpServletResponse res, String requiredLevel) throws IOException {
+        var auth = authPermission(req.getSession(false), requiredLevel);
+
+        if (!auth) {
+            try (var out = res.getWriter()) {
+                out.print("{\"error\":\"no auth\"}");
+            }
+            return false;
+        }
+
+        return true;
+    }
+
     //--------------------METHDOS---------------
+    public static ProcessRequestMethod ping = (req, res) -> {
+        setResponse(res);
+
+        try (var out = res.getWriter()) {
+            out.print("{\"api_status\":\"ok\"}");
+        }
+    };
+
+    public static ProcessRequestMethod authUser = (req, res) -> {
+        String user = req.getParameter("user");
+        String pass = req.getParameter("password");
+
+        var usuarios = pool.getUsuarioDAO().getAll();
+        for (var usuario : usuarios) {
+            if (usuario.nombre_usuario().equals(user) && usuario.contrasena().equals(pass)) {
+                var session = req.getSession(true);
+                session.setAttribute("auth", usuario.tipo());
+                if (usuario.tipo().equals("admin")) {
+                    res.sendRedirect("/admin");
+                }
+                if (usuario.tipo().equals("paciente")) {
+                    res.sendRedirect("/paciente");
+                }
+                break;
+            }
+        }
+
+        if (req.getSession().getAttribute("auth") == null) {
+            res.sendRedirect("/");
+        }
+    };
+
+    //---------------------USUARIOS METHODS--------------
     public static ProcessRequestMethod getUsuario = (request, response) -> {
         setResponse(response);
         
-        var session = request.getSession(false);
-        
-        if (session == null || session.getAttribute("auth").equals("false")) {
-            try (var out = response.getWriter()) {
-                out.print("{\"error\":\"no auth\"}");
-                return;
-            }
+        if (!authAccess(request, response, "admin")) {
+            return;
         }
+
         
         try (var out = response.getWriter()) {
             int id;
@@ -63,6 +109,10 @@ public final class ProcessRequest {
     
     public static ProcessRequestMethod deleteUsuario = (req, res) -> {
         setResponse(res);
+
+        if (!authAccess(req, res, "admin")) {
+            return;
+        }
         
         try (var out = res.getWriter()) {
             String id = req.getParameter("id");
@@ -78,8 +128,15 @@ public final class ProcessRequest {
             }
         }
     };
-    
+
+    //---------------------------PACIENTES METHODS--------------
     public static ProcessRequestMethod postPaciente = (req, res) -> {
+        setResponse(res);
+
+        if (!authAccess(req, res, "admin")) {
+            return;
+        }
+
         String[] datos = new String[4];
         datos[0] = req.getParameter("nombre");
         datos[1] = req.getParameter("apellidos");
@@ -116,36 +173,12 @@ public final class ProcessRequest {
         req.getRequestDispatcher("/admin/pacientes").forward(req, res);
     };
 
-    public static ProcessRequestMethod authUser = (req, res) -> {
-        String user = req.getParameter("user");
-        String pass = req.getParameter("password");
-
-        var usuarios = pool.getUsuarioDAO().getAll();
-        for (var usuario : usuarios) {
-            if (usuario.nombre_usuario().equals(user) && usuario.contrasena().equals(pass)) {
-                var session = req.getSession(true);
-                session.setAttribute("auth", usuario.tipo());
-                if (usuario.tipo().equals("admin")) {
-                    res.sendRedirect("/admin");
-                }
-                if (usuario.tipo().equals("paciente")) {
-                    res.sendRedirect("/paciente");
-                }
-                break;
-            }
-        }
-
-        if (req.getSession().getAttribute("auth") == null) {
-            res.sendRedirect("/");
-        }
-    };
-
-    public static ProcessRequestMethod postCita = (req, res) -> {
-
-    };
-
     public static ProcessRequestMethod deletePaciente = (req, res) -> {
         setResponse(res);
+
+        if (!authAccess(req, res, "admin")) {
+            return;
+        }
 
         String id_paciente = req.getParameter("id_paciente");
         System.out.println("id paciente" + id_paciente);
@@ -170,11 +203,12 @@ public final class ProcessRequest {
         }
     };
 
-    public static ProcessRequestMethod ping = (req, res) -> {
+    //--------------------------CITA METHODS---------------------
+    public static ProcessRequestMethod postCita = (req, res) -> {
         setResponse(res);
-
-        try (var out = res.getWriter()) {
-            out.print("{\"api_status\":\"ok\"}");
+        if (!authAccess(req, res, "admin")) {
+            return;
         }
     };
+
 }
