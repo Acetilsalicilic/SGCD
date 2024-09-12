@@ -8,11 +8,13 @@ import static Auth.Authorize.authPermission;
 import DAO.EntityDAOPool;
 import Records.Paciente;
 import Records.Usuario;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import interfaces.ProcessRequestMethod;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import util.Utils;
 
 /**
@@ -58,26 +60,48 @@ public final class ProcessRequest {
     };
 
     public static ProcessRequestMethod authUser = (req, res) -> {
-        String user = req.getParameter("user");
-        String pass = req.getParameter("password");
+
+
+        var json = mapper.readValue(req.getReader(), new TypeReference<HashMap<String, String>>() {
+        });
+
+        System.out.println(json);
+
+        String username = json.get("username");
+        String password = json.get("password");
+
+        if (username == null || password == null) {
+            setResponse(res);
+            System.out.println("INVALID LOGIN CREDENTIALS!!");
+
+            try (var out = res.getWriter()) {
+                out.print("{\"auth_error\":\"invalid credentials\"}");
+            }
+            return;
+        }
 
         var usuarios = pool.getUsuarioDAO().getAll();
         for (var usuario : usuarios) {
-            if (usuario.nombre_usuario().equals(user) && usuario.contrasena().equals(pass)) {
+            if (usuario.nombre_usuario().equals(username) && usuario.contrasena().equals(password)) {
+                System.out.println("Login correct with credentials " + username + " " + password);
+
                 var session = req.getSession(true);
                 session.setAttribute("auth", usuario.tipo());
-                if (usuario.tipo().equals("admin")) {
-                    res.sendRedirect("/admin");
+
+//                res.sendRedirect("/admin");
+                setResponse(res);
+                String response = "{\"auth_correct\":\"" + usuario.tipo() + "\"}";
+                System.out.println(response);
+                try (var out = res.getWriter()) {
+                    out.print(response);
                 }
-                if (usuario.tipo().equals("paciente")) {
-                    res.sendRedirect("/paciente");
-                }
-                break;
+                return;
             }
         }
 
-        if (req.getSession().getAttribute("auth") == null) {
-            res.sendRedirect("/");
+        try (var out = res.getWriter()) {
+            setResponse(res);
+            out.print("{\"auth_error\":\"wrong credentials\"}");
         }
     };
 

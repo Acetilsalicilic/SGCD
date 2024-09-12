@@ -12,6 +12,10 @@ body {
     height: 100vh;
 }
 
+.error-message {
+    color: red;
+}
+
 .form-div {
     width: 30%;
     height: 60vh;
@@ -42,6 +46,8 @@ body {
     justify-content: space-around;
 
     align-items: center;
+
+    background-color: rgb(255, 255, 255);
 }
 
 .form-label {

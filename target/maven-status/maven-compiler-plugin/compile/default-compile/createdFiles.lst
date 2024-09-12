@@ -10,6 +10,7 @@ DAO\MedicoDAO.class
 apiServlets\AuthServlet.class
 apiServlets\PacienteServlet.class
 interfaces\GeneralDAO.class
+requestProcessing\ProcessRequest$1.class
 interfaces\SQLUpdate.class
 Records\Medico.class
 Records\Cita.class
