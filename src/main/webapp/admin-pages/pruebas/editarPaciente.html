@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            .floating {
+                z-index: 10px;
+                position: absolute;
+
+                top: 80px;
+                left: 10%;
+
+                width: 80%;
+                height: 400px;
+
+                background-color: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(2px);
+
+                box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+
+                padding: 2rem;
+
+                color: white;
+
+                font-size: 1.2rem;
+            }
+
+            .close-button {
+                background-color: rgba(0, 0, 0, 0.7);
+                color: white;
+                font-size: large;
+                border: 2px solid white;
+
+                padding: 0.5rem;
+            }
+
+            .close-button:active {
+                background-color: rgba(0, 0, 0, 0.3);
+            }
+
+            .float-cont {
+                height: calc(100% - 6rem);
+
+                justify-content: center;
+
+                padding: 3rem;
+            }
+
+            .float-form-form {
+                display: flex;
+                justify-content: center;
+                height: 100%;
+            }
+
+            .float-form {
+                display: flex;
+                flex-direction: column;
+
+                justify-content: space-around;
+
+                width: 50%;
+            }
+
+            .float-send-button {
+                width: fit-content;
+                align-self: center;
+                padding: 1rem;
+
+                background-color: rgba(0, 0, 0, 0.7);
+                color: white;
+                font-size: large;
+                border: 2px solid white;
+            }
+
+            .float-send-button:active {
+                background-color: rgba(0, 0, 0, 0.3);
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Paciente</h1>
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Earum, quo.
+        Quia quae autem doloribus unde voluptates officia quisquam tenetur aut
+        culpa incidunt, assumenda aperiam nesciunt, minus eius odio ipsam
+        eligendi.
+        <div class="floating">
+            <div class="float-cont">
+                <button type="button" class="close-button">X</button>
+                <form
+                    action="/api/usuarios"
+                    method="patch"
+                    class="float-form-form"
+                >
+                    <div class="float-form">
+                        <label for="edit-nombre">Nombre:</label>
+                        <input type="text" name="nombre" id="edit-nombre" />
+
+                        <label for="edit-apellidos">Apellidos:</label>
+                        <input
+                            type="text"
+                            name="apellidos"
+                            id="edit-apellidos"
+                        />
+
+                        <label for="edit-telefono">Telefono:</label>
+                        <input type="text" name="telefono" id="edit-telefono" />
+
+                        <label for="edit-direccion">Direccion:</label>
+                        <input
+                            type="text"
+                            name="direccion"
+                            id="edit-direccion"
+                        />
+
+                        <button type="submit" class="float-send-button">
+                            Editar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            * {
+                position: relative;
+                --gap: 10px;
+            }
+
+            .floating-container {
+                position: absolute;
+                z-index: 10;
+                background-color: #070f2b;
+
+                color: aliceblue;
+
+                top: 50px;
+                left: 50px;
+                width: 500px;
+                height: 300px;
+
+                padding: 1rem;
+
+                box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+
+                gap: 10px;
+
+                display: flex;
+                flex-direction: column;
+            }
+
+            .float-header {
+                display: flex;
+                justify-content: space-between;
+                background-color: #1b1a55;
+                height: 15%;
+                width: 100%;
+            }
+
+            .float-body {
+                display: flex;
+                gap: var(--gap);
+                background-color: #1b1a55;
+
+                height: 85%;
+            }
+        </style>
+    </head>
+    <body id="body">
+        <h1>Some title</h1>
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci
+            aliquid exercitationem delectus vero minus harum, temporibus id,
+            dolorum eaque vel laboriosam nostrum sit officia blanditiis
+            provident sapiente odit at cumque.
+        </p>
+
+        <button type="button" id="show-floating" onclick="show_floating()">
+            Mostrar
+        </button>
+
+        <div class="floating-container">
+            <div class="float-header">
+                <div class="float-title">
+                    <p>Selecciona la fecha</p>
+                </div>
+                <div class="float-close-container">
+                    <button type="button">X</button>
+                </div>
+            </div>
+
+            <div class="float-body">
+                <div class="float-day-container"></div>
+                <div class="float-result"></div>
+            </div>
+        </div>
+    </body>
+
+    <!--               SCRIPT FOR LATER                -->
+    <script>
+        var already_shown = false;
+        const show_floating = () => {
+            if (already_shown) return;
+
+            console.log("mostrar");
+            const $body = document.getElementById("body");
+
+            const $template = document.createElement("div");
+            $template.innerHTML = `<div class="floating-container">
+                                        <button type="button" id="close-floating">X</button>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat molestiae ipsam veritatis repudiandae nam, consequuntur, tenetur iusto beatae corporis nemo error sequi, exercitationem quidem! Doloremque inventore impedit beatae eligendi maxime?</p>
+                                    </div>`;
+
+            $body.appendChild($template);
+
+            already_shown = true;
+        };
+
+        const hide_floating = () => {
+            if (!already_shown) return;
+
+            console.log("ocultar");
+        };
+    </script>
+</html>

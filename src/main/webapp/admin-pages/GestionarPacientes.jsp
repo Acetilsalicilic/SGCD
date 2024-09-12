@@ -56,10 +56,84 @@
                 display: flex;
                 flex-direction: column;
             }
+
+            /*         FLOATING          */
+            #floating {
+                position: absolute;
+                z-index: 10px;
+
+                top: 80px;
+                left: 10%;
+
+                width: 60%;
+                height: 400px;
+
+                background-color: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(2px);
+
+                box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+
+                padding: 2rem;
+
+                color: white;
+
+                font-size: 1.2rem;
+            }
+
+            .close-button {
+                background-color: rgba(0, 0, 0, 0.7);
+                color: white;
+                font-size: large;
+                border: 2px solid white;
+
+                padding: 0.5rem;
+            }
+
+            .close-button:active {
+                background-color: rgba(0, 0, 0, 0.3);
+            }
+
+            .float-cont {
+                height: calc(100% - 6rem);
+
+                justify-content: center;
+
+                padding: 3rem;
+            }
+
+            .float-form-form {
+                display: flex;
+                justify-content: center;
+                height: 100%;
+            }
+
+            .float-form {
+                display: flex;
+                flex-direction: column;
+
+                justify-content: space-around;
+
+                width: 50%;
+            }
+
+            .float-send-button {
+                width: fit-content;
+                align-self: center;
+                padding: 1rem;
+
+                background-color: rgba(0, 0, 0, 0.7);
+                color: white;
+                font-size: large;
+                border: 2px solid white;
+            }
+
+            .float-send-button:active {
+                background-color: rgba(0, 0, 0, 0.3);
+            }
         </style>
         <%
             //                       AUTHORIZATION
-            if (session == null || !session.getAttribute("auth").equals("admin")) {
+            if (session == null && !session.getAttribute("auth").equals("admin")) {
                 response.sendRedirect("/");
             }
 
@@ -68,6 +142,88 @@
                 out.print("<script>alert('Status de la creacion de paciente: " + request.getAttribute("create-status") + "')</script>");
             }
         %>
+        <script>
+            const showEdit = () => {
+                const $floating = document.createElement('div');
+                $floating.setAttribute("id", "floating")
+
+                $floating.innerHTML = `<div class="float-cont">
+                <button type="button" class="close-button" onclick="hideEdit()">X</button>
+                <form
+                    action="/api/usuarios"
+                    method="patch"
+                    class="float-form-form"
+                >
+                    <div class="float-form">
+                        <label for="edit-nombre">Nombre:</label>
+                        <input type="text" name="nombre" id="edit-nombre" />
+
+                        <label for="edit-apellidos">Apellidos:</label>
+                        <input
+                            type="text"
+                            name="apellidos"
+                            id="edit-apellidos"
+                        />
+
+                        <label for="edit-telefono">Telefono:</label>
+                        <input type="text" name="telefono" id="edit-telefono" />
+
+                        <label for="edit-direccion">Direccion:</label>
+                        <input
+                            type="text"
+                            name="direccion"
+                            id="edit-direccion"
+                        />
+
+                        <button type="submit" class="float-send-button">
+                            Editar
+                        </button>
+                    </div>
+                </form>
+            </div>`
+
+                
+
+                document.body.appendChild($floating)
+            }
+
+            const deleteUsuario = async (evt) => {
+                const id_paciente = evt.getAttribute("data-paciente")
+                console.log(id_paciente)
+
+                const rs = confirm("Estas seguro de eliminar a este paciente?")
+
+                if (rs) {
+                    
+                    fetch("/api/pacientes?id_paciente=" + id_paciente, {
+                    method: "delete",
+                    }).then(response => response.json())
+                    .then(json => {
+                        console.error(json)
+                        if (json.status == 'ok') {
+                            alert("La eliminacion fue exitosa")
+                        } else {
+                            alert("Hubo un error, no se elimino el paciente")
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    })
+
+                    location.reload()
+                }
+            }
+
+            const hideEdit = () => {
+                const $floating = document.getElementById('floating')
+
+                console.log($floating);
+                console.log('Hide');
+                
+
+                document.body.removeChild($floating)
+            }
+        </script>
     </head>
     <body>
         <div class="all-container">
@@ -122,8 +278,10 @@
                             for (var usuario : usuarios) {
                                 out.println("<li class=\"usuario-element\">"
                                         + "<div class=\"usuario-row\"><p>Nombre de paciente:</p><p>" + usuario.nombre() + "</p></div>"
-                                                + "<div class=\"usuario-row\"><p>Apellidos:</p><p>" + usuario.apellidos() + "</p></div>"
-                                                        + "<div class=\"usuario-row\"><p>ID:</p><p>" + usuario.id() + "</p></div>"
+                                        + "<div class=\"usuario-row\"><p>Apellidos:</p><p>" + usuario.apellidos() + "</p></div>"
+                                        + "<div class=\"usuario-row\"><p>ID:</p><p>" + usuario.id() + "</p></div>"
+                                        + "<div class=\"usuario-row\"><button type=\"button\" data-paciente=\"" + usuario.id() + "\" onclick=\"deleteUsuario(this)\">Eliminar</button></div>"
+                                        + "<div class=\"usuario-row\"><button type=\"button\" data-paciente=\"" + usuario.id() + "\" onclick=\"showEdit()\">Editar</button></div>"
                                         + "</li>");
                             }
                         }

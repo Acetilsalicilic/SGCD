@@ -10,6 +10,7 @@ import Records.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import interfaces.ProcessRequestMethod;
 import jakarta.servlet.http.HttpServletResponse;
+import util.Utils;
 
 /**
  *
@@ -136,6 +137,44 @@ public final class ProcessRequest {
 
         if (req.getSession().getAttribute("auth") == null) {
             res.sendRedirect("/");
+        }
+    };
+
+    public static ProcessRequestMethod postCita = (req, res) -> {
+
+    };
+
+    public static ProcessRequestMethod deletePaciente = (req, res) -> {
+        setResponse(res);
+
+        String id_paciente = req.getParameter("id_paciente");
+        System.out.println("id paciente" + id_paciente);
+
+        if (id_paciente == null) {
+            try (var out = res.getWriter()) {
+                out.print("{\"error\":\"empty id\"}");
+            }
+            return;
+        }
+        if (!Utils.isNumeric(id_paciente)) {
+            try (var out = res.getWriter()) {
+                out.print("{\"error\":\"invalid id\"}");
+            }
+            return;
+        }
+
+        var rs = pool.getPacienteDAO().deleteById(Integer.parseInt(id_paciente));
+
+        try (var out = res.getWriter()) {
+            out.print("{\"status\":\"ok\"}");
+        }
+    };
+
+    public static ProcessRequestMethod ping = (req, res) -> {
+        setResponse(res);
+
+        try (var out = res.getWriter()) {
+            out.print("{\"api_status\":\"ok\"}");
         }
     };
 }

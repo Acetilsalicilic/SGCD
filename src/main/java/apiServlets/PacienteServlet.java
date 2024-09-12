@@ -40,6 +40,11 @@ public class PacienteServlet extends HttpServlet {
         ProcessRequest.postPaciente.process(request, response);
     }
 
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        ProcessRequest.deletePaciente.process(request, response);
+    }
+
     @Override
     public String getServletInfo() {
         return "Short description";

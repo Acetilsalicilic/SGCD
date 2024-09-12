@@ -40,6 +40,9 @@ public class EntityDAOPool {
     }
     
     public static EntityDAOPool instance() {
+        if (instance == null) {
+            System.out.println("ERROR! Pool hasn't been instantiated yet!");
+        }
         return instance;
     }
     

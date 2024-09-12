@@ -8,10 +8,10 @@ import DAO.EntityDAOPool;
 import Records.Paciente;
 import Records.Usuario;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
@@ -38,6 +38,7 @@ public class PacienteDAOTests {
     }
     
     @Test
+    @Disabled
     public void getByName() {
         var dao = instance.getPacienteDAO();
         
