@@ -27,7 +27,7 @@ public class MySQLConnection {
         }
         try {
             cn = DriverManager.getConnection(url, username, password);
-            System.out.println("Connection establisheds!");
+            System.out.println("Connection established!");
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot connect", e);
         }
