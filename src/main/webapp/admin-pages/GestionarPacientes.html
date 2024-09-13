@@ -3,6 +3,11 @@
     <head>
         <link rel="stylesheet" href="../estilos/navbar.css" />
         <link rel="stylesheet" href="../estilos/admin/gestionarPacientes.css" />
+        <link
+            rel="stylesheet"
+            href="../estilos/admin/floating/floatingEditarPaciente.css"
+        />
+        <script src="./js_scripts/gestionarPaciente.js"></script>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Gestionar pacientes</title>
@@ -125,71 +130,17 @@
                                 <button type="button" class="pacientes-button">
                                     Eliminar
                                 </button>
-                                <button type="button" class="pacientes-button">
+                                <button
+                                    type="button"
+                                    class="pacientes-button"
+                                    onclick="showEditar(this)"
+                                >
                                     Editar
                                 </button>
                             </div>
                         </div>
                         <!--END OF ELEMENT-->
-
-
-                        <!-------------------LIST ELEMENT---------->
-                            <div class="pacientes-element">
-                                <div class="pacientes-col-wrapper">
-                                    <div class="pacientes-label-col">
-                                        <label class="data-label" for="nombre"
-                                            >Nombre</label
-                                        >
-                                        <label class="data-label" for="apellidos"
-                                            >Apellidos</label
-                                        >
-                                        <label class="data-label" for="telefono"
-                                            >Telefono</label
-                                        >
-                                        <label class="data-label" for="direccion"
-                                            >Direccion</label
-                                        >
-                                        <label class="data-label" for="usuario"
-                                            >Usuario</label
-                                        >
-                                        <label class="data-label" for="contrasena"
-                                            >Contrasena</label
-                                        >
-                                    </div>
-    
-                                    <div class="pacientes-data-col">
-                                        <p class="data-display" id="apellidos">
-                                            Test
-                                        </p>
-                                        <p class="data-display" id="nombre">Test</p>
-                                        <p class="data-display" id="telefono">
-                                            667
-                                        </p>
-                                        <p class="data-display" id="direccion">
-                                            Aca
-                                        </p>
-                                        <p class="data-display" id="usuario">
-                                            Usuario
-                                        </p>
-                                        <p class="data-display" id="contrasena">
-                                            Contrasena
-                                        </p>
-                                    </div>
-                                </div>
-    
-                                <div class="pacientes-buttons-container">
-                                    <button type="button" class="pacientes-button">
-                                        Eliminar
-                                    </button>
-                                    <button type="button" class="pacientes-button">
-                                        Editar
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <!--END OF ELEMENT-->
                     </div>
-
                 </div>
             </div>
         </div>
