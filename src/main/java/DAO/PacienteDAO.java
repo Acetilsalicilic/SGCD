@@ -18,7 +18,7 @@ public class PacienteDAO extends AbstractEntityDAO {
     public PacienteDAO(Connection con) {
         super(con);
     }
-    
+
     public Paciente getById(Integer id_paciente){
         return (Paciente) inStatementQuery((st) -> {
             String pacienteByIdQuery = "SELECT * FROM pacientes WHERE id_paciente = ?;";
@@ -43,7 +43,7 @@ public class PacienteDAO extends AbstractEntityDAO {
             }
         });
     }
-    
+
     public ArrayList<Paciente> getAll() {
         return (ArrayList<Paciente>) inStatementQuery((st) -> {
             var pacientes = new ArrayList<Paciente>();
@@ -100,6 +100,7 @@ public class PacienteDAO extends AbstractEntityDAO {
             st.setString(3, paciente.apellidos());
             st.setString(4, paciente.telefono());
             st.setString(5, paciente.direccion());
+            st.setInt(6, paciente.id_paciente());
             
             st.execute();
             

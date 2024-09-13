@@ -158,7 +158,15 @@ public final class ProcessRequest {
 
     //---------------------------PACIENTES METHODS--------------
     public static ProcessRequestMethod postPaciente = (req, res) -> {
+        setResponse(res);
 
+//        var json = mapper.readValue(req.getReader(), jsonReference);
+//
+//        // Tomcat's impossibility for handling PATCH or PUT methods workaround :)
+//        if (json.get("post-type").equals("patch")) {
+//            ProcessRequest.patchPaciente(req, res);
+//            return;
+//        }
     };
 
     public static ProcessRequestMethod deletePaciente = (req, res) -> {
@@ -196,11 +204,6 @@ public final class ProcessRequest {
     public static ProcessRequestMethod getPaciente = (req, res) -> {
         setResponse(res);
 
-//        var json = mapper.readValue(req.getReader(), jsonReference);
-//
-//        System.out.println("json: " + json);
-//        String type = json.get("type");
-//        System.out.println("thing in type: " + type);
         String type = req.getParameter("type");
         String query = req.getParameter("query");
 
@@ -231,7 +234,6 @@ public final class ProcessRequest {
         responseMap.put("pacientes", pacientes);
 
         var responseJson = mapper.writeValueAsString(responseMap);
-        System.out.println("response json: " + responseJson);
 
         try (var out = res.getWriter()) {
             out.print(responseJson);
@@ -239,6 +241,41 @@ public final class ProcessRequest {
     };
 
     public static ProcessRequestMethod patchPaciente = (req, res) -> {
+        System.out.println("SOMEONE IS PUTTING SOME SHIT HERE");
+        setResponse(res);
+        var dao = pool.getPacienteDAO();
+
+        var json = mapper.readValue(req.getReader(), jsonReference);
+        String[] datos = new String[7];
+
+        datos[0] = json.get("nombre");
+        datos[1] = json.get("apellidos");
+        datos[2] = json.get("telefono");
+        datos[3] = json.get("direccion");
+        datos[4] = json.get("usuario");
+        datos[5] = json.get("contrasena");
+        datos[6] = json.get("id");
+
+        var usuario = pool.getUsuarioDAO().getByUsername(datos[4]);
+        var paciente = new Paciente(
+                Integer.parseInt(datos[6]),
+                usuario,
+                datos[0],
+                datos[1],
+                datos[2],
+                datos[3]
+        );
+
+        var rs = dao.update(paciente);
+
+        try (var out = res.getWriter()) {
+            if (rs != 1) {
+                out.print("{\"error\":\"something went wrong\"}");
+                return;
+            }
+
+            out.print("{\"status\":\"ok\"}");
+        }
 
     };
 

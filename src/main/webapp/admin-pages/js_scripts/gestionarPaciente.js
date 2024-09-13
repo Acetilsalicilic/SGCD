@@ -25,6 +25,7 @@ const showEditar = (el) => {
             );
 
             $editarButton.setAttribute("data-id", id);
+            $editarButton.addEventListener("click", editarButton);
             floatingEditSetValues($floating, id);
         });
 };
@@ -99,8 +100,32 @@ const loadInfo = () => {
 };
 
 const editarButton = () => {
+    console.log("going to edit...");
+
     const $floating = document.querySelector(".editar-floating");
     const id = $floating.querySelector("#editar-enviar-button").value;
+
+    floatingEditGetValues().then((paciente) => {
+        fetch("/api/pacientes", {
+            method: "put",
+            body: JSON.stringify(paciente),
+        })
+            .then((response) => response.text())
+            .then((res) => {
+                console.log(res);
+
+                if (res.error) {
+                    console.error(
+                        "something went wrong while trying to edit paciente"
+                    );
+                    console.error(res.error);
+                }
+                if (res.status) {
+                    console.log("Success updating paciente with id " + id);
+                    loadInfo();
+                }
+            });
+    });
 };
 
 //--------------DATA FETCHING--------------
@@ -153,6 +178,24 @@ const floatingEditSetValues = async ($floating, id) => {
     $floating.querySelector("#editar-usuario").value = paciente.usuario;
     $floating.querySelector("#editar-contrasena").value = paciente.contrasena;
 };
+
+const floatingEditGetValues = async () => {
+    const $floating = document.querySelector(".editar-floating");
+    const id = $floating
+        .querySelector("#editar-enviar-button")
+        .getAttribute("data-id");
+
+    return (paciente = {
+        nombre: $floating.querySelector("#editar-nombre").value,
+        apellidos: $floating.querySelector("#editar-apellidos").value,
+        telefono: $floating.querySelector("#editar-telefono").value,
+        direccion: $floating.querySelector("#editar-direccion").value,
+        usuario: $floating.querySelector("#editar-usuario").value,
+        contrasena: $floating.querySelector("#editar-contrasena").value,
+        id,
+    });
+};
+
 const createPacienteElement = ({
     id,
     nombre,

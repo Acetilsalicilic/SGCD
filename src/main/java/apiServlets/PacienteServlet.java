@@ -33,12 +33,14 @@ public class PacienteServlet extends HttpServlet {
         ProcessRequest.postPaciente.process(request, response);
     }
 
+    @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProcessRequest.deletePaciente.process(request, response);
     }
 
-    protected void doPatch(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProcessRequest.patchPaciente.process(request, response);
     }
