@@ -6,7 +6,9 @@ body {
 .main-container {
     display: flex;
     justify-content: center;
-    align-items: center;
+
+    margin-top: 5rem;
+    margin-bottom: 2rem;
 
     height: 100vh;
 }
@@ -14,8 +16,9 @@ body {
 .inner-container {
     width: calc(90% - 4rem);
     min-height: calc(85vh - 4rem);
+    height: fit-content;
 
-    margin-top: 5rem;
+    margin-top: 2rem;
 
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
     padding: 2rem;

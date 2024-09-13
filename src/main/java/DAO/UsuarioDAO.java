@@ -92,7 +92,8 @@ public class UsuarioDAO extends AbstractEntityDAO {
                     rs.getInt("id_usuario"),
                     rs.getInt("id_tipo_usuario"),
                     rs.getString("nombre_usuario"),
-                    rs.getString("contrasena")
+                        rs.getString("contrasena"),
+                        rs.getString("desc_tipo")
                 ));
             }
             return usuarios;

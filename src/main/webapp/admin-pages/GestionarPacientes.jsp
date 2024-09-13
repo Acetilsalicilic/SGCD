@@ -1,13 +1,9 @@
-<%@page import="DAO.EntityDAOPool"%>
-<%@page import="Auth.Authorize"%>
+<%@page import="DAO.EntityDAOPool"%> <%@page import="Auth.Authorize"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <%
-            if (!Authorize.authPermission(session, "admin")) {
-                response.sendRedirect("/");
-            }
-        %>
+        <% if (!Authorize.authPermission(session, "admin")) {
+        response.sendRedirect("/"); } %>
         <link rel="stylesheet" href="../estilos/navbar.css" />
         <link rel="stylesheet" href="../estilos/admin/gestionarPacientes.css" />
         <link
@@ -18,7 +14,7 @@
             rel="stylesheet"
             href="../estilos/admin/floating/floatingCrearPaciente.css"
         />
-        <script src="./js_scripts/gestionarPaciente.js"></script>
+        <script src="/admin-pages/js_scripts/gestionarPaciente.js"></script>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Gestionar pacientes</title>
@@ -63,7 +59,11 @@
 
                         <div class="search-row">
                             <input type="text" name="query" id="query-input" />
-                            <button type="button" id="buscar-button">
+                            <button
+                                type="button"
+                                id="buscar-button"
+                                onclick="searchButton(this)"
+                            >
                                 Buscar
                             </button>
                         </div>
@@ -76,6 +76,7 @@
                                     name="tipo"
                                     id="radio-nombre"
                                     class="radio-button"
+                                    value="name"
                                     checked
                                 />
                             </div>
@@ -87,6 +88,7 @@
                                     name="tipo"
                                     id="radio-id"
                                     class="radio-button"
+                                    value="id"
                                 />
                             </div>
                         </div>
@@ -147,6 +149,7 @@
                                     type="button"
                                     class="pacientes-button"
                                     onclick="showEditar(this)"
+                                    data-id=""
                                 >
                                     Editar
                                 </button>

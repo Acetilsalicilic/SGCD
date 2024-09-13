@@ -87,11 +87,11 @@ public final class ProcessRequest {
         for (var usuario : usuarios) {
             if (usuario.nombre_usuario().equals(username) && usuario.contrasena().equals(password)) {
                 System.out.println("Login correct with credentials " + username + " " + password);
+                System.out.println("User foundÑ " + usuario);
 
                 var session = req.getSession(true);
                 session.setAttribute("auth", usuario.desc_tipo());
 
-//                res.sendRedirect("/admin");
                 setResponse(res);
                 String response = "{\"auth_correct\":\"" + usuario.desc_tipo() + "\"}";
                 System.out.println(response);
@@ -196,11 +196,13 @@ public final class ProcessRequest {
     public static ProcessRequestMethod getPaciente = (req, res) -> {
         setResponse(res);
 
-        var json = mapper.readValue(req.getReader(), jsonReference);
-
-        System.out.println("json: " + json);
-        String type = json.get("type");
-        System.out.println("thing in type: " + type);
+//        var json = mapper.readValue(req.getReader(), jsonReference);
+//
+//        System.out.println("json: " + json);
+//        String type = json.get("type");
+//        System.out.println("thing in type: " + type);
+        String type = req.getParameter("type");
+        String query = req.getParameter("query");
 
         if (type == null || (!type.equals("name") && !type.equals("id"))) {
             try (var out = res.getWriter()) {
@@ -208,8 +210,6 @@ public final class ProcessRequest {
                 return;
             }
         }
-
-        String query = json.get("query");
 
         if (type.equals("id") && !Utils.isNumeric(query)) {
             try (var out = res.getWriter()) {
