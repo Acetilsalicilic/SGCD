@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
+// TODO: CAMBIAR NOMBRE DB AL HACER PRUEBAS
+
 /**
  *
  * @author W10
@@ -28,7 +30,7 @@ public class PacienteDAOTests {
     
     @BeforeAll
     public void setUpClass() {
-        EntityDAOPool.init("jdbc:mysql://localhost:3306/lab4", "root", "pass");
+        EntityDAOPool.init("jdbc:mysql://localhost:3306/lab4", "root", "");
         instance = EntityDAOPool.instance();
     }
     
@@ -38,41 +40,54 @@ public class PacienteDAOTests {
     }
     
     @Test
-    @Disabled
-    public void getByName() {
-        var dao = instance.getPacienteDAO();
-        
-        var rs = dao.getByNombre("ast");
+    public void getPacienteById() {
+        var rs = instance.getPacienteDAO().getById(1);
+        System.out.println(rs);
         assertNotNull(rs);
-        
-        assertFalse(rs.isEmpty());
-        
-        for (var pac : rs) {
-            System.out.println("paciente: " + pac);
-        }
     }
     
     @Test
-    @Disabled
-    public void create() {
-        var dao = instance.getPacienteDAO();
-        
-        var paciente = new Paciente(
-                5,
-                "jast",
-                "test test",
-                "12345678890",
-                "direccion",
-                new Usuario(
-                        2,
-                        "asd",
-                        "asd",
-                        "admin"
-                )
-        );
-        
-        var rs = dao.create(paciente);
-        
-        assertEquals(1, rs);
+    public void getAllPacientes() {
+        var rs = instance.getPacienteDAO().getAll();
+        System.out.println(rs);
+        assertNotNull(rs);
     }
+    
+//    @Test
+//    public void getByName() {
+//        var dao = instance.getPacienteDAO();
+//        
+//        var rs = dao.getByNombre("ast");
+//        assertNotNull(rs);
+//        
+//        assertFalse(rs.isEmpty());
+//        
+//        for (var pac : rs) {
+//            System.out.println("paciente: " + pac);
+//        }
+//    }
+    
+//    @Test
+//    @Disabled
+//    public void create() {
+//        var dao = instance.getPacienteDAO();
+//        
+//        var paciente = new Paciente(
+//                5,
+//                "jast",
+//                "test test",
+//                "12345678890",
+//                "direccion",
+//                new Usuario(
+//                        2,
+//                        "asd",
+//                        "asd",
+//                        "admin"
+//                )
+//        );
+//        
+//        var rs = dao.create(paciente);
+//        
+//        assertEquals(1, rs);
+//    }
 }

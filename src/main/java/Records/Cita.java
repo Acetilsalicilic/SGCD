@@ -10,6 +10,6 @@ import java.time.LocalDateTime;
  *
  * @author W10
  */
-public record Cita(Integer id, LocalDateTime fecha, Paciente paciente, Medico medico, String servicio) {
+public record Cita(Integer id_cita, Medico medico, Paciente paciente, Servicio servicio, LocalDateTime fecha_cita) {
 
 }

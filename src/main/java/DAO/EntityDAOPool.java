@@ -26,9 +26,13 @@ public class EntityDAOPool {
         
         //------------DAO Instantiation-----------
         usuarioDao = new UsuarioDAO(con);
+        tipoUsuarioDao = new TipoUsuarioDAO(con);
         pacienteDao = new PacienteDAO(con);
         medicoDao = new MedicoDAO(con);
-
+        servicioDao = new ServicioDAO(con);
+        especialidadDao = new EspecialidadDAO(con);
+        citaDao = new CitaDAO(con);
+        
     }
     
     public static void close() {
@@ -49,12 +53,20 @@ public class EntityDAOPool {
     //---------------DAO Variables--------------
     
     private UsuarioDAO usuarioDao;
+    private TipoUsuarioDAO tipoUsuarioDao;
     private PacienteDAO pacienteDao;
     private MedicoDAO medicoDao;
+    private ServicioDAO servicioDao;
+    private EspecialidadDAO especialidadDao;
+    private CitaDAO citaDao;
     
     //--------------Get DAO Methods-------------
     public UsuarioDAO getUsuarioDAO() {
         return usuarioDao;
+    }
+    
+    public TipoUsuarioDAO getTipoUsuarioDAO() {
+        return tipoUsuarioDao;
     }
     
     public PacienteDAO getPacienteDAO() {
@@ -63,5 +75,17 @@ public class EntityDAOPool {
     
     public MedicoDAO getMedicoDAO() {
         return medicoDao;
+    }
+    
+    public ServicioDAO getServicioDAO() {
+        return servicioDao;
+    }
+    
+    public EspecialidadDAO getEspecialidadDAO() {
+        return especialidadDao;
+    }
+    
+    public CitaDAO getCitaDAO() {
+        return citaDao;
     }
 }

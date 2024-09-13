@@ -24,7 +24,7 @@ import util.Utils;
 public final class ProcessRequest {
     private static String url = "jdbc:mysql://localhost:3306/lab4";
     private static String username = "root";
-    private static String password = "pass";
+    private static String password = "";
     static {
         EntityDAOPool.init(url, username, password);
     }

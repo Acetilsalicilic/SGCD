@@ -32,11 +32,11 @@ public class UsuarioServlet extends HttpServlet {
         throw new UnsupportedOperationException("Not suppoerted yet");
     }
     
-    @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        ProcessRequest.deleteUsuario.process(request, response);
-    }
+//    @Override
+//    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+//    throws ServletException, IOException {
+//        ProcessRequest.deleteUsuario.process(request, response);
+//    }
 
     @Override
     public String getServletInfo() {
