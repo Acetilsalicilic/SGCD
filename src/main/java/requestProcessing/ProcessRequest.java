@@ -159,14 +159,6 @@ public final class ProcessRequest {
     //---------------------------PACIENTES METHODS--------------
     public static ProcessRequestMethod postPaciente = (req, res) -> {
         setResponse(res);
-
-//        var json = mapper.readValue(req.getReader(), jsonReference);
-//
-//        // Tomcat's impossibility for handling PATCH or PUT methods workaround :)
-//        if (json.get("post-type").equals("patch")) {
-//            ProcessRequest.patchPaciente(req, res);
-//            return;
-//        }
     };
 
     public static ProcessRequestMethod deletePaciente = (req, res) -> {
@@ -178,8 +170,8 @@ public final class ProcessRequest {
 
         var json = mapper.readValue(req.getReader(), jsonReference);
 
-        String id_paciente = json.get("id_paciente");
-        System.out.println("id paciente" + id_paciente);
+        String id_paciente = json.get("paciente_id");
+        System.out.println("id paciente " + id_paciente);
 
         if (id_paciente == null) {
             try (var out = res.getWriter()) {
@@ -202,6 +194,9 @@ public final class ProcessRequest {
     };
 
     public static ProcessRequestMethod getPaciente = (req, res) -> {
+        if (!authAccess(req, res, "admin")) {
+            return;
+        }
         setResponse(res);
 
         String type = req.getParameter("type");
@@ -241,6 +236,9 @@ public final class ProcessRequest {
     };
 
     public static ProcessRequestMethod patchPaciente = (req, res) -> {
+        if (!authAccess(req, res, "admin")) {
+            return;
+        }
         System.out.println("SOMEONE IS PUTTING SOME SHIT HERE");
         setResponse(res);
         var dao = pool.getPacienteDAO();

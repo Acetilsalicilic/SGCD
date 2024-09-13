@@ -138,6 +138,32 @@ const editarButton = () => {
     });
 };
 
+const eliminarButton = (el) => {
+    console.log("going to delete some folks...");
+    const paciente_id = el.getAttribute("data-id");
+    const rs = confirm(
+        `Estas seguro de querer eliminar al paciente con id ${paciente_id}?`
+    );
+
+    if (!rs) return;
+
+    fetch("/api/pacientes", {
+        method: "delete",
+        body: JSON.stringify({ paciente_id }),
+    })
+        .then((response) => response.json())
+        .then((json) => {
+            console.log(json);
+            if (json.error) {
+                alert("Algo salio mal");
+            }
+            if (json.status) {
+                alert("El paciente se elimino con exito");
+                loadInfo();
+            }
+        });
+};
+
 //--------------DATA FETCHING--------------
 
 const getPacientes = async (type, query) => {
@@ -241,7 +267,11 @@ const createPacienteElement = ({
 </div>
 
 <div class="pacientes-buttons-container">
-    <button type="button" class="pacientes-button">Eliminar</button>
+    <button 
+        type="button" 
+        class="pacientes-button" 
+        onclick="eliminarButton(this)" 
+        data-id="${id}">Eliminar</button>
     <button
         type="button"
         class="pacientes-button"
