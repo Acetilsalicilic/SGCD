@@ -110,7 +110,7 @@ const editarButton = () => {
             method: "put",
             body: JSON.stringify(paciente),
         })
-            .then((response) => response.text())
+            .then((response) => response.json())
             .then((res) => {
                 console.log(res);
 
@@ -119,11 +119,21 @@ const editarButton = () => {
                         "something went wrong while trying to edit paciente"
                     );
                     console.error(res.error);
+                    alert("Algo salio mal");
                 }
                 if (res.status) {
                     console.log("Success updating paciente with id " + id);
+                    alert("El paciente se edito correctamente");
+                    hideEditar();
                     loadInfo();
                 }
+            })
+            .catch((error) => {
+                console.error(
+                    "something went wrong while trying to edit paciente in promise"
+                );
+                console.error(error);
+                alert("Algo salio mal");
             });
     });
 };
