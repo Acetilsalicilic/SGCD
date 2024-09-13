@@ -1,9 +1,9 @@
-var editarShown = false;
+var floatingShown = false;
 
 const showEditar = (el) => {
-    if (editarShown) return;
+    if (floatingShown) return;
 
-    editarShown = true;
+    floatingShown = true;
 
     let editarString;
 
@@ -23,9 +23,38 @@ const showEditar = (el) => {
 };
 
 const hideEditar = (el) => {
-    if (!editarShown) return;
-    editarShown = false;
+    if (!floatingShown) return;
+    floatingShown = false;
 
     const $floating = document.getElementById("editar-floating");
     document.body.removeChild($floating);
+};
+
+const showCrear = (el) => {
+    console.log("show-crear");
+
+    if (floatingShown) return;
+    floatingShown = true;
+
+    fetch("/admin-pages/fragments/floatingCrearPaciente.html")
+        .then((response) => response.text())
+        .then((string) => {
+            const $crear = document.createElement("div");
+            $crear.setAttribute("class", "crear-floating");
+            $crear.setAttribute("id", "crear-floating");
+
+            $crear.innerHTML = string;
+
+            document.body.appendChild($crear);
+        });
+};
+
+const hideCrear = (el) => {
+    console.log("hide-crear");
+
+    if (!floatingShown) return;
+    floatingShown = false;
+
+    const $crear = document.getElementById("crear-floating");
+    document.body.removeChild($crear);
 };

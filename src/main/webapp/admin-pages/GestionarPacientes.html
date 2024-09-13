@@ -7,6 +7,10 @@
             rel="stylesheet"
             href="../estilos/admin/floating/floatingEditarPaciente.css"
         />
+        <link
+            rel="stylesheet"
+            href="../estilos/admin/floating/floatingCrearPaciente.css"
+        />
         <script src="./js_scripts/gestionarPaciente.js"></script>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,7 +26,9 @@
 
             <div class="nav-element-container">
                 <div class="nav-element create-element-nav">
-                    <a href="" class="nav-link">Crear paciente</a>
+                    <a href="#" class="nav-link" onclick="showCrear(this)"
+                        >Crear paciente</a
+                    >
                 </div>
                 <div class="nav-element">
                     <a href="/admin" class="nav-link">Inicio admin</a>
