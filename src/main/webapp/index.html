@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <script>
+            const pingServer = () => {
+                console.log("Calling server");
+
+                fetch("/api")
+                    .then((response) => response.json())
+                    .then((json) => {
+                        if (json.api_status == "ok") {
+                            console.log(json);
+                        } else {
+                            console.error("Error in response:");
+                            console.error(json);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            };
+
+            pingServer();
+
+            const redirectToLogin = () => {
+                location.replace("/auth");
+            };
+        </script>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <button class="button" onclick="redirectToLogin()">
+            Iniciar Sesión
+            <div class="hoverEffect">
+                <div></div>
+            </div>
+        </button>
+        <nav>
+            <ul>
+                <li>
+                    <a href="#Quienes somos"
+                        ><button style="margin: 30px">Quienes somos</button></a
+                    >
+                </li>
+                <li><button>Ubicación</button></li>
+                <li class="logo">
+                    <img src="logo dental.png" width="150px" height="150px" />
+                </li>
+                <li><button>Servicios</button></li>
+                <li>
+                    <button style="margin: 25px">Dudas y Comentarios</button>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="card"></div>
+
+        <div class="container">
+            <h1>HOSPITAL DENTAL</h1>
+        </div>
+
+        <div class="text">
+            <p>
+                La salud bucal es nuestra prioridad. <br />
+                En nuestra clínica dental, utilizamos tecnología de <br />
+                vanguardia, incluyendo un sistema de gestión de <br />
+                consultas que optimiza cada paso de tu tratamiento. <br />
+                Desde la primera cita hasta el seguimiento, disfrutarás <br />
+                de un servicio eficiente y personalizado.
+            </p>
+        </div>
+
+        <div class="item" id="Quienes somos">
+            <h3>quienes somos</h3>
+        </div>
+    </body>
+</html>
