@@ -96,69 +96,12 @@
                 </div>
 
                 <div class="pacientes-table">
-                    <div class="pacientes-list">
-                        <!-------------------LIST ELEMENT---------->
-                        <div class="pacientes-element">
-                            <div class="pacientes-col-wrapper">
-                                <div class="pacientes-label-col">
-                                    <label class="data-label" for="nombre"
-                                        >Nombre</label
-                                    >
-                                    <label class="data-label" for="apellidos"
-                                        >Apellidos</label
-                                    >
-                                    <label class="data-label" for="telefono"
-                                        >Telefono</label
-                                    >
-                                    <label class="data-label" for="direccion"
-                                        >Direccion</label
-                                    >
-                                    <label class="data-label" for="usuario"
-                                        >Usuario</label
-                                    >
-                                    <label class="data-label" for="contrasena"
-                                        >Contrasena</label
-                                    >
-                                </div>
-
-                                <div class="pacientes-data-col">
-                                    <p class="data-display" id="apellidos">
-                                        Test
-                                    </p>
-                                    <p class="data-display" id="nombre">Test</p>
-                                    <p class="data-display" id="telefono">
-                                        667
-                                    </p>
-                                    <p class="data-display" id="direccion">
-                                        Aca
-                                    </p>
-                                    <p class="data-display" id="usuario">
-                                        Usuario
-                                    </p>
-                                    <p class="data-display" id="contrasena">
-                                        Contrasena
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="pacientes-buttons-container">
-                                <button type="button" class="pacientes-button">
-                                    Eliminar
-                                </button>
-                                <button
-                                    type="button"
-                                    class="pacientes-button"
-                                    onclick="showEditar(this)"
-                                    data-id=""
-                                >
-                                    Editar
-                                </button>
-                            </div>
-                        </div>
-                        <!--END OF ELEMENT-->
-                    </div>
+                    <div class="pacientes-list"></div>
                 </div>
             </div>
         </div>
+        <script>
+            loadInfo();
+        </script>
     </body>
 </html>

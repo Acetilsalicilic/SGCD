@@ -7,6 +7,7 @@ const showEditar = (el) => {
     floatingShown = true;
 
     let editarString;
+    const id = el.getAttribute("data-id");
 
     fetch("/admin-pages/fragments/floatingEditPaciente.html")
         .then((response) => response.text())
@@ -19,6 +20,12 @@ const showEditar = (el) => {
             $floating.innerHTML = editarString;
 
             document.body.appendChild($floating);
+            const $editarButton = $floating.querySelector(
+                "#editar-enviar-button"
+            );
+
+            $editarButton.setAttribute("data-id", id);
+            floatingEditSetValues($floating, id);
         });
 };
 
@@ -77,27 +84,44 @@ const searchButton = (el) => {
     });
 };
 
+const loadInfo = () => {
+    console.log("loading info");
+
+    const $list = document.querySelector(".pacientes-list");
+    $list.innerHTML = "";
+
+    getPacientes("name", "").then((json) => {
+        const convertedPacientes = convertPacientes(json);
+        if (convertedPacientes.length > 0)
+            convertedPacientes.forEach(addPacienteElement);
+        else showNoPacientesAvailable();
+    });
+};
+
+const editarButton = () => {
+    const $floating = document.querySelector(".editar-floating");
+    const id = $floating.querySelector("#editar-enviar-button").value;
+};
+
 //--------------DATA FETCHING--------------
 
 const getPacientes = async (type, query) => {
     const response = await fetch(`/api/pacientes?type=${type}&query=${query}`);
     const json = await response.json();
-    console.log(json);
     return json;
+};
+
+const getPacienteById = async (id) => {
+    return await getPacientes("id", id);
 };
 
 const convertPacientes = (json) => {
     const listaPacientesJson = json.pacientes;
-    console.log(listaPacientesJson);
-    console.log(typeof listaPacientesJson);
 
     const listaPacientes = [];
 
     for (index in listaPacientesJson) {
         const paciente = listaPacientesJson[index];
-
-        console.log("paciente: ");
-        console.log(paciente);
 
         listaPacientes.push({
             id: paciente.id_paciente,
@@ -114,6 +138,21 @@ const convertPacientes = (json) => {
 };
 
 //-----------------DOM EDITING-----------------
+const floatingEditSetValues = async ($floating, id) => {
+    const json = await getPacienteById(id);
+    const paciente = convertPacientes(json)[0];
+
+    console.log(json);
+
+    console.log(paciente);
+
+    $floating.querySelector("#editar-nombre").value = paciente.nombre;
+    $floating.querySelector("#editar-apellidos").value = paciente.apellidos;
+    $floating.querySelector("#editar-telefono").value = paciente.telefono;
+    $floating.querySelector("#editar-direccion").value = paciente.direccion;
+    $floating.querySelector("#editar-usuario").value = paciente.usuario;
+    $floating.querySelector("#editar-contrasena").value = paciente.contrasena;
+};
 const createPacienteElement = ({
     id,
     nombre,
@@ -177,6 +216,16 @@ const showNoPacienteFound = (type, query) => {
     $warn.innerHTML = `<p>No se encontro ningun paciente con el ${
         type == "name" ? "nombre" : "id"
     } "${query}"!`;
+    const $list = document.querySelector(".pacientes-list");
+    $list.appendChild($warn);
+};
+
+const showNoPacientesAvailable = () => {
+    console.log("no pacientes found");
+
+    const $warn = document.createElement("div");
+    $warn.setAttribute("class", "pacientes-element");
+    $warn.innerHTML = "No hay pacientes para mostrar";
     const $list = document.querySelector(".pacientes-list");
     $list.appendChild($warn);
 };
