@@ -14,7 +14,10 @@ import interfaces.ProcessRequestMethod;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import util.Utils;
 
 /**
@@ -24,12 +27,14 @@ import util.Utils;
 public final class ProcessRequest {
     private static String url = "jdbc:mysql://localhost:3306/lab4";
     private static String username = "root";
-    private static String password = "";
+    private static String password = "pass";
     static {
         EntityDAOPool.init(url, username, password);
     }
     private static EntityDAOPool pool = EntityDAOPool.instance();
     private static ObjectMapper mapper = new ObjectMapper();
+    private static TypeReference<HashMap<String, String>> jsonReference = new TypeReference<>() {
+    };
     
     private static void setResponse(HttpServletResponse response) {
         response.setContentType("application/json");
@@ -61,9 +66,7 @@ public final class ProcessRequest {
 
     public static ProcessRequestMethod authUser = (req, res) -> {
 
-
-        var json = mapper.readValue(req.getReader(), new TypeReference<HashMap<String, String>>() {
-        });
+        var json = mapper.readValue(req.getReader(), jsonReference);
 
         System.out.println(json);
 
@@ -86,11 +89,11 @@ public final class ProcessRequest {
                 System.out.println("Login correct with credentials " + username + " " + password);
 
                 var session = req.getSession(true);
-                session.setAttribute("auth", usuario.tipo());
+                session.setAttribute("auth", usuario.desc_tipo());
 
 //                res.sendRedirect("/admin");
                 setResponse(res);
-                String response = "{\"auth_correct\":\"" + usuario.tipo() + "\"}";
+                String response = "{\"auth_correct\":\"" + usuario.desc_tipo() + "\"}";
                 System.out.println(response);
                 try (var out = res.getWriter()) {
                     out.print(response);
@@ -155,46 +158,7 @@ public final class ProcessRequest {
 
     //---------------------------PACIENTES METHODS--------------
     public static ProcessRequestMethod postPaciente = (req, res) -> {
-        setResponse(res);
 
-        if (!authAccess(req, res, "admin")) {
-            return;
-        }
-
-        String[] datos = new String[4];
-        datos[0] = req.getParameter("nombre");
-        datos[1] = req.getParameter("apellidos");
-        datos[2] = req.getParameter("telefono");
-        datos[3] = req.getParameter("direccion");
-
-        for (String dato : datos) {
-            if (dato == null) {
-                res.sendRedirect("/admin/pacientes");
-                return;
-            }
-        }
-
-        var rs = pool.getPacienteDAO().create(new Paciente(
-                1,
-                datos[0],
-                datos[1],
-                datos[2],
-                datos[3],
-                new Usuario(
-                        1,
-                        datos[0],
-                        "asd",
-                        "paciente"
-                )
-        ));
-
-        if (rs == 1) {
-            req.setAttribute("create-status", "{\"status\":\"ok\"}");
-        } else {
-            req.setAttribute("create-status", "{\"status\":\"error\"}");
-        }
-
-        req.getRequestDispatcher("/admin/pacientes").forward(req, res);
     };
 
     public static ProcessRequestMethod deletePaciente = (req, res) -> {
@@ -204,7 +168,9 @@ public final class ProcessRequest {
             return;
         }
 
-        String id_paciente = req.getParameter("id_paciente");
+        var json = mapper.readValue(req.getReader(), jsonReference);
+
+        String id_paciente = json.get("id_paciente");
         System.out.println("id paciente" + id_paciente);
 
         if (id_paciente == null) {
@@ -225,6 +191,55 @@ public final class ProcessRequest {
         try (var out = res.getWriter()) {
             out.print("{\"status\":\"ok\"}");
         }
+    };
+
+    public static ProcessRequestMethod getPaciente = (req, res) -> {
+        setResponse(res);
+
+        var json = mapper.readValue(req.getReader(), jsonReference);
+
+        System.out.println("json: " + json);
+        String type = json.get("type");
+        System.out.println("thing in type: " + type);
+
+        if (type == null || (!type.equals("name") && !type.equals("id"))) {
+            try (var out = res.getWriter()) {
+                out.print("{\"error\":\"invalid type\"}");
+                return;
+            }
+        }
+
+        String query = json.get("query");
+
+        if (type.equals("id") && !Utils.isNumeric(query)) {
+            try (var out = res.getWriter()) {
+                out.print("{\"error\":\"invalid id\"}");
+                return;
+            }
+        }
+
+        var allPacientes = pool.getPacienteDAO().getAll();
+        Stream streamPacientes;
+
+        if (type.equals("name"))
+            streamPacientes = allPacientes.stream().filter(paciente -> paciente.nombre().toLowerCase().contains(query.toLowerCase()));
+        else
+            streamPacientes = allPacientes.stream().filter(paciente -> paciente.id_paciente().intValue() == Integer.parseInt(query));
+
+        var pacientes = (ArrayList<Paciente>) streamPacientes.collect(Collectors.toCollection(ArrayList::new));
+        var responseMap = new HashMap<String, ArrayList<Paciente>>();
+        responseMap.put("pacientes", pacientes);
+
+        var responseJson = mapper.writeValueAsString(responseMap);
+        System.out.println("response json: " + responseJson);
+
+        try (var out = res.getWriter()) {
+            out.print(responseJson);
+        }
+    };
+
+    public static ProcessRequestMethod patchPaciente = (req, res) -> {
+
     };
 
     //--------------------------CITA METHODS---------------------

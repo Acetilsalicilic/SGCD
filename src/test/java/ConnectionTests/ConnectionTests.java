@@ -5,14 +5,7 @@
 package ConnectionTests;
 
 import nativeDB.MySQLConnection;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 /**
  *
@@ -21,7 +14,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 public class ConnectionTests {
     String url = "jdbc:mysql://localhost:3306/lab4";
     String username = "root";
-    String pass = "";
+    String pass = "pass";
     
     public ConnectionTests() {
     }

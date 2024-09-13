@@ -5,15 +5,11 @@
 package ConnectionTests;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import nativeDB.MySQLConnection;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
@@ -26,7 +22,7 @@ public class EntitiesInsertTests {
     private Connection cn;
     private MySQLConnection sqlCon;
     
-    String url = "jdbc:mysql://localhost:3306/jdbcdb";
+    String url = "jdbc:mysql://localhost:3306/lab4";
     String username = "root";
     String pass = "pass";
     

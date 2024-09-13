@@ -1,6 +1,13 @@
+<%@page import="DAO.EntityDAOPool"%>
+<%@page import="Auth.Authorize"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <%
+            if (!Authorize.authPermission(session, "admin")) {
+                response.sendRedirect("/");
+            }
+        %>
         <link rel="stylesheet" href="../estilos/navbar.css" />
         <link rel="stylesheet" href="../estilos/admin/gestionarPacientes.css" />
         <link
