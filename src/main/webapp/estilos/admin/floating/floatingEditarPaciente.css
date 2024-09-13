@@ -1,0 +1,92 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.editar-floating {
+    z-index: 20;
+    position: absolute;
+
+    top: 5rem;
+
+    width: 60vw;
+    height: 500px;
+
+    box-shadow: 10px 10px 20px rgba(0,0,0,0.5);
+
+    background-color: rgba(6, 82, 168, 0.744);
+    backdrop-filter: blur(10px);
+
+    padding: 2rem;
+
+    font-family: sans-serif;
+
+    color: white;
+}
+
+.editar-header {
+    display: flex;
+    justify-content: space-between;
+
+    color: white;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    height: 70%;
+
+    justify-content: space-around;
+}
+
+.editar-input {
+    background-color: rgba(0,0,0,0);
+    color: white;
+    border-style: solid;
+    border-color: white;
+
+    font-size: 1rem;
+}
+
+.editar-input:focus {
+    background-color: rgba(42, 77, 117, 0.471);
+    border-style: dotted;
+    outline: none;
+}
+
+.editar-enviar {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.editar-button {
+    background-color: transparent;
+    color: white;
+
+    border-style: solid;
+
+    border-color: white;
+
+    padding: 1rem;
+    font-size: 1.2rem;
+}
+
+.editar-button:active {
+    background-color: rgba(42, 77, 117, 0.471);
+    border-style: dotted;
+    outline: none;
+}
+
+#editar-cerrar{
+    height: 2.5rem;
+    text-align: center;
+    padding: 0.5rem;
+
+    background-color: rgba(176, 0, 53, 0.7);
+}
+
+#editar-cerrar:active {
+    background-color: rgba(111, 54, 71, 0.8);
+}
