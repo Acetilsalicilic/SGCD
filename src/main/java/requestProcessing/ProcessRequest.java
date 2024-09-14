@@ -362,6 +362,59 @@ public final class ProcessRequest {
         }
     };
 
+    public static ProcessRequestMethod postMedico = (req, res) -> {
+        System.out.println("Posting of medico");
+        setResponse(res);
+        if (!authAccess(req, res, "admin")) {
+            return;
+        }
+
+        var json = mapper.readValue(req.getReader(), jsonReference);
+
+        var values = json.entrySet();
+
+        for (var value : values) {
+            if (value == null) {
+                try (var out = res.getWriter()) {
+                    out.print("{\"error\":\"invalid parameter\"}");
+                }
+                return;
+            }
+        }
+
+        Usuario usuario = new Usuario(
+                pool.getTipoUsuarioDAO().getIdByDesc(json.get("desc_tipo")),
+                json.get("nombre_usuario"),
+                json.get("contrasena")
+        );
+
+        var especialidad = pool.getEspecialidadDAO().getByDesc(json.get("especialidad"));
+
+        var rsUs = pool.getUsuarioDAO().create(usuario);
+
+        usuario = pool.getUsuarioDAO().getByUsername(usuario.nombre_usuario());
+        System.out.println("Usuario del medico: " + usuario);
+
+        Medico medico = new Medico(
+                usuario,
+                especialidad,
+                json.get("nombre"),
+                json.get("apellidos")
+        );
+
+        var rsMd = pool.getMedicoDAO().create(medico);
+
+        if (rsUs < 0 || rsMd < 0) {
+            try (var out = res.getWriter()) {
+                out.print("{\"error\":\"couldn't create medico\"}");
+            }
+            return;
+        } else {
+            try (var out = res.getWriter()) {
+                out.print("{\"status\":\"ok\"}");
+            }
+        }
+    };
     //--------------------------CITA METHODS---------------------
     public static ProcessRequestMethod postCita = (req, res) -> {
         setResponse(res);

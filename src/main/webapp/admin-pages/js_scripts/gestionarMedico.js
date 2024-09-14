@@ -4,6 +4,7 @@ function loadInfo() {
     getAllMedicos().then((info) => {
         console.log("loading info");
         const data = convertMedicos(info);
+        document.body.querySelector(".medicos-list").innerHTML = "";
         if (data.length == 0) {
             showListMessage("No hay medicos para mostrar!");
         } else {
@@ -33,9 +34,52 @@ function searchButton() {
                 } ${query}!`
             );
         } else {
-            data.forEach((medico) => addMedicoElement(medico));
+            console.log("search medico values");
+
+            medicos.forEach((medico) => {
+                addMedicoElement(medico);
+                console.log(medico);
+            });
         }
     });
+}
+
+function createButton() {
+    const $floating = document.body.querySelector(".crear-floating");
+
+    let medico;
+
+    try {
+        medico = {
+            nombre: $floating.querySelector("#crear-nombre").value,
+            apellidos: $floating.querySelector("#crear-apellidos").value,
+            especialidad: $floating.querySelector("#crear-especialidad").value,
+            desc_tipo: $floating.querySelector("#crear-tipo").value,
+            nombre_usuario: $floating.querySelector("#crear-usuario").value,
+            contrasena: $floating.querySelector("#crear-contrasena").value,
+        };
+    } catch (error) {
+        alert("Hubo un error al recolectar los datos!");
+        console.error(error);
+        return;
+    }
+
+    postMedico(medico)
+        .then((json) => {
+            if (json.status) {
+                alert("El medico se creo correctamente");
+                loadInfo();
+                hideCrear();
+            } else if (json.error) {
+                alert("Algo salio mal");
+                console.error(json);
+                loadInfo();
+            }
+        })
+        .catch((error) => {
+            alert("Algo salio mal");
+            console.error(error);
+        });
 }
 
 //-----------------DATA MANIPULATION
@@ -142,6 +186,7 @@ async function addMedicoElement(medico) {
     const $element = document.createElement("div");
     $element.setAttribute("class", "medicos-element");
     $element.setAttribute("id", `medicos-element-${medico.id}`);
+    $element.setAttribute("data-medico", JSON.stringify(medico));
 
     $element.innerHTML = elementHtml;
 

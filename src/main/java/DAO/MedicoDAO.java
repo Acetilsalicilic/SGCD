@@ -141,27 +141,18 @@ public class MedicoDAO extends AbstractEntityDAO {
 //        });
 //    }
 //    
-//    public int create(Medico medico) {
-//        return preparedUpdate((con) -> {
-//           var st = con.prepareStatement("INSERT INTO medicos VALUES (?, ?, ?, ?, ?);");
-//           
-//           int id_esp;
-//           
-//           try (var stmt = con.createStatement()) {
-//               var rs = stmt.executeQuery("SELECT id_especialidad FROM especialidades WHERE especialidad");
-//               rs.next();
-//               id_esp = rs.getInt("id_especialidad");
-//           }
-//           
-//           st.setInt(1, medico.id());
-//           st.setInt(2, medico.usuario().id_usuario());
-//           st.setInt(3, id_esp);
-//           st.setString(4, medico.nombre());
-//           st.setString(5, medico.apellidos());
-//           
-//           st.execute();
-//            
-//            return 1; 
-//        });
-//    }
+    public int create(Medico medico) {
+        return preparedUpdate((con) -> {
+            var st = con.prepareStatement("INSERT INTO medicos (id_usuario, id_especialidad, nombre, apellidos) VALUES ( ?, ?, ?, ?);");
+
+            st.setInt(1, medico.usuario().id_usuario().intValue());
+            st.setInt(2, medico.especialidad().id_especialidad());
+            st.setString(3, medico.nombre_medico());
+            st.setString(4, medico.apellidos_medico());
+
+            st.execute();
+
+            return 1;
+        });
+    }
 }

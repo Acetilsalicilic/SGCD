@@ -13,8 +13,16 @@
     <label for="crear-apellidos">Apellidos</label>
     <input class="crear-input" type="text" id="crear-apellidos" />
 
+    <datalist id="specialty-type-options">
+        <option value="Dentista ayudante">Dentista ayudante</option>
+    </datalist>
     <label for="crear-especialidad">Especialidad</label>
-    <input class="crear-input" type="text" id="crear-especialidad" />
+    <input
+        class="crear-input"
+        type="text"
+        id="crear-especialidad"
+        list="specialty-type-options"
+    />
 
     <datalist id="user-type-options">
         <option value="admin">Administrador</option>
@@ -39,7 +47,7 @@
     <button
         class="crear-button"
         id="crear-enviar-button"
-        onclick="crearButton(this)"
+        onclick="createButton(this)"
     >
         Crear
     </button>

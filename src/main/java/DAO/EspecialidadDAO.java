@@ -37,5 +37,17 @@ public class EspecialidadDAO extends AbstractEntityDAO {
             }
         });
     }
+
+    public Especialidad getByDesc(String desc) {
+        return (Especialidad) inStatementQuery((st) -> {
+            var rs = st.executeQuery("SELECT * FROM especialidades WHERE desc_espe = '" + desc + "';");
+            rs.next();
+
+            return new Especialidad(
+                    rs.getInt("id_especialidad"),
+                    rs.getString("desc_espe")
+            );
+        });
+    }
     
 }
