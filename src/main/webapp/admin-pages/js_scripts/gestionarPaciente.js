@@ -1,4 +1,5 @@
 var floatingShown = false;
+const availableUserTypes = ["admin", "paciente", "medico"];
 
 //------------------------BUTTON FUNCTIONALITIES-------------
 const showEditar = (el) => {
@@ -164,12 +165,59 @@ const eliminarButton = (el) => {
         });
 };
 
+const crearButton = (el) => {
+    const $crear = document.body.querySelector(".crear-floating");
+
+    data = {
+        nombre: $crear.querySelector("#crear-nombre").value,
+        apellidos: $crear.querySelector("#crear-apellidos").value,
+        telefono: $crear.querySelector("#crear-telefono").value,
+        direccion: $crear.querySelector("#crear-direccion").value,
+        tipo_usuario: $crear.querySelector("#crear-tipo").value,
+        usuario: $crear.querySelector("#crear-usuario").value,
+        contrasena: $crear.querySelector("#crear-contrasena").value,
+    };
+
+    if (!availableUserTypes.includes(data.tipo_usuario)) {
+        alert(`El tipo de usuario ${data.tipo_usuario} no existe!`);
+        return;
+    }
+
+    postPaciente(data)
+        .then((response) => response.json())
+        .then((json) => {
+            console.log(json);
+            if (json.error) {
+                console.error(json);
+                alert("Algo salio mal");
+            }
+            if (json.status) {
+                alert("El paciente se creo con exito");
+                hideCrear();
+                loadInfo();
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            alert("Algo salio mal");
+        });
+};
+
 //--------------DATA FETCHING--------------
 
 const getPacientes = async (type, query) => {
     const response = await fetch(`/api/pacientes?type=${type}&query=${query}`);
     const json = await response.json();
     return json;
+};
+
+const postPaciente = async (paciente) => {
+    const response = await fetch("/api/pacientes", {
+        method: "post",
+        body: JSON.stringify(paciente),
+    });
+
+    return response;
 };
 
 const getPacienteById = async (id) => {

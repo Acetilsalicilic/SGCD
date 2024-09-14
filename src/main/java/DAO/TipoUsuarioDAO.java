@@ -46,5 +46,13 @@ public class TipoUsuarioDAO extends AbstractEntityDAO {
             }
         });
     }
-    
+
+    public Integer getIdByDesc(String desc) {
+        return (Integer) inStatementQuery((st) -> {
+            var rs = st.executeQuery("SELECT id_tipo FROM tipo_usuario WHERE desc_tipo='" + desc + "';");
+            rs.next();
+
+            return rs.getInt("id_tipo");
+        });
+    }
 }

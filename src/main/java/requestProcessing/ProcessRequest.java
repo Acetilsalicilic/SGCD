@@ -43,6 +43,7 @@ public final class ProcessRequest {
 
     //--------------AUTH METHODS---------------
     private static boolean authAccess(HttpServletRequest req, HttpServletResponse res, String requiredLevel) throws IOException {
+        setResponse(res);
         var auth = authPermission(req.getSession(false), requiredLevel);
 
         if (!auth) {
@@ -158,7 +159,46 @@ public final class ProcessRequest {
 
     //---------------------------PACIENTES METHODS--------------
     public static ProcessRequestMethod postPaciente = (req, res) -> {
+        System.out.println("SOMEONE IS POSTING SOME SHEET HERE");
         setResponse(res);
+
+        if (!authAccess(req, res, "admin")) {
+            return;
+        }
+
+        var json = mapper.readValue(req.getReader(), jsonReference);
+
+        var usuario = new Usuario(
+                pool.getTipoUsuarioDAO().getIdByDesc(json.get("tipo_usuario")),
+                json.get("usuario"),
+                json.get("contrasena")
+        );
+
+        var paciente = new Paciente(
+                json.get("nombre"),
+                json.get("apellidos"),
+                json.get("telefono"),
+                json.get("direccion")
+        );
+
+        int usuarioRs = pool.getUsuarioDAO().create(usuario);
+        int id_usuario = pool.getUsuarioDAO().getByUsername(json.get("usuario")).id_usuario();
+
+        int pacienteRs = pool.getPacienteDAO().create(paciente, id_usuario);
+
+        try (var out = res.getWriter()) {
+            if (usuarioRs == -1) {
+                out.print("{\"error\":\"couldn't insert user\"}");
+                return;
+            }
+            if (pacienteRs == -1) {
+                out.print("{\"error\":\"couldn't insert paciente\"}");
+                return;
+            }
+
+            out.print("{\"status\":\"ok\"}");
+        }
+
     };
 
     public static ProcessRequestMethod deletePaciente = (req, res) -> {

@@ -84,6 +84,22 @@ public class PacienteDAO extends AbstractEntityDAO {
             return 1;
         });
     }
+
+    public int create(Paciente paciente, int id_usuario) {
+        return preparedUpdate((con) -> {
+            var st = con.prepareStatement("INSERT INTO pacientes (id_usuario, nombre, apellidos, telefono, direccion) VALUES (?, ?, ?, ?, ?);");
+
+            st.setInt(1, id_usuario);
+            st.setString(2, paciente.nombre());
+            st.setString(3, paciente.apellidos());
+            st.setString(4, paciente.telefono());
+            st.setString(5, paciente.direccion());
+
+            st.execute();
+
+            return 1;
+        });
+    }
     
     public int deleteById(int id) {
         return inStatementUpdate((st) -> {

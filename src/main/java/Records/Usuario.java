@@ -28,5 +28,9 @@ public record Usuario(Integer id_usuario, Integer id_tipo_usuario, String nombre
     public Usuario(Integer id_usuario, Integer id_tipo_usuario) {
         this(id_usuario, id_tipo_usuario, "", "", "");
     }
-    
+
+    // Constructor with no id
+    public Usuario(Integer id_tipo_usuario, String nombre_usuario, String contrasena) {
+        this(null, id_tipo_usuario, nombre_usuario, contrasena, null);
+    }
 }

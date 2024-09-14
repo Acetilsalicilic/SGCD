@@ -19,6 +19,19 @@
     <label for="crear-direccion">Direccion</label>
     <input class="crear-input" type="text" id="crear-direccion" />
 
+    <datalist id="user-type-options">
+        <option value="admin">Administrador</option>
+        <option value="paciente">Paciente</option>
+        <option value="medico">Medico</option>
+    </datalist>
+    <label for="crear-tipo">Tipo de usuario</label>
+    <input
+        class="crear-input"
+        type="text"
+        id="crear-tipo"
+        list="user-type-options"
+    />
+
     <label for="crear-usuario">Usuario</label>
     <input class="crear-input" type="text" id="crear-usuario" />
 
@@ -26,5 +39,11 @@
     <input class="crear-input" type="text" id="crear-contrasena" />
 </div>
 <div class="crear-enviar">
-    <button class="crear-button" id="crear-enviar-button">Crear</button>
+    <button
+        class="crear-button"
+        id="crear-enviar-button"
+        onclick="crearButton(this)"
+    >
+        Crear
+    </button>
 </div>
