@@ -6,6 +6,7 @@ package EntityDaoTests;
 
 import DAO.EntityDAOPool;
 import Records.Paciente;
+import Records.TipoUsuario;
 import Records.Usuario;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -39,10 +40,22 @@ public class PacienteDAOTests {
         EntityDAOPool.close();
     }
     
+    // Create Paciente Test
+    @Test
+    public void createPaciente() {
+        int id_usuario = 7;
+        var usuario = EntityDAOPool.instance().getUsuarioDAO().getById(id_usuario);
+        var rs = instance.getPacienteDAO().createPaciente(new Paciente(0, usuario, "Vicky", "LaNievePica", "1234567890", "HastaLaVerga"));
+        System.out.println("ID Paciente Created: " + rs);
+        assertNotNull(rs);
+    }
+    
+    // Get Pacinete By ID or All Test (Read)
     @Test
     public void getPacienteById() {
-        var rs = instance.getPacienteDAO().getById(1);
-        System.out.println(rs);
+        int id_paciente = 4;
+        var rs = instance.getPacienteDAO().getById(id_paciente);
+        System.out.println("Paciente With ID " + id_paciente + ": " + rs);
         assertNotNull(rs);
     }
     
@@ -53,41 +66,34 @@ public class PacienteDAOTests {
         assertNotNull(rs);
     }
     
-//    @Test
-//    public void getByName() {
-//        var dao = instance.getPacienteDAO();
-//        
-//        var rs = dao.getByNombre("ast");
-//        assertNotNull(rs);
-//        
-//        assertFalse(rs.isEmpty());
-//        
-//        for (var pac : rs) {
-//            System.out.println("paciente: " + pac);
-//        }
-//    }
+    // Get Paciente By Name Test (Read)
+    @Test 
+    public void getPacienteByName() {
+        String nombre_paciente = "Mike";
+        var rs = instance.getPacienteDAO().getByNombre(nombre_paciente);
+        System.out.println("Paciente With Name " + nombre_paciente + "Found: " + rs);
+        assertNotNull(rs);
+    }
     
-//    @Test
-//    @Disabled
-//    public void create() {
-//        var dao = instance.getPacienteDAO();
-//        
-//        var paciente = new Paciente(
-//                5,
-//                "jast",
-//                "test test",
-//                "12345678890",
-//                "direccion",
-//                new Usuario(
-//                        2,
-//                        "asd",
-//                        "asd",
-//                        "admin"
-//                )
-//        );
-//        
-//        var rs = dao.create(paciente);
-//        
-//        assertEquals(1, rs);
-//    }
+    // Update Paciente Test
+    @Test
+    public void updatePaciente() {
+        int id_usuario = 3;
+        var usuario = EntityDAOPool.instance().getUsuarioDAO().getById(id_usuario);
+        int id_paciente = 2;
+        var paciente = EntityDAOPool.instance().getPacienteDAO().getById(id_paciente);
+        var rs = instance.getPacienteDAO().updatePaciente(new Paciente(id_paciente, usuario, "VegaTestUpdate", paciente.apellidos(), paciente.telefono(), paciente.direccion()));
+        System.out.println(rs);
+        assertNotNull(rs);
+    }
+    
+    // Delete Paciente Test 
+    @Test
+    public void deletePaciente() {
+        int id_paciente = 5;
+        var rs = instance.getPacienteDAO().deletePacienteById(id_paciente);
+        System.out.println("Paciente With ID " + id_paciente + " Deleted Status: " + rs);
+        assertNotNull(rs);
+    }
+    
 }
