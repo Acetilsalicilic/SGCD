@@ -71,7 +71,7 @@ public class PacienteDAOTests {
     public void getPacienteByName() {
         String nombre_paciente = "Mike";
         var rs = instance.getPacienteDAO().getByNombre(nombre_paciente);
-        System.out.println("Paciente With Name " + nombre_paciente + "Found: " + rs);
+        System.out.println("Paciente With Name " + nombre_paciente + " Found: " + rs);
         assertNotNull(rs);
     }
     
@@ -83,7 +83,7 @@ public class PacienteDAOTests {
         int id_paciente = 2;
         var paciente = EntityDAOPool.instance().getPacienteDAO().getById(id_paciente);
         var rs = instance.getPacienteDAO().updatePaciente(new Paciente(id_paciente, usuario, "VegaTestUpdate", paciente.apellidos(), paciente.telefono(), paciente.direccion()));
-        System.out.println(rs);
+        System.out.println("Paciente With ID " + id_paciente + " Updated Status: " + rs);
         assertNotNull(rs);
     }
     

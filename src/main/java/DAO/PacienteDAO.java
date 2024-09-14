@@ -79,7 +79,7 @@ public class PacienteDAO extends AbstractEntityDAO {
     public ArrayList<Paciente> getAll() {
         return (ArrayList<Paciente>) inStatementQuery((st) -> {
             var pacientes = new ArrayList<Paciente>();
-            String pacientesAllQuery = "SELECT * FROM pacientes";
+            String pacientesAllQuery = "SELECT * FROM pacientes;";
             try (PreparedStatement pacientesAllStmt = st.getConnection().prepareStatement(pacientesAllQuery)) {
                 try (var pacientesAll = pacientesAllStmt.executeQuery()) {
                     while (pacientesAll.next()) {
@@ -112,20 +112,20 @@ public class PacienteDAO extends AbstractEntityDAO {
                }
                try (ResultSet rs = getByNameStmt.executeQuery()) {
                    while (rs.next()) {
-                       var usuario = EntityDAOPool.instance().getUsuarioDAO().getById(rs.getInt("id_usuario"));
-                      Paciente paciente = new Paciente (
+                        var usuario = EntityDAOPool.instance().getUsuarioDAO().getById(rs.getInt("id_usuario"));
+                        Paciente paciente = new Paciente (
                             rs.getInt("id_paciente"),
                             usuario,
                             rs.getString("nombre"),
                             rs.getString("apellidos"),
                             rs.getString("telefono"),
                             rs.getString("direccion")
-                      );
-                      pacientes.add(paciente);
-                   }
-               }
+                        );
+                        pacientes.add(paciente);
+                    }
+                }
             }
-           return pacientes;
+            return pacientes;
         });
     }
     
