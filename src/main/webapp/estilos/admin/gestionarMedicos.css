@@ -1,0 +1,165 @@
+body {
+    margin: 0px;
+    font-family: sans-serif;
+}
+
+.main-container {
+    display: flex;
+    justify-content: center;
+
+    margin-top: 5rem;
+    margin-bottom: 2rem;
+
+    height: 100vh;
+}
+
+.inner-container {
+    width: calc(90% - 4rem);
+    min-height: calc(85vh - 4rem);
+    height: fit-content;
+
+    margin-top: 2rem;
+
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/*       SEARCH BOX        */
+.search-box {
+    display: flex;
+    flex-direction: column;
+
+    width: 50%;
+    align-self: center;
+    margin-bottom: 2rem;
+}
+
+.search-row {
+    display: flex;
+    justify-content: center;
+
+    font-size: 1.5rem;
+
+}
+
+#query-input {
+    width: 75%;
+    font-size: 1.3rem;
+
+    border-top-left-radius: 0.6rem;
+}
+
+#buscar-button {
+    font-size: 1.4rem;
+    border-bottom-right-radius: 0.6rem;
+
+    background-color: #ffffff;
+    border-width: 2px;
+    border-style: solid;
+}
+
+#buscar-button:active {
+    border-style: dotted;
+    background-color: #dfdfdf;
+}
+
+.radio-container {
+    font-size: 1.2rem;
+    justify-content: space-evenly;
+    margin-top: 1rem;
+}
+
+.radio-button {
+    accent-color: rgb(0, 0, 0);
+    border-radius: 0px;
+}
+
+/*LIST*/
+.medicos-table {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    width: 100%;
+
+    border-width: 4px;
+    border-style: inset;
+
+    background-color: #f9f9f9;
+}
+
+.medicos-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    font-size: 1rem;
+}
+
+/*ELEMENT*/
+.medicos-element {
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    margin: 1rem;
+    padding: 1rem;
+
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    background-color: white;
+}
+
+.medicos-col-wrapper {
+    display: flex;
+    width: 100%;
+
+    justify-content: space-around;
+}
+
+.medicos-label-col {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-evenly;
+}
+
+.data-label {
+    height: 2rem;
+}
+
+.medicos-data-col {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-evenly;
+}
+
+.data-display {
+    height: 2rem;
+    margin: 0px;
+}
+
+.medicos-buttons-container {
+    display: flex;
+    width: 50%;
+    justify-content: space-evenly;
+}
+
+.medicos-button {
+    background-color: white;
+    border-style: solid;
+    padding: 0.3rem;
+    font-size: 1rem;
+    width: 5rem;
+}
+
+.medicos-button:active {
+    border-style: dotted;
+    background-color: #dfdfdf;
+}

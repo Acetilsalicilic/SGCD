@@ -35,3 +35,44 @@
     </button>
 </div>
 <!--END OF ELEMENT-->
+
+<div class="pacientes-col-wrapper">
+    <div class="pacientes-label-col">
+        <label class="data-label" for="nombre">Nombre</label>
+        <label class="data-label" for="apellidos">Apellidos</label>
+        <label class="data-label" for="telefono">Telefono</label>
+        <label class="data-label" for="direccion">Direccion</label>
+        <label class="data-label" for="usuario">Usuario</label>
+        <label class="data-label" for="contrasena">Contrasena</label>
+        <label class="data-label" for="id">ID</label>
+    </div>
+
+    <div class="pacientes-data-col">
+        <p class="data-display" id="apellidos">${nombre}</p>
+        <p class="data-display" id="nombre">${apellidos}</p>
+        <p class="data-display" id="telefono">${telefono}</p>
+        <p class="data-display" id="direccion">${direccion}</p>
+        <p class="data-display" id="usuario">${usuario}</p>
+        <p class="data-display" id="contrasena">${contrasena}</p>
+        <p class="data-display" id="id">${id}</p>
+    </div>
+</div>
+
+<div class="pacientes-buttons-container">
+    <button
+        type="button"
+        class="pacientes-button"
+        onclick="eliminarButton(this)"
+        data-id="${id}"
+    >
+        Eliminar
+    </button>
+    <button
+        type="button"
+        class="pacientes-button"
+        onclick="showEditar(this)"
+        data-id="${id}"
+    >
+        Editar
+    </button>
+</div>
