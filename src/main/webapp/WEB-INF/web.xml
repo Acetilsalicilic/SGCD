@@ -13,17 +13,16 @@
     <!--                  ADMIN                      -->
     
     <servlet>
-        <servlet-name>SeeUsers</servlet-name>
-        <jsp-file>/admin-pages/SeeUsers.jsp</jsp-file>
-    </servlet>
-    
-    <servlet>
         <servlet-name>InicioAdmin</servlet-name>
         <jsp-file>/admin-pages/InicioAdmin.jsp</jsp-file>
     </servlet>
     <servlet>
         <servlet-name>GestPac</servlet-name>
         <jsp-file>/admin-pages/GestionarPacientes.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>GestMed</servlet-name>
+        <jsp-file>/admin-pages/GestionarMedicos.jsp</jsp-file>
     </servlet>
     
     
@@ -41,19 +40,18 @@
     </servlet-mapping>
     
     <!--                  ADMIN                      -->
-    <servlet-mapping>
-        <servlet-name>SeeUsers</servlet-name>
-        <url-pattern>/admin/usuarios</url-pattern> <!-- Any URL you want here -->
-    </servlet-mapping>
     
     <servlet-mapping>
         <servlet-name>InicioAdmin</servlet-name>
         <url-pattern>/admin</url-pattern> <!-- Any URL you want here -->
     </servlet-mapping>
-    
     <servlet-mapping>
         <servlet-name>GestPac</servlet-name>
         <url-pattern>/admin/pacientes</url-pattern> <!-- Any URL you want here -->
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GestMed</servlet-name>
+        <url-pattern>/admin/medicos</url-pattern> <!-- Any URL you want here -->
     </servlet-mapping>
 
     

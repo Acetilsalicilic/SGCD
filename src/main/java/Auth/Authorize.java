@@ -12,6 +12,9 @@ import jakarta.servlet.http.HttpSession;
  */
 public class Authorize {
     public static boolean authPermission(HttpSession session, String requiredLevel) {
+        if (session == null) {
+            return false;
+        }
         if (session.getAttribute("auth") != null && session.getAttribute("auth").equals(requiredLevel)) {
             return true;
         } else {

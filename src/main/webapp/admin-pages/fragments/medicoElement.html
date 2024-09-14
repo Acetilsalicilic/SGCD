@@ -3,30 +3,30 @@
 </div>-->
 <div class="medicos-col-wrapper">
     <div class="medicos-label-col">
-        <label class="data-label" for="nombre">Nombre</label>
-        <label class="data-label" for="apellidos">Apellidos</label>
-        <label class="data-label" for="telefono">Telefono</label>
-        <label class="data-label" for="direccion">Direccion</label>
-        <label class="data-label" for="usuario">Usuario</label>
-        <label class="data-label" for="contrasena">Contrasena</label>
-        <label class="data-label" for="id">ID</label>
+        <label class="data-label" for="display-nombre">Nombre</label>
+        <label class="data-label" for="display-apellidos">Apellidos</label>
+        <label class="data-label" for="display-telefono">Especialidad</label>
+        <label class="data-label" for="display-usuario">Usuario</label>
+        <label class="data-label" for="display-contrasena">Contrasena</label>
+        <label class="data-label" for="display-tipo">Tipo de usuario</label>
+        <label class="data-label" for="display-id">ID</label>
     </div>
 
     <div class="medicos-data-col">
-        <p class="data-display" id="apellidos">${nombre}</p>
-        <p class="data-display" id="nombre">${apellidos}</p>
-        <p class="data-display" id="telefono">${telefono}</p>
-        <p class="data-display" id="direccion">${direccion}</p>
-        <p class="data-display" id="usuario">${usuario}</p>
-        <p class="data-display" id="contrasena">${contrasena}</p>
-        <p class="data-display" id="id">${id}</p>
+        <p class="data-display" id="display-nombre">${nombre}</p>
+        <p class="data-display" id="display-apellidos">${apellidos}</p>
+        <p class="data-display" id="display-especialidad">${especialidad}</p>
+        <p class="data-display" id="display-usuario">asdf</p>
+        <p class="data-display" id="display-contrasena">${contrasena}</p>
+        <p class="data-display" id="display-tipo">${tipo}</p>
+        <p class="data-display" id="display-id">${id}</p>
     </div>
 </div>
 
 <div class="medicos-buttons-container">
     <button
         type="button"
-        class="medicos-button"
+        class="medicos-button medicos-button-eliminar"
         onclick="eliminarButton(this)"
         data-id="${id}"
     >
@@ -34,7 +34,7 @@
     </button>
     <button
         type="button"
-        class="medicos-button"
+        class="medicos-button medicos-button-editar"
         onclick="showEditar(this)"
         data-id="${id}"
     >

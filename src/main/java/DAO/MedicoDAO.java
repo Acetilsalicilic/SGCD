@@ -91,26 +91,26 @@ public class MedicoDAO extends AbstractEntityDAO {
             }
         });
     }
-    
-//    public ArrayList<Medico> getByNombre(String nombre) {
-//        var medicos = getAll();
-//            
-//        var filteredMedicos = medicos.stream().filter(
-//                medico -> medico.nombre().toLowerCase().contains(nombre.toLowerCase())
-//        );
-//            
-//        return filteredMedicos.collect(Collectors.toCollection(ArrayList::new));
-//    }
-//    
-//    public ArrayList<Medico> getByEspecialidad(String especialidad) {
-//        var medicos = getAll();
-//            
-//        var filteredMedicos = medicos.stream().filter(
-//                medico -> medico.especialidad().toLowerCase().contains(especialidad.toLowerCase())
-//        );
-//            
-//        return filteredMedicos.collect(Collectors.toCollection(ArrayList::new));
-//    }
+
+    public ArrayList<Medico> getByNombre(String nombre) {
+        var medicos = getAll();
+
+        var filteredMedicos = medicos.stream().filter(
+                medico -> medico.nombre_medico().toLowerCase().contains(nombre.toLowerCase())
+        );
+
+        return filteredMedicos.collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<Medico> getByEspecialidad(String especialidad) {
+        var medicos = getAll();
+
+        var filteredMedicos = medicos.stream().filter(
+                medico -> medico.especialidad().desc_espe().toLowerCase().contains(especialidad.toLowerCase())
+        );
+
+        return filteredMedicos.collect(Collectors.toCollection(ArrayList::new));
+    }
 //    
 //    public int update(Medico medico) {
 //        return preparedUpdate((con) -> {

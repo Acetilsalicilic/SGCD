@@ -6,6 +6,7 @@ package requestProcessing;
 
 import static Auth.Authorize.authPermission;
 import DAO.EntityDAOPool;
+import Records.Medico;
 import Records.Paciente;
 import Records.Usuario;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -330,6 +331,35 @@ public final class ProcessRequest {
             out.print("{\"status\":\"ok\"}");
         }
 
+    };
+
+    //-------------------------MEDICO METHODS-------------------
+    public static ProcessRequestMethod getMedico = (req, res) -> {
+        setResponse(res);
+        if (!authAccess(req, res, "admin")) {
+            return;
+        }
+
+        String type = req.getParameter("type");
+        String query = req.getParameter("query");
+
+        if (!type.equals("name") && !type.equals("specialty")) {
+            try (var out = res.getWriter()) {
+                out.print("{\"error\":\"invalid type\"}");
+            }
+        }
+
+        ArrayList<Medico> medicos;
+
+        if (type.equals("name")) {
+            medicos = pool.getMedicoDAO().getByNombre(query);
+        } else {
+            medicos = pool.getMedicoDAO().getByEspecialidad(query);
+        }
+
+        try (var out = res.getWriter()) {
+            out.print(mapper.writeValueAsString(medicos));
+        }
     };
 
     //--------------------------CITA METHODS---------------------

@@ -1,0 +1,46 @@
+<!--<div class="crear-floating">
+</div>-->
+<div class="crear-header">
+    <h1 class="crear-title">Crear medico</h1>
+    <button id="crear-cerrar" class="crear-button" onclick="hideCrear(this)">
+        X
+    </button>
+</div>
+<div class="form-container">
+    <label for="crear-nombre">Nombre</label>
+    <input class="crear-input" type="text" id="crear-nombre" />
+
+    <label for="crear-apellidos">Apellidos</label>
+    <input class="crear-input" type="text" id="crear-apellidos" />
+
+    <label for="crear-especialidad">Especialidad</label>
+    <input class="crear-input" type="text" id="crear-especialidad" />
+
+    <datalist id="user-type-options">
+        <option value="admin">Administrador</option>
+        <option value="paciente">Paciente</option>
+        <option value="medico">Medico</option>
+    </datalist>
+    <label for="crear-tipo">Tipo de usuario</label>
+    <input
+        class="crear-input"
+        type="text"
+        id="crear-tipo"
+        list="user-type-options"
+    />
+
+    <label for="crear-usuario">Usuario</label>
+    <input class="crear-input" type="text" id="crear-usuario" />
+
+    <label for="crear-contrasena">Contrasena</label>
+    <input class="crear-input" type="text" id="crear-contrasena" />
+</div>
+<div class="crear-enviar">
+    <button
+        class="crear-button"
+        id="crear-enviar-button"
+        onclick="crearButton(this)"
+    >
+        Crear
+    </button>
+</div>
