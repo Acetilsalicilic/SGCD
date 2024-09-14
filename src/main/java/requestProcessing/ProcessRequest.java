@@ -159,7 +159,6 @@ public final class ProcessRequest {
 
     //---------------------------PACIENTES METHODS--------------
     public static ProcessRequestMethod postPaciente = (req, res) -> {
-        System.out.println("SOMEONE IS POSTING SOME SHEET HERE");
         setResponse(res);
 
         if (!authAccess(req, res, "admin")) {
@@ -226,7 +225,9 @@ public final class ProcessRequest {
             return;
         }
 
+        var paciente = pool.getPacienteDAO().getById(Integer.parseInt(id_paciente));
         var rs = pool.getPacienteDAO().deleteById(Integer.parseInt(id_paciente));
+        var rsUst = pool.getUsuarioDAO().deleteById(paciente.usuario().id_usuario());
 
         try (var out = res.getWriter()) {
             out.print("{\"status\":\"ok\"}");

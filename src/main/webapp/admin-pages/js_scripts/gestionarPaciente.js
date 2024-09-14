@@ -178,6 +178,13 @@ const crearButton = (el) => {
         contrasena: $crear.querySelector("#crear-contrasena").value,
     };
 
+    for (key in data) {
+        if (!data[key]) {
+            alert(`El campo ${key} es invalido!`);
+            return;
+        }
+    }
+
     if (!availableUserTypes.includes(data.tipo_usuario)) {
         alert(`El tipo de usuario ${data.tipo_usuario} no existe!`);
         return;
