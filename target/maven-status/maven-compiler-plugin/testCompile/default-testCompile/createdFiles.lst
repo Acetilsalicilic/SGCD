@@ -4,7 +4,6 @@ EntityDaoTests\ServicioDAOTest.class
 ConnectionTests\ConnectionTests.class
 EntityDaoTests\MedicoDAOTest.class
 EntityDaoTests\TipoUsuarioDAOTest.class
-EntityDaoTests\Pacinte.class
 EntityDaoTests\PacienteDAOTests.class
 EntityDaoTests\UsuarioDAOTests.class
 ConnectionTests\EntitiesInsertTests.class
