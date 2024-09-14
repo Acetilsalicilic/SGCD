@@ -43,17 +43,19 @@ public class UsuarioDAOTests {
     // Create User Test
     @Test 
     public void create() {
-        var rs = instance.getUsuarioDAO().create(new Usuario(14, 1, "vegaInsert", "1234"));
+        int tipo_usuario = 1;
+        TipoUsuario tipoUsuario = EntityDAOPool.instance().getTipoUsuarioDAO().getTypeUser(tipo_usuario);
+        var rs = instance.getUsuarioDAO().create(new Usuario(0, tipoUsuario, "VegaTest2", "Vega1234"));
         System.out.println("ID User Created: " + rs);
         assertNotNull(rs);
     }
     
-    // Get Users Test (Read)
-    
+    // Get Users By ID or All Test (Read)
     @Test
-    public void select() {
-        var rs = instance.getUsuarioDAO().getById(1);
-        System.out.println(rs);
+    public void getById() {
+        int id_user = 1;
+        var rs = instance.getUsuarioDAO().getById(id_user);
+        System.out.println("User With ID " + id_user + ": " + rs);
         assertNotNull(rs);
     }
     
@@ -70,7 +72,11 @@ public class UsuarioDAOTests {
     // Update Usuario Test 
     @Test
     public void update() {
-        var rs = instance.getUsuarioDAO().update(new Usuario (13, 2, "vegaUpdate", "vegaUpdatePass"));
+        // Se Crea el Objeto Tipo Usuario
+        int tipo_usuario = 1;
+        TipoUsuario tipoUsuario = EntityDAOPool.instance().getTipoUsuarioDAO().getTypeUser(tipo_usuario);
+        // Se Crea el Objeto Usuario (Pasandole el Objeto TipoUsuario)
+        var rs = instance.getUsuarioDAO().update(new Usuario (16, tipoUsuario, "vegaUpdate", "vegaUpdatePass"));
         System.out.println(rs);
         assertNotNull(rs);
     }
@@ -78,8 +84,9 @@ public class UsuarioDAOTests {
     // Delete Usuario Test
     @Test
     public void delete() {
-       var rs = instance.getUsuarioDAO().deleteById(14);
-        System.out.println(rs);
+        int id_delete = 15;
+       var rs = instance.getUsuarioDAO().deleteById(id_delete);
+        System.out.println("User With ID " + id_delete + "Deleted: " + rs);
         assertNotNull(rs);
     }
 }

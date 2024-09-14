@@ -4,6 +4,7 @@
  */
 package DAO;
 
+import Records.TipoUsuario;
 import Records.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,84 +27,84 @@ public class UsuarioDAO extends AbstractEntityDAO {
         return inStatementUpdate((st) -> {
             String createUsuarioQuery = "INSERT INTO usuarios (id_tipo_usuario, nombre_usuario, contrasena) VALUES (?, ?, ?);";
             try (PreparedStatement createUsuarioStmt = st.getConnection().prepareStatement(createUsuarioQuery, Statement.RETURN_GENERATED_KEYS)) {
-                createUsuarioStmt.setInt(1, usuario.id_tipo_usuario());
+                TipoUsuario tipoUsuario = EntityDAOPool.instance().getTipoUsuarioDAO().getTypeUser(usuario.tipoUsuario().id_tipo());
+                if (tipoUsuario == null) {
+                    throw new SQLException("No se Encontro el Tipo de Usuario con el ID Proporcionado.");
+                }
+                createUsuarioStmt.setInt(1, tipoUsuario.id_tipo());
                 createUsuarioStmt.setString(2, usuario.nombre_usuario());
                 createUsuarioStmt.setString(3, usuario.contrasena());
                 
                 // Se Ejecuta el Update y se Obtiene el Numero de Filas Afectadas
                 int affectedRows = createUsuarioStmt.executeUpdate();
                 
-                if (affectedRows > 0) {
-                    try (ResultSet generatedKeys = createUsuarioStmt.getGeneratedKeys()) {
-                        if (generatedKeys.next()) {
-                            return generatedKeys.getInt(1); // Return ID User Created
-                        } else {
-                            System.err.println("No Se Genero Ninguna Clave");
-                            return -1; // No Se Genero Ninguna Clave
-                        }
-                    } catch (SQLException e) {
-                        System.err.println("Errror Al Obtener Claves Generadas: " + e.getLocalizedMessage());
-                        e.printStackTrace();
-                        return -1; // SQL Error
-                    }
-                } else {
-                    return -1; // No Se Afectaron Filas
+                if (affectedRows == 0) {
+                    throw new SQLException("Error al Crear el Usuario. No se Creo el Registro.");
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return 0; // Error SQL 
+                
+                try (ResultSet generatedKeys = createUsuarioStmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1);
+                    } else {
+                        throw new SQLException("Error al Crear el Usuario. No se Obtuvo el ID Generado.");
+                    }
+                }
             }
         });
     }
     
     // Get Usuario By ID or All (Read)
-    public Usuario getById(Integer id) {
+    public Usuario getById(Integer id_usuario) {
         return (Usuario) inStatementQuery((st) -> {
-            
-            var rs = st.executeQuery(
-                "SELECT usuarios.id_usuario, usuarios.id_tipo_usuario, usuarios.nombre_usuario, usuarios.contrasena, tipo_usuario.desc_tipo " +
-                "FROM usuarios " +
-                "INNER JOIN tipo_usuario ON tipo_usuario.id_tipo = usuarios.id_tipo_usuario " +
-                "WHERE usuarios.id_usuario = " + id + ";"
-            );
-            
-            rs.next();
-            
-            return new Usuario(
-                rs.getInt("id_usuario"),
-                rs.getInt("id_tipo_usuario"),
-                rs.getString("nombre_usuario"),
-                rs.getString("contrasena"),
-                rs.getString("desc_tipo")
-            );
+            String getUsuarioById = "SELECT * FROM usuarios WHERE id_usuario = ?;";
+            try (PreparedStatement getUsuarioByIdStmt = st.getConnection().prepareStatement(getUsuarioById)) {
+                getUsuarioByIdStmt.setInt(1, id_usuario);
+                try (var usuarioById = getUsuarioByIdStmt.executeQuery()) {
+                    if (usuarioById.next()) {
+                        var tipoUsuario = EntityDAOPool.instance().getTipoUsuarioDAO().getTypeUser(usuarioById.getInt("id_tipo_usuario"));
+                        return new Usuario (
+                            usuarioById.getInt("id_usuario"),
+                            tipoUsuario,
+                            usuarioById.getString("nombre_usuario"),
+                            usuarioById.getString("contrasena")
+                        );
+                    } else {
+                        return null;
+                    }
+                }
+            }
         });
     }
     
     public ArrayList<Usuario> getAll() {
         return (ArrayList<Usuario>) inStatementQuery((st) -> {
             var usuarios = new ArrayList<Usuario>();
-            var rs = st.executeQuery(
-                "SELECT usuarios.id_usuario, usuarios.id_tipo_usuario, usuarios.nombre_usuario, usuarios.contrasena, tipo_usuario.desc_tipo " +
-                "FROM usuarios " +
-                "INNER JOIN tipo_usuario ON tipo_usuario.id_tipo = usuarios.id_tipo_usuario;"     
-            );
-            while(rs.next()){
-                usuarios.add(new Usuario (
-                    rs.getInt("id_usuario"),
-                    rs.getInt("id_tipo_usuario"),
-                    rs.getString("nombre_usuario"),
-                    rs.getString("contrasena")
-                ));
+            String getAllUsuariosQuery = "SELECT * FROM usuarios;";
+            try (PreparedStatement getAllUsuariosStmt = st.getConnection().prepareStatement(getAllUsuariosQuery)) {
+                try (var usuariosAll = getAllUsuariosStmt.executeQuery()) {
+                    while (usuariosAll.next()) {
+                        var tipoUsuario = EntityDAOPool.instance().getTipoUsuarioDAO().getTypeUser(usuariosAll.getInt("id_tipo_usuario"));
+                        usuarios.add(
+                            new Usuario (
+                                usuariosAll.getInt("id_usuario"),
+                                tipoUsuario,
+                                usuariosAll.getString("nombre_usuario"),
+                                usuariosAll.getString("contrasena")
+                            )
+                        );
+                    }
+                }
             }
             return usuarios;
         });
     }
     
+    // Update Usuario With Object
     public int update(Usuario usuario) {
         return inStatementUpdate((st) -> {
             String updateUsuarioQuery = "UPDATE usuarios SET id_tipo_usuario = ?, nombre_usuario = ?, contrasena = ? WHERE id_usuario = ?;";
             try (PreparedStatement updateUsuarioStmt = st.getConnection().prepareStatement(updateUsuarioQuery)) {
-                updateUsuarioStmt.setInt(1, usuario.id_tipo_usuario());
+                updateUsuarioStmt.setInt(1, usuario.tipoUsuario().id_tipo());
                 updateUsuarioStmt.setString(2, usuario.nombre_usuario());
                 updateUsuarioStmt.setString(3, usuario.contrasena());
                 updateUsuarioStmt.setInt(4, usuario.id_usuario());
@@ -123,6 +124,7 @@ public class UsuarioDAO extends AbstractEntityDAO {
         });
     }
     
+    // Delete Usuario By ID
     public int deleteById(Integer id_usuario) {
         return inStatementUpdate((st) -> {
             String deleteUsuarioQuery = "DELETE FROM usuarios WHERE id_usuario = ?";

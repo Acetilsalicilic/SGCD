@@ -18,24 +18,14 @@ public class TipoUsuarioDAO extends AbstractEntityDAO {
         super(con);
     }
     
-    public TipoUsuario getTypeUser(Integer id_usuario) {
+    public TipoUsuario getTypeUser(Integer id_tipo_usuario) {
         return (TipoUsuario) inStatementQuery((st) -> {
-            String tipoUsuarioQuery = 
-                "SELECT " + 
-                "usuarios.id_usuario, " +
-                "usuarios.id_tipo_usuario, " + 
-                "tipo_usuario.id_tipo, " +
-                "tipo_usuario.desc_tipo " +
-                "FROM usuarios " + 
-                "INNER JOIN tipo_usuario ON usuarios.id_tipo_usuario = tipo_usuario.id_tipo " +
-                "WHERE id_usuario = ?;"
-            ;
+            String tipoUsuarioQuery = "SELECT * FROM tipo_usuario WHERE id_tipo = ?;";
             try (PreparedStatement tipoUsuarioStmt = st.getConnection().prepareStatement(tipoUsuarioQuery)) {
-                tipoUsuarioStmt.setInt(1, id_usuario);
-                
+                tipoUsuarioStmt.setInt(1, id_tipo_usuario);
                 try (var tipoUsuario = tipoUsuarioStmt.executeQuery()) {
                     if (tipoUsuario.next()) {
-                        return new TipoUsuario (
+                        return new TipoUsuario(
                             tipoUsuario.getInt("id_tipo"),
                             tipoUsuario.getString("desc_tipo")
                         );
