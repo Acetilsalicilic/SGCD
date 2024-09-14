@@ -295,7 +295,9 @@ public final class ProcessRequest {
         datos[5] = json.get("contrasena");
         datos[6] = json.get("id");
 
-        var usuario = pool.getUsuarioDAO().getByUsername(datos[4]);
+        var usuario = pool.getUsuarioDAO().getByUsername(json.get("old_username"));
+
+        System.out.println(usuario);
         var paciente = new Paciente(
                 Integer.parseInt(datos[6]),
                 usuario,
@@ -305,11 +307,23 @@ public final class ProcessRequest {
                 datos[3]
         );
 
+        var rsUs = pool.getUsuarioDAO().update(new Usuario(
+                usuario.id_usuario(),
+                usuario.id_tipo_usuario(),
+                datos[4],
+                datos[5]
+        ));
+
         var rs = dao.update(paciente);
 
         try (var out = res.getWriter()) {
             if (rs != 1) {
-                out.print("{\"error\":\"something went wrong\"}");
+                out.print("{\"error\":\"couldn't update paciente\"}");
+                return;
+            }
+
+            if (rsUs != 1) {
+                out.print("{\"error\":\"couldn't update user\"}");
                 return;
             }
 

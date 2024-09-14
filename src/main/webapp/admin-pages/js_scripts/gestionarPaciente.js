@@ -9,6 +9,9 @@ const showEditar = (el) => {
 
     let editarString;
     const id = el.getAttribute("data-id");
+    const oldUsername = document.body
+        .querySelector(`#paciente-element-${id}`)
+        .querySelector("#usuario").innerText;
 
     fetch("/admin-pages/fragments/floatingEditPaciente.html")
         .then((response) => response.text())
@@ -26,7 +29,9 @@ const showEditar = (el) => {
             );
 
             $editarButton.setAttribute("data-id", id);
+            $editarButton.setAttribute("data-old-username", oldUsername);
             $editarButton.addEventListener("click", editarButton);
+
             floatingEditSetValues($floating, id);
         });
 };
@@ -105,8 +110,11 @@ const editarButton = () => {
 
     const $floating = document.querySelector(".editar-floating");
     const id = $floating.querySelector("#editar-enviar-button").value;
+    const oldUsername = $floating
+        .querySelector("#editar-enviar-button")
+        .getAttribute("data-old-username");
 
-    floatingEditGetValues().then((paciente) => {
+    floatingEditGetValues(oldUsername).then((paciente) => {
         fetch("/api/pacientes", {
             method: "put",
             body: JSON.stringify(paciente),
@@ -270,7 +278,7 @@ const floatingEditSetValues = async ($floating, id) => {
     $floating.querySelector("#editar-contrasena").value = paciente.contrasena;
 };
 
-const floatingEditGetValues = async () => {
+const floatingEditGetValues = async (old_username) => {
     const $floating = document.querySelector(".editar-floating");
     const id = $floating
         .querySelector("#editar-enviar-button")
@@ -284,6 +292,7 @@ const floatingEditGetValues = async () => {
         usuario: $floating.querySelector("#editar-usuario").value,
         contrasena: $floating.querySelector("#editar-contrasena").value,
         id,
+        old_username,
     });
 };
 
@@ -298,6 +307,7 @@ const createPacienteElement = ({
 }) => {
     const $pacienteElement = document.createElement("div");
     $pacienteElement.setAttribute("class", "pacientes-element");
+    $pacienteElement.setAttribute("id", `paciente-element-${id}`);
     $pacienteElement.innerHTML = `
     <div class="pacientes-col-wrapper">
     <div class="pacientes-label-col">
