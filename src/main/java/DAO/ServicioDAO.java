@@ -7,7 +7,7 @@ package DAO;
 import Records.Servicio;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -39,5 +39,18 @@ public class ServicioDAO extends AbstractEntityDAO {
         });
     }
 
-    
+    public ArrayList<Servicio> getAll() {
+        return (ArrayList<Servicio>) inStatementQuery((st) -> {
+            var rs = st.executeQuery("SELECT * FROM servicios;");
+            var servicios = new ArrayList<Servicio>();
+            while (rs.next()) {
+                servicios.add(new Servicio(
+                        rs.getInt("id_servicio"),
+                        rs.getString("desc_servicio")
+                ));
+            }
+
+            return servicios;
+        });
+    }
 }

@@ -6,16 +6,19 @@ package requestProcessing;
 
 import static Auth.Authorize.authPermission;
 import DAO.EntityDAOPool;
+import Records.Cita;
 import Records.Medico;
 import Records.Paciente;
 import Records.Usuario;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import interfaces.ProcessRequestMethod;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -34,7 +37,8 @@ public final class ProcessRequest {
         EntityDAOPool.init(url, username, password);
     }
     private static EntityDAOPool pool = EntityDAOPool.instance();
-    private static ObjectMapper mapper = new ObjectMapper();
+//    private static ObjectMapper mapper = new ObjectMapper();
+    private static ObjectMapper mapper = JsonMapper.builder().findAndAddModules().build();
     private static TypeReference<HashMap<String, String>> jsonReference = new TypeReference<>() {
     };
     
@@ -95,6 +99,21 @@ public final class ProcessRequest {
                 var session = req.getSession(true);
                 session.setAttribute("auth", usuario.tipoUsuario().desc_tipo());
                 session.setAttribute("username", usuario.nombre_usuario());
+
+                //Adding paciente's id in session
+                if (usuario.tipoUsuario().desc_tipo().equals("paciente")) {
+                    var pacientes = pool.getPacienteDAO().getAll();
+                    Integer id = -1;
+
+                    for (var paciente : pacientes) {
+                        if (paciente.usuario().equals(usuario)) {
+                            id = paciente.id_paciente();
+                            break;
+                        }
+                    }
+
+                    session.setAttribute("paciente_id", id);
+                }
 
                 setResponse(res);
                 String response = "{\"auth_correct\":\"" + usuario.tipoUsuario().desc_tipo() + "\"}";
@@ -517,8 +536,38 @@ public final class ProcessRequest {
 //--------------------------CITA METHODS---------------------
     public static ProcessRequestMethod postCita = (req, res) -> {
         setResponse(res);
-        if (!authAccess(req, res, "admin")) {
+        if (!authAccess(req, res, "paciente")) {
             return;
+        }
+
+        var json = mapper.readValue(req.getReader(), jsonReference);
+
+        Integer[] fecha = new Integer[5];
+        fecha[0] = Integer.parseInt(json.get("year"));
+        fecha[1] = Integer.parseInt(json.get("month"));
+        fecha[2] = Integer.parseInt(json.get("day"));
+        fecha[3] = Integer.parseInt(json.get("hour"));
+        fecha[4] = Integer.parseInt(json.get("minutes"));
+
+        var fechaObj = LocalDateTime.of(fecha[0], fecha[1], fecha[2], fecha[3], fecha[4]);
+
+        var cita = new Cita(
+                null,
+                pool.getMedicoDAO().getById(Integer.parseInt(json.get("id_medico"))),
+                pool.getPacienteDAO().getById((Integer) req.getSession(false).getAttribute("paciente_id")),
+                pool.getServicioDAO().getTypeService(Integer.parseInt(json.get("id_servicio"))),
+                fechaObj
+        );
+
+        var rs = pool.getCitaDAO().createCita(cita);
+
+        try (var out = res.getWriter()) {
+            if (rs < 0) {
+                out.print("{\"error\":\"couldn't create cita\"}");
+                return;
+            }
+
+            out.print("{\"status\":\"ok\"}");
         }
     };
 
@@ -551,6 +600,29 @@ public final class ProcessRequest {
             var date = LocalDate.of(timeData[0], timeData[1], timeData[2]);
             var times = pool.getCitaDAO().horasDisponiblesCitas(id_medico, date);
             var resJson = mapper.writeValueAsString(times);
+
+            try (var out = res.getWriter()) {
+                out.print(resJson);
+                return;
+            }
+        }
+
+        if (type.equals("available-services")) {
+            var servicios = pool.getServicioDAO().getAll();
+            var resJson = mapper.writeValueAsString(servicios);
+
+            try (var out = res.getWriter()) {
+                out.print(resJson);
+                return;
+            }
+        }
+
+        if (type.equals("all-citas")) {
+            Integer id_paciente = (Integer) req.getSession(false).getAttribute("paciente_id");
+            var citas = pool.getCitaDAO().getAllCitas(id_paciente);
+
+            var resJson = mapper.writeValueAsString(citas);
+            System.out.println(resJson);
 
             try (var out = res.getWriter()) {
                 out.print(resJson);

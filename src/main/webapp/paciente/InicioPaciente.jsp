@@ -1,3 +1,4 @@
+<%@page import="DAO.EntityDAOPool"%>
 <%@page import="Auth.Authorize"%>
 <!DOCTYPE html>
 <% //-----------AUTH------------- 
@@ -32,7 +33,7 @@ if (!Authorize.authPermission(session,
         <div class="page-container">
             <div class="center-element">
                 <h1 class="title">Inicio paciente</h1>
-                <p id="welcome-parag">Bienvenido, <%= session.getAttribute("username") %>.</p>
+                <p id="welcome-parag">Bienvenido, <%= EntityDAOPool.instance().getPacienteDAO().getById((Integer)session.getAttribute("paciente_id")).nombre() %>.</p>
             </div>
         </div>
     </body>

@@ -137,8 +137,7 @@ public class CitaDAO extends AbstractEntityDAO {
                 "FROM citas " + 
                 "INNER JOIN medicos ON citas.id_medico = medicos.id_medico " + 
                 "INNER JOIN pacientes ON citas.id_paciente = pacientes.id_paciente " + 
-                "WHERE medicos.id_usuario = ? OR pacientes.id_usuario = ?;"    
-            ;
+ "WHERE medicos.id_medico = ? OR pacientes.id_paciente = ?;";
             try (PreparedStatement citasUsuarioStmt = st.getConnection().prepareStatement(citasUsuarioQuery)) {
                 citasUsuarioStmt.setInt(1, id_usuario);
                 citasUsuarioStmt.setInt(2, id_usuario);

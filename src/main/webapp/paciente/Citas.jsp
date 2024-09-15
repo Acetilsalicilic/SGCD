@@ -1,7 +1,8 @@
 <%@page import="Auth.Authorize"%>
 <!DOCTYPE html>
 <% //-----------AUTH------------- 
-if (!Authorize.authPermission(session,"paciente")) { response.sendRedirect("/"); } %>
+if (!Authorize.authPermission(session,"paciente")) { response.sendRedirect("/"); }
+%>
 <html lang="en">
     <head>
         <link rel="stylesheet" href="/estilos/navbar.css" />
@@ -47,5 +48,8 @@ if (!Authorize.authPermission(session,"paciente")) { response.sendRedirect("/");
                 </div>
             </div>
         </div>
+        <script>
+            loadInfo();
+        </script>
     </body>
 </html>
