@@ -1,24 +1,39 @@
-<%-- 
-    Document   : InicioPaciente
-    Created on : 10 sep 2024, 12:37:14 p.m.
-    Author     : W10
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="Auth.Authorize"%>
 <!DOCTYPE html>
+<% //-----------AUTH------------- 
+if (!Authorize.authPermission(session,
+"paciente")) { response.sendRedirect("/"); } 
+%>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-        <%
-            if (session.getAttribute("auth") == null || !session.getAttribute("auth").equals("paciente")) {
-                response.sendRedirect("/");
-    }
-
-        %>
+        <link rel="stylesheet" href="/estilos/navbar.css" />
+        <link rel="stylesheet" href="/estilos/paciente/inicioPaciente.css" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Inicio paciente</title>
     </head>
     <body>
-        <h1>Paciente</h1>
-        <input type="datetime-local" name="" id="" step="1800" min="30">
+        <div class="navbar">
+            <div class="nav-logo">
+                <a href="/">
+                    <img src="../img/logo-sgcd.jpg" alt="" id="nav-logo-img" />
+                </a>
+            </div>
+
+            <div class="nav-element-container">
+                <div class="nav-element">
+                    <a href="/paciente" class="nav-link">Inicio paciente</a>
+                </div>
+                <div class="nav-element">
+                    <a href="/paciente/citas" class="nav-link">Ver citas</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-container">
+            <div class="center-element">
+                <h1 class="title">Inicio paciente</h1>
+                <p id="welcome-parag">Bienvenido, <%= session.getAttribute("username") %>.</p>
+            </div>
+        </div>
     </body>
 </html>

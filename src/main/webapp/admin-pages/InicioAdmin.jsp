@@ -39,7 +39,7 @@ if (!Authorize.authPermission(session,
     <div class="page-container">
         <div class="center-element">
             <h1 class="title">Inicio administrador</h1>
-            <p id="welcome-parag">Bienvenido, administrador</p>
+            <p id="welcome-parag">Bienvenido, <%= session.getAttribute("username") %>.</p>
         </div>
     </div>
 </html>

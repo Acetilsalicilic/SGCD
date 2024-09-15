@@ -89,10 +89,10 @@ public final class ProcessRequest {
         for (var usuario : usuarios) {
             if (usuario.nombre_usuario().equals(username) && usuario.contrasena().equals(password)) {
                 System.out.println("Login correct with credentials " + username + " " + password);
-                System.out.println("User foundÑ " + usuario);
 
                 var session = req.getSession(true);
                 session.setAttribute("auth", usuario.tipoUsuario().desc_tipo());
+                session.setAttribute("username", usuario.nombre_usuario());
 
                 setResponse(res);
                 String response = "{\"auth_correct\":\"" + usuario.tipoUsuario().desc_tipo() + "\"}";
