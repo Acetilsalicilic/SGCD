@@ -6,6 +6,7 @@
         response.sendRedirect("/"); } %>
         <link rel="stylesheet" href="../estilos/navbar.css" />
         <link rel="stylesheet" href="../estilos/admin/gestionarPacientes.css" />
+        <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
         <link
             rel="stylesheet"
             href="../estilos/admin/floating/floatingEditarPaciente.css"

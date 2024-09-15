@@ -1,18 +1,16 @@
 <%@page import="Auth.Authorize"%>
 <!DOCTYPE html>
-<%
-    //-----------AUTH-------------
-     if (!Authorize.authPermission(session, "admin")) {
-        response.sendRedirect("/");
-    }
+<% //-----------AUTH------------- 
+if (!Authorize.authPermission(session,
+"admin")) { response.sendRedirect("/"); } 
 %>
 <html>
     <head>
         <link rel="stylesheet" href="../estilos/navbar.css" />
         <link rel="stylesheet" href="../estilos/admin/inicioAdmin.css" />
+        <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Inicio administrador</title>
-        
     </head>
     <body>
         <div class="navbar">
@@ -41,9 +39,7 @@
     <div class="page-container">
         <div class="center-element">
             <h1 class="title">Inicio administrador</h1>
-            <p id="welcome-parag">
-                Bienvenido, administrador
-            </p>
+            <p id="welcome-parag">Bienvenido, administrador</p>
         </div>
     </div>
 </html>

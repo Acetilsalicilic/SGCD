@@ -3,6 +3,7 @@
     <head>
         <link rel="stylesheet" href="../estilos/navbar.css" />
         <link rel="stylesheet" href="../estilos/main/login.css" />
+        <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Iniciar sesion</title>
     </head>
