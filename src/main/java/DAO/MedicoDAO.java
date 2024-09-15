@@ -4,11 +4,14 @@
  */
 package DAO;
 
+import Records.Especialidad;
 import Records.Medico;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -20,34 +23,49 @@ public class MedicoDAO extends AbstractEntityDAO {
         super(con);
     }
     
+    // Create Medico Method
+    public int createMedico(Medico medico) {
+      return inStatementUpdate((st) -> {
+          String createMedicoQuery = "INSERT INTO medicos (id_usuario, id_especialidad, nombre, apellidos) VALUES (?, ?, ?, ?);";
+          try (PreparedStatement createMedicoStmt = st.getConnection().prepareStatement(createMedicoQuery, Statement.RETURN_GENERATED_KEYS)) {
+              createMedicoStmt.setInt(1, medico.usuario().id_usuario());
+              createMedicoStmt.setInt(2, medico.especialidad().id_especialidad());
+              createMedicoStmt.setString(3, medico.nombre_medico());
+              createMedicoStmt.setString(4, medico.apellidos_medico());
+              
+              int affectedRows = createMedicoStmt.executeUpdate();
+              
+              if (affectedRows == 0) {
+                  throw new SQLException("Error al Crear al Medico. No se Creo el Registro.");
+              }
+              
+              try (ResultSet generatedKeys = createMedicoStmt.getGeneratedKeys()) {
+                  if (generatedKeys.next()) {
+                      return generatedKeys.getInt(1);
+                  } else {
+                      throw new SQLException("Error al Crear al Medico. No se Obtuvo el ID Generado.");
+                  }
+              }
+          }
+      });
+    }
+    
+    // Get Medico By ID or All (Read)
     public Medico getById(Integer id_medico) {
         return (Medico) inStatementQuery((st) -> {
-            String medicoByIdQuery =
-                "SELECT " + 
-                "medicos.id_medico, " + 
-                "medicos.id_usuario, " + 
-                "medicos.id_especialidad, " +
-                "medicos.nombre AS nombre_medico, " +
-                "medicos.apellidos AS apellidos_medico, " +
-                "especialidades.id_especialidad, " +
-                "especialidades.desc_espe " + 
-                "FROM medicos " + 
-                "INNER JOIN especialidades ON medicos.id_especialidad = especialidades.id_especialidad " +
-                "WHERE medicos.id_usuario = ?;"
-            ;
+            String medicoByIdQuery = "SELECT * FROM medicos WHERE id_medico = ?;";
             try (PreparedStatement medicoByIdStmt = st.getConnection().prepareStatement(medicoByIdQuery)) {
                 medicoByIdStmt.setInt(1, id_medico);
-                
                 try (var medicoById = medicoByIdStmt.executeQuery()) {
                     if (medicoById.next()) {
                         var usuario = EntityDAOPool.instance().getUsuarioDAO().getById(medicoById.getInt("id_usuario"));
                         var especialidad = EntityDAOPool.instance().getEspecialidadDAO().getTypeEspecialidad(medicoById.getInt("id_especialidad"));
                         return new Medico (
-                            medicoById.getInt("id_medico"),
-                            usuario,
-                            especialidad,
-                            medicoById.getString("nombre_medico"),
-                            medicoById.getString("apellidos_medico")
+                                medicoById.getInt("id_medico"),
+                                usuario,
+                                especialidad,
+                                medicoById.getString("nombre"),
+                                medicoById.getString("apellidos")
                         );
                     } else {
                         return null;
@@ -60,31 +78,21 @@ public class MedicoDAO extends AbstractEntityDAO {
     public ArrayList<Medico> getAll() {
         return (ArrayList<Medico>) inStatementQuery((st) -> {
             var medicos = new ArrayList<Medico>();
-            String medicosAllQuery = 
-                "SELECT " + 
-                "medicos.id_medico, " + 
-                "medicos.id_usuario, " + 
-                "medicos.id_especialidad, " +
-                "medicos.nombre AS nombre_medico, " +
-                "medicos.apellidos AS apellidos_medico, " +
-                "especialidades.id_especialidad, " +
-                "especialidades.desc_espe " + 
-                "FROM medicos " + 
-                "INNER JOIN especialidades ON medicos.id_especialidad = especialidades.id_especialidad;"
-            ;
+            String medicosAllQuery = "SELECT * FROM medicos;";
             try (PreparedStatement medicosAllStmt = st.getConnection().prepareStatement(medicosAllQuery)) {
-                try (var medicosAll = medicosAllStmt.executeQuery()){
-                    while(medicosAll.next()){
+                try (var medicosAll = medicosAllStmt.executeQuery()) {
+                    while (medicosAll.next()) {
                         var usuario = EntityDAOPool.instance().getUsuarioDAO().getById(medicosAll.getInt("id_usuario"));
                         var especialidad = EntityDAOPool.instance().getEspecialidadDAO().getTypeEspecialidad(medicosAll.getInt("id_especialidad"));
                         medicos.add(
                             new Medico (
                                 medicosAll.getInt("id_medico"),
-                                    usuario,
+                                usuario,
                                 especialidad,
-                                medicosAll.getString("nombre_medico"),
-                                medicosAll.getString("apellidos_medico")
-                        ));
+                                medicosAll.getString("nombre"),
+                                medicosAll.getString("apellidos")
+                            )
+                       );
                     }
                     return medicos;
                 }
@@ -92,67 +100,104 @@ public class MedicoDAO extends AbstractEntityDAO {
         });
     }
 
-    public ArrayList<Medico> getByNombre(String nombre) {
-        var medicos = getAll();
-
-        var filteredMedicos = medicos.stream().filter(
-                medico -> medico.nombre_medico().toLowerCase().contains(nombre.toLowerCase())
-        );
-
-        return filteredMedicos.collect(Collectors.toCollection(ArrayList::new));
+    // Find Medico By Name
+    public ArrayList<Medico> getByNombre(String nombre_medico) {
+        return (ArrayList<Medico>) inStatementQuery((st) -> {
+           ArrayList<Medico> medicos = new ArrayList<>(); 
+           String getByNameQuery = "SELECT * FROM medicos WHERE nombre LIKE ?;";
+           try (PreparedStatement getByNameStmt = st.getConnection().prepareStatement(getByNameQuery)) {
+               if (nombre_medico != null) {
+                   getByNameStmt.setString(1, "%" + nombre_medico + "%");
+               }
+               try (ResultSet rs = getByNameStmt.executeQuery()) {
+                    while (rs.next()) {
+                    var usuario = EntityDAOPool.instance().getUsuarioDAO().getById(rs.getInt("id_usuario"));
+                    var especialidad = EntityDAOPool.instance().getEspecialidadDAO().getTypeEspecialidad(rs.getInt("id_especialidad"));
+                    Medico medico = new Medico (
+                        rs.getInt("id_medico"),
+                        usuario,
+                        especialidad,
+                        rs.getString("nombre"),
+                        rs.getString("apellidos")
+                    );
+                    medicos.add(medico);
+                    }
+                }
+            }
+           return medicos;
+        });
     }
-
-    public ArrayList<Medico> getByEspecialidad(String especialidad) {
-        var medicos = getAll();
-
-        var filteredMedicos = medicos.stream().filter(
-                medico -> medico.especialidad().desc_espe().toLowerCase().contains(especialidad.toLowerCase())
-        );
-
-        return filteredMedicos.collect(Collectors.toCollection(ArrayList::new));
+    
+    // Find Medico By Speciality
+    public ArrayList<Medico> getBySpeciality(String desc_espe) {
+        return (ArrayList<Medico>) inStatementQuery((st) -> {
+            ArrayList<Medico> medicos = new ArrayList<>();
+            Especialidad especialidadFind = EntityDAOPool.instance().getEspecialidadDAO().getByDescription(desc_espe);
+            if (especialidadFind != null) {
+                String getMedicosBySpecialityQuery = "SELECT * FROM medicos WHERE id_especialidad = ?;";
+                try (PreparedStatement getMedicosBySpecialityStmt = st.getConnection().prepareStatement(getMedicosBySpecialityQuery)) {
+                    getMedicosBySpecialityStmt.setInt(1, especialidadFind.id_especialidad());
+                    try (ResultSet rs = getMedicosBySpecialityStmt.executeQuery()) {
+                        while (rs.next()) {
+                            var usuario = EntityDAOPool.instance().getUsuarioDAO().getById(rs.getInt("id_usuario"));
+                            Medico medico = new Medico(
+                                rs.getInt("id_medico"),
+                                usuario,
+                                especialidadFind,
+                                rs.getString("nombre"),
+                                rs.getString("apellidos")
+                            );
+                            medicos.add(medico);
+                        }
+                    }
+                }
+            }
+            return medicos;
+        });
     }
-//    
-//    public int update(Medico medico) {
-//        return preparedUpdate((con) -> {
-//            var st = con.prepareStatement("UPDATE medicos SET id_medico=?, id_usuario=?, id_especialidad=?, nombre=?, apellidos=?");
-//            int id_espe;
-//            
-//            try (var stmt = con.createStatement()) {
-//                var rs = stmt.executeQuery("SELECT id_especialidad FROM especialidades WHERE desc_espe='" + medico.especialidad() + "';");
-//                rs.next();
-//                id_espe = rs.getInt("id_especialidad");
-//            }
-//            
-//            st.setInt(1, medico.id());
-//            st.setInt(2, medico.usuario().id_usuario());
-//            st.setInt(3, id_espe);
-//            st.setString(4, medico.nombre());
-//            st.setString(5, medico.apellidos());
-//            
-//            st.execute();
-//            
-//            return 1;
-//        });
-//    }
-//    
-//    public int deleteById(int id) {
-//        return inStatementUpdate((st) -> {
-//            return st.executeUpdate("DELETE FROM medicos WHERE id_medico=" + id + ";");
-//        });
-//    }
-//    
-    public int create(Medico medico) {
-        return preparedUpdate((con) -> {
-            var st = con.prepareStatement("INSERT INTO medicos (id_usuario, id_especialidad, nombre, apellidos) VALUES ( ?, ?, ?, ?);");
-
-            st.setInt(1, medico.usuario().id_usuario().intValue());
-            st.setInt(2, medico.especialidad().id_especialidad());
-            st.setString(3, medico.nombre_medico());
-            st.setString(4, medico.apellidos_medico());
-
-            st.execute();
-
-            return 1;
+    
+    // Update Medico With Object
+    public int updateMedico(Medico medico) {
+        return inStatementUpdate((st) -> {
+            String updateMedicoQuery = "UPDATE medicos SET id_usuario = ?, id_especialidad = ?, nombre = ?, apellidos = ? WHERE id_medico = ?;";
+            try (PreparedStatement updateMedicoStmt = st.getConnection().prepareStatement(updateMedicoQuery)) {
+                updateMedicoStmt.setInt(1, medico.usuario().id_usuario());
+                updateMedicoStmt.setInt(2, medico.especialidad().id_especialidad());
+                updateMedicoStmt.setString(3, medico.nombre_medico());
+                updateMedicoStmt.setString(4, medico.apellidos_medico());
+                updateMedicoStmt.setInt(5, medico.id_medico());                
+                int affectedRows = updateMedicoStmt.executeUpdate();
+                
+                if (affectedRows > 0) {
+                    return affectedRows; // Numero de Filas Afectadas
+                } else {
+                    return -1; // No se Actualizo Ninguna Fila 
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return -1; // Error SQL
+            }
+        });
+    }
+    
+    // Delete Medico By ID
+    public int deleteMedicoById(Integer id_medico) {
+        return inStatementUpdate((st) -> {
+            String deleteMedicoQuery = "DELETE FROM medicos WHERE id_medico = ?;";
+            try (PreparedStatement deleteMedicoStmt = st.getConnection().prepareStatement(deleteMedicoQuery)) {
+                deleteMedicoStmt.setInt(1, id_medico);
+                
+                int affectedRows = deleteMedicoStmt.executeUpdate();
+                
+                if (affectedRows > 0){
+                    return affectedRows; // Se Borro el Medico
+                } else  {
+                    return -1; // No se Elimino Ninguna Fila
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return -1; // Error SQL
+            }
         });
     }
 }
