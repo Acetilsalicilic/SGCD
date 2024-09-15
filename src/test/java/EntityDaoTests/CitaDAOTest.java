@@ -12,6 +12,7 @@ import Records.Servicio;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterAll;
@@ -57,19 +58,50 @@ public class CitaDAOTest {
     }
     
     // Get Citas By ID or All (Read)
+    @Test
+    public void getById() {
+        int id_cita = 2;
+        var rs = instance.getCitaDAO().getById(id_cita);
+        System.out.println("Cita With ID " + id_cita + " Found: " + rs);
+        assertNotNull(rs);
+    }
+    
     @Test 
     public void getAllCitas() {
-        var rs = instance.getCitaDAO().getAllCitas(1);
-        System.out.println(rs);
+        int id_usuario = 1;
+        var rs = instance.getCitaDAO().getAllCitas(id_usuario);
+        System.out.println("Citas Found For User ID " + id_usuario + ": " + rs);
         assertNotNull(rs);
     }
     
     // Check Availability of Schedule
     @Test
     public void horasDisponibles() {
-        Integer id_medico = 1;
+        int id_medico = 1;
         LocalDate fechaPrueba = LocalDate.of(2024, 12, 12);
         List<String> horasDisponibles = EntityDAOPool.instance().getCitaDAO().horasDisponiblesCitas(id_medico, fechaPrueba);
         System.out.println("Horas Disponibles: " + horasDisponibles);
+    }
+    
+    // Update Cita 
+    @Test
+    public void updateCita() {
+        int id_cita = 5;
+        String date_cita = "2024-12-12 11:30";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse(date_cita, formatter);
+        var cita = EntityDAOPool.instance().getCitaDAO().getById(id_cita);
+        var rs = instance.getCitaDAO().updateCita(new Cita(id_cita, cita.medico(), cita.paciente(), cita.servicio(), dateTime));
+        System.out.println("Cita With ID " + id_cita + " Updated Status: " + rs);
+        assertNotNull(rs);
+    }
+    
+    // Delete Cita By ID
+    @Test
+    public void deleteCita() {
+        int id_cita = 6;
+        var rs = instance.getCitaDAO().deleteCitaById(id_cita);
+        System.out.println("Cita With ID " + id_cita + " Deleted Status: " + rs);
+        assertNotNull(rs);
     }
 }

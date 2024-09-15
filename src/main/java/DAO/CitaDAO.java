@@ -56,7 +56,70 @@ public class CitaDAO extends AbstractEntityDAO {
         });
     }
     
+    // Methods to Check Availability of Schedule
+    public List<String> horasDisponiblesCitas(Integer id_medico, LocalDate fecha_cita) {
+        return (List<String>) inStatementQuery((st) -> {
+            List<String> horasOcupadas = new ArrayList<>(); // Lista de Horas Ocupadas (Se Llena con el Query)
+            List<String> horasDisponibles = new ArrayList<>(); // Lista de Horas Disponibles (Se Genera Automaticamente)
+            String horasDisponiblesQuery = 
+                "SELECT fecha_cita " +
+                "FROM citas " +
+                "WHERE id_medico = ? AND DATE(fecha_cita) = ?;"
+            ;
+            
+            // Hora de Inicio y Fin de las Citas
+            LocalTime horaInicio = LocalTime.of(10, 0);
+            LocalTime horaFin = LocalTime.of(13, 0);
+            
+            //  Generar las Horas Disponibles (10:00 a 13:00 hrs) con Intervalos de 30 Minutos
+            while (!horaInicio.isAfter(horaFin)) {
+                horasDisponibles.add(horaInicio.toString());
+                horaInicio = horaInicio.plusMinutes(30);
+            }
+            
+            try (PreparedStatement horasDisponiblesStmt = st.getConnection().prepareStatement(horasDisponiblesQuery)) {
+                horasDisponiblesStmt.setInt(1, id_medico);
+                horasDisponiblesStmt.setDate(2, Date.valueOf(fecha_cita));
+                
+                try (ResultSet rs = horasDisponiblesStmt.executeQuery()) {
+                    while (rs.next()) {
+                        String horaString = rs.getTimestamp("fecha_cita").toLocalDateTime().toLocalTime().toString();
+                        horasOcupadas.add(horaString);
+                    }
+                    // Remover Todas las Horas Ocupadas en la lista de horas disponibles
+                    horasDisponibles.removeAll(horasOcupadas);
+                }
+            }
+            return horasDisponibles;
+        });
+    }
+    
     // Get Citas By ID or All (Read)
+    public Cita getById(Integer id_cita) {
+        return (Cita) inStatementQuery((st) -> {
+            String citaByIdQuery = "SELECT * FROM citas WHERE id_cita = ?;";
+            try (PreparedStatement citaByIdStmt = st.getConnection().prepareStatement(citaByIdQuery)) {
+                citaByIdStmt.setInt(1, id_cita);
+                try (ResultSet rs = citaByIdStmt.executeQuery()) {
+                    if (rs.next()) {
+                        var medico = EntityDAOPool.instance().getMedicoDAO().getById(rs.getInt("id_medico"));
+                        var paciente = EntityDAOPool.instance().getPacienteDAO().getById(rs.getInt("id_paciente"));
+                        var servicio = EntityDAOPool.instance().getServicioDAO().getTypeService(rs.getInt("id_servicio"));
+                        return new Cita(
+                            rs.getInt("id_cita"),
+                            medico,
+                            paciente,
+                            servicio,
+                            rs.getTimestamp("fecha_cita").toLocalDateTime()
+                        );
+                    } else {
+                        return null;
+                    }
+                }
+            }
+        });
+    }
+    
     public ArrayList<Cita> getAllCitas (Integer id_usuario) {
         return (ArrayList<Cita>) inStatementQuery((st) -> {
             var citas = new ArrayList<Cita>();
@@ -102,41 +165,49 @@ public class CitaDAO extends AbstractEntityDAO {
         });
     }
     
-    // Methods to Check Availability of Schedule
-    public List<String> horasDisponiblesCitas(Integer id_medico, LocalDate fecha_cita) {
-        return (List<String>) inStatementQuery((st) -> {
-            List<String> horasOcupadas = new ArrayList<>(); // Lista de Horas Ocupadas (Se Llena con el Query)
-            List<String> horasDisponibles = new ArrayList<>(); // Lista de Horas Disponibles (Se Genera Automaticamente)
-            String horasDisponiblesQuery = 
-                "SELECT fecha_cita " +
-                "FROM citas " +
-                "WHERE id_medico = ? AND DATE(fecha_cita) = ?;"
-            ;
-            
-            // Hora de Inicio y Fin de las Citas
-            LocalTime horaInicio = LocalTime.of(10, 0);
-            LocalTime horaFin = LocalTime.of(13, 0);
-            
-            //  Generar las Horas Disponibles (10:00 a 13:00 hrs) con Intervalos de 30 Minutos
-            while (!horaInicio.isAfter(horaFin)) {
-                horasDisponibles.add(horaInicio.toString());
-                horaInicio = horaInicio.plusMinutes(30);
-            }
-            
-            try (PreparedStatement horasDisponiblesStmt = st.getConnection().prepareStatement(horasDisponiblesQuery)) {
-                horasDisponiblesStmt.setInt(1, id_medico);
-                horasDisponiblesStmt.setDate(2, Date.valueOf(fecha_cita));
+    // Update Cita With Object
+    public int updateCita(Cita cita) {
+        return inStatementUpdate((st) -> {
+            String updateCitaQuery = "UPDATE citas SET id_medico = ?, id_paciente = ?, id_servicio = ?, fecha_cita = ?  WHERE id_cita = ?;";
+            try (PreparedStatement updateCitaStmt = st.getConnection().prepareStatement(updateCitaQuery)) {
+                updateCitaStmt.setInt(1, cita.medico().id_medico());
+                updateCitaStmt.setInt(2, cita.paciente().id_paciente());
+                updateCitaStmt.setInt(3, cita.servicio().id_servicio());
+                updateCitaStmt.setTimestamp(4, Timestamp.valueOf(cita.fecha_cita()));
+                updateCitaStmt.setInt(5, cita.id_cita());
                 
-                try (ResultSet rs = horasDisponiblesStmt.executeQuery()) {
-                    while (rs.next()) {
-                        String horaString = rs.getTimestamp("fecha_cita").toLocalDateTime().toLocalTime().toString();
-                        horasOcupadas.add(horaString);
-                    }
-                    // Remover Todas las Horas Ocupadas en la lista de horas disponibles
-                    horasDisponibles.removeAll(horasOcupadas);
+                int affectedRows = updateCitaStmt.executeUpdate();
+                
+                if (affectedRows > 0) {
+                    return affectedRows; // Numero de Filas Afectadas (Se Actualizo la Cita)
+                } else {
+                    return -1; // No se Actualizo Ninguna Fila
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return -1;
             }
-            return horasDisponibles;
+        });
+    }
+    
+    // Delete Cita By ID
+    public int deleteCitaById(Integer id_cita) {
+        return inStatementUpdate((st) -> {
+            String deleteCitaQuery = "DELETE FROM citas WHERE id_cita = ?;";
+            try (PreparedStatement deleteCitaStmt = st.getConnection().prepareStatement(deleteCitaQuery)) {
+                deleteCitaStmt.setInt(1, id_cita);
+                
+                int affectedRows = deleteCitaStmt.executeUpdate();
+                
+                if (affectedRows > 0) {
+                    return affectedRows; // Se Borro el Usuario 
+                } else {
+                    return -1; // No se Elimino Ninguna Fila 
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return -1; // Error SQL
+            }
         });
     }
     
