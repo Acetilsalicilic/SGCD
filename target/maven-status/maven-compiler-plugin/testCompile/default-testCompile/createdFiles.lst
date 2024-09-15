@@ -6,5 +6,6 @@ EntityDaoTests\MedicoDAOTest.class
 EntityDaoTests\TipoUsuarioDAOTest.class
 EntityDaoTests\PacienteDAOTests.class
 EntityDaoTests\UsuarioDAOTests.class
+EntityDaoTests\ConsultaDAOTest.class
 ConnectionTests\EntitiesInsertTests.class
 ConnectionTests\EntitiesSelectTests.class

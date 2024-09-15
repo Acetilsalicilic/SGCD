@@ -32,7 +32,7 @@ public class EntityDAOPool {
         servicioDao = new ServicioDAO(con);
         especialidadDao = new EspecialidadDAO(con);
         citaDao = new CitaDAO(con);
-        
+        consultaDao = new ConsultaDAO(con);
     }
     
     public static void close() {
@@ -56,6 +56,7 @@ public class EntityDAOPool {
     private ServicioDAO servicioDao;
     private EspecialidadDAO especialidadDao;
     private CitaDAO citaDao;
+    private ConsultaDAO consultaDao;
     
     //--------------Get DAO Methods-------------
     public UsuarioDAO getUsuarioDAO() {
@@ -84,5 +85,9 @@ public class EntityDAOPool {
     
     public CitaDAO getCitaDAO() {
         return citaDao;
+    }
+    
+    public ConsultaDAO getConsultaDAO() {
+        return consultaDao;
     }
 }

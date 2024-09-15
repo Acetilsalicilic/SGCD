@@ -27,4 +27,5 @@ Records\TipoUsuario.class
 DAO\PacienteDAO.class
 interfaces\SQLQuery.class
 DAO\ServicioDAO.class
+DAO\ConsultaDAO.class
 Records\Paciente.class

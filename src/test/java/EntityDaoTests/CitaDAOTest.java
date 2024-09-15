@@ -81,6 +81,7 @@ public class CitaDAOTest {
         LocalDate fechaPrueba = LocalDate.of(2024, 12, 12);
         List<String> horasDisponibles = EntityDAOPool.instance().getCitaDAO().horasDisponiblesCitas(id_medico, fechaPrueba);
         System.out.println("Horas Disponibles: " + horasDisponibles);
+        assertNotNull(horasDisponibles);
     }
     
     // Update Cita 
