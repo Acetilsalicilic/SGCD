@@ -13,8 +13,16 @@
     <label for="editar-apellidos">Apellidos</label>
     <input class="editar-input" type="text" id="editar-apellidos" />
 
+    <datalist id="specialty-type-options">
+        <option value="Dentista ayudante">Dentista ayudante</option>
+    </datalist>
     <label for="editar-telefono">Especialidad</label>
-    <input class="editar-input" type="text" id="editar-telefono" />
+    <input
+        class="editar-input"
+        type="text"
+        id="editar-especialidad"
+        list="specialty-type-options"
+    />
 
     <label for="editar-usuario">Usuario</label>
     <input class="editar-input" type="text" id="editar-usuario" />
@@ -23,5 +31,11 @@
     <input class="editar-input" type="text" id="editar-contrasena" />
 </div>
 <div class="editar-enviar">
-    <button class="editar-button" id="editar-enviar-button">Editar</button>
+    <button
+        class="editar-button"
+        id="editar-enviar-button"
+        onclick="editarButton(this)"
+    >
+        Editar
+    </button>
 </div>

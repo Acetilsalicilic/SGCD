@@ -13,7 +13,7 @@
         <script src="/admin-pages/js_scripts/gestionarMedico.js"></script>
         <link
             rel="stylesheet"
-            href="../estilos/admin/floating/floatingCrearMedico.css"
+            href="../estilos/admin/floating/floatingEditarMedico.css"
         />
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />

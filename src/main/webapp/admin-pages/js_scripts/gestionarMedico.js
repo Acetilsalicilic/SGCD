@@ -102,6 +102,45 @@ function deleteButton(el) {
     });
 }
 
+function editarButton(el) {
+    console.log("Going to edit some folks");
+
+    const $floating = document.body.querySelector(".editar-floating");
+
+    const prevMedico = JSON.parse(
+        el.parentElement.parentElement.getAttribute("data-medico")
+    );
+    console.log(prevMedico);
+
+    try {
+        medico = {
+            nombre: $floating.querySelector("#editar-nombre").value,
+            apellidos: $floating.querySelector("#editar-apellidos").value,
+            especialidad: $floating.querySelector("#editar-especialidad").value,
+            nombre_usuario: $floating.querySelector("#editar-usuario").value,
+            contrasena: $floating.querySelector("#editar-contrasena").value,
+            id_tipo: prevMedico.tipoUsuario.id_tipo,
+            id_usuario: prevMedico.id_usuario,
+            id: prevMedico.id,
+        };
+    } catch (error) {
+        alert("Hubo un error al recolectar los datos!");
+        console.error(error);
+        return;
+    }
+
+    patchMedico(medico).then((json) => {
+        if (json.status) {
+            alert("El medico se actualizo con exito");
+        } else {
+            alert("Algo salio mal");
+            console.error(json);
+        }
+        hideEditar();
+        loadInfo();
+    });
+}
+
 //-----------------DATA MANIPULATION
 function convertMedicos(raw) {
     const medicos = [];
@@ -151,6 +190,42 @@ function hideCrear() {
     document.body.removeChild($element);
 }
 
+function showEditar(el) {
+    if (floatingShown) return;
+    floatingShown = true;
+    const medico = el.parentElement.parentElement.getAttribute("data-medico");
+    const parsedMedico = JSON.parse(medico);
+
+    fetchFragment("/admin-pages/fragments/floatingEditarMedico.html").then(
+        (html) => {
+            const $element = document.createElement("div");
+            $element.setAttribute("class", "editar-floating");
+            $element.setAttribute("data-medico", medico);
+            $element.innerHTML = html;
+
+            $element.querySelector("#editar-nombre").value =
+                parsedMedico.nombre;
+            $element.querySelector("#editar-apellidos").value =
+                parsedMedico.apellidos;
+            $element.querySelector("#editar-especialidad").value =
+                parsedMedico.desc_espe;
+            $element.querySelector("#editar-usuario").value =
+                parsedMedico.nombre_usuario;
+            $element.querySelector("#editar-contrasena").value =
+                parsedMedico.contrasena;
+
+            document.body.appendChild($element);
+        }
+    );
+}
+
+function hideEditar() {
+    if (!floatingShown) return;
+    floatingShown = false;
+    const $element = document.body.querySelector(".editar-floating");
+    document.body.removeChild($element);
+}
+
 //------------------DATA FETCHING
 async function fetchFragment(link) {
     const response = await fetch(link);
@@ -188,7 +263,7 @@ async function patchMedico(medico) {
         method: "put",
         body: JSON.stringify(medico),
     });
-    return await response.json;
+    return await response.json();
 }
 
 //------------------------DOM MANIPULATION

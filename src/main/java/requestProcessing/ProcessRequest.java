@@ -452,7 +452,67 @@ public final class ProcessRequest {
             out.print("{\"status\":\"ok\"}");
         }
     };
-    //--------------------------CITA METHODS---------------------
+
+    public static ProcessRequestMethod putMedico = (req, res) -> {
+        setResponse(res);
+        if (!authAccess(req, res, "admin")) {
+            return;
+        }
+
+        var json = mapper.readValue(req.getReader(), jsonReference);
+
+        String[] data = new String[8];
+
+        data[0] = json.get("id");
+        data[1] = json.get("nombre");
+        data[2] = json.get("apellidos");
+        data[3] = json.get("especialidad");
+        data[4] = json.get("nombre_usuario");
+        data[5] = json.get("contrasena");
+        data[6] = json.get("id_tipo");
+        data[7] = json.get("id_usuario");
+
+        for (var field : data) {
+            if (field == null) {
+                try (var out = res.getWriter()) {
+                    out.print("{\"error\":\"invalid field\"}");
+                    return;
+                }
+            }
+        }
+
+        var usuario = new Usuario(
+                Integer.parseInt(data[7]),
+                pool.getTipoUsuarioDAO().getTypeUser(Integer.parseInt(data[6])),
+                data[4],
+                data[5]
+        );
+
+        var rsUs = pool.getUsuarioDAO().update(usuario);
+        var medico = new Medico(
+                Integer.parseInt(data[0]),
+                usuario,
+                pool.getEspecialidadDAO().getByDescription(data[3]),
+                data[1],
+                data[2]
+        );
+
+        var rsMd = pool.getMedicoDAO().updateMedico(medico);
+
+        try (var out = res.getWriter()) {
+            if (rsMd < 0) {
+                out.print("{\"error\":\"couldn't update medico\"}");
+                return;
+            }
+            if (rsUs < 0) {
+                out.print("{\"error\":\"couldn't update user\"}");
+                return;
+            }
+
+            out.print("{\"status\":\"ok\"}");
+        }
+    };
+//--------------------------CITA METHODS---------------------
     public static ProcessRequestMethod postCita = (req, res) -> {
         setResponse(res);
         if (!authAccess(req, res, "admin")) {

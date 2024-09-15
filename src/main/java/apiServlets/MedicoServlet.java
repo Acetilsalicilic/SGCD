@@ -41,7 +41,7 @@ public class MedicoServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        
+        ProcessRequest.putMedico.process(request, response);
     }
 
 }
