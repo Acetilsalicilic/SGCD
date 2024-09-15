@@ -39,7 +39,7 @@ function showCrear() {
                 console.log(json);
                 let optionElements = "";
                 for (key in json) {
-                    optionElements += `<option id="medico-option-${json[key].nombre_medico}" data-id="${json[key].id_medico}" value="${json[key].nombre_medico}">${json[key].nombre_medico}</option>`;
+                    optionElements += `<option data-name="${json[key].nombre_medico}" data-id="${json[key].id_medico}" value="${json[key].nombre_medico}">${json[key].nombre_medico}</option>`;
                 }
                 $options.innerHTML = optionElements;
                 return fetchAvailableServices();
@@ -72,7 +72,7 @@ function allowTimes() {
 
     const medico = document.querySelector("#crear-medico").value;
     const id_medico = document
-        .querySelector(`#medico-option-${medico}`)
+        .querySelector(`[data-name="${medico}"]`)
         .getAttribute("data-id");
     const date = new Date(document.querySelector("#crear-fecha").value);
     console.log(date);
@@ -101,7 +101,7 @@ function createButton() {
     const time = $floating.querySelector("#crear-hora").value;
     const nombre_medico = $floating.querySelector("#crear-medico").value;
     const id_medico = $floating
-        .querySelector(`#medico-option-${nombre_medico}`)
+        .querySelector(`[data-name="${nombre_medico}"]`)
         .getAttribute("data-id");
 
     const [hour, minute] = time.split(":");
