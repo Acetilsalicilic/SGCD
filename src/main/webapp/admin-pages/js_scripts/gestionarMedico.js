@@ -34,11 +34,8 @@ function searchButton() {
                 } ${query}!`
             );
         } else {
-            console.log("search medico values");
-
             medicos.forEach((medico) => {
                 addMedicoElement(medico);
-                console.log(medico);
             });
         }
     });
@@ -197,10 +194,6 @@ async function patchMedico(medico) {
 //------------------------DOM MANIPULATION
 
 async function addMedicoElement(medico) {
-    console.log("adding element");
-
-    console.log(medico);
-
     const $list = document.body.querySelector(".medicos-list");
     const elementHtml = await fetchFragment(
         "/admin-pages/fragments/medicoElement.html"

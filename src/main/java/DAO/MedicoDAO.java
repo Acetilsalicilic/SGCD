@@ -203,12 +203,12 @@ public class MedicoDAO extends AbstractEntityDAO {
         });
     }
 
-    public int delete(int id) {
-        return preparedUpdate((con) -> {
-            var st = con.prepareStatement("DELETE FROM medicos WHERE id_medico=?;");
-            st.setInt(1, id);
-
-            return 1;
-        });
-    }
+//    public int delete(int id) {
+//        return preparedUpdate((con) -> {
+//            var st = con.prepareStatement("DELETE FROM medicos WHERE id_medico=?;");
+//            st.setInt(1, id);
+//
+//            return 1;
+//        });
+//    }
 }

@@ -436,7 +436,7 @@ public final class ProcessRequest {
         var medico = pool.getMedicoDAO().getById(id);
         int id_usuario = medico.usuario().id_usuario();
 
-        var rsMd = pool.getMedicoDAO().delete(id);
+        var rsMd = pool.getMedicoDAO().deleteMedicoById(id);
         var rsUs = pool.getUsuarioDAO().deleteById(id_usuario);
 
         try (var out = res.getWriter()) {
