@@ -15,6 +15,7 @@ import interfaces.ProcessRequestMethod;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -48,6 +49,7 @@ public final class ProcessRequest {
         var auth = authPermission(req.getSession(false), requiredLevel);
 
         if (!auth) {
+            System.out.println("Access denied for auth value " + req.getSession(false).getAttribute("auth") + " in servlet " + req.getServletPath());
             try (var out = res.getWriter()) {
                 out.print("{\"error\":\"no auth\"}");
             }
@@ -520,4 +522,40 @@ public final class ProcessRequest {
         }
     };
 
+    public static ProcessRequestMethod getCita = (req, res) -> {
+        setResponse(res);
+        if (!authAccess(req, res, "paciente")) {
+            return;
+        }
+
+        String type = req.getParameter("type");
+
+        if (type.equals("available-medicos")) {
+            var medicos = pool.getMedicoDAO().getAll();
+            var resJson = mapper.writeValueAsString(medicos);
+
+            try (var out = res.getWriter()) {
+                out.print(resJson);
+                return;
+            }
+        }
+
+        if (type.equals("available-times")) {
+            int id_medico = Integer.parseInt(req.getParameter("id_medico"));
+            Integer[] timeData = new Integer[3];
+
+            timeData[0] = Integer.parseInt(req.getParameter("year"));
+            timeData[1] = Integer.parseInt(req.getParameter("month"));
+            timeData[2] = Integer.parseInt(req.getParameter("day"));
+
+            var date = LocalDate.of(timeData[0], timeData[1], timeData[2]);
+            var times = pool.getCitaDAO().horasDisponiblesCitas(id_medico, date);
+            var resJson = mapper.writeValueAsString(times);
+
+            try (var out = res.getWriter()) {
+                out.print(resJson);
+                return;
+            }
+        }
+    };
 }
