@@ -152,14 +152,13 @@ public class UsuarioDAO extends AbstractEntityDAO {
             var rs = st.executeQuery("SELECT * FROM usuarios WHERE nombre_usuario = '" + username + "';");
             rs.next();
 
-            var tipoUsuario = EntityDAOPool.instance().getTipoUsuarioDAO().getTypeUser(rs.getInt("id_usuario"));
+            var tipoUsuario = EntityDAOPool.instance().getTipoUsuarioDAO().getTypeUser(rs.getInt("id_tipo_usuario"));
 
             return new Usuario(
                     rs.getInt("id_usuario"),
-                    rs.getInt("id_tipo_usuario"),
+                    tipoUsuario,
                     rs.getString("nombre_usuario"),
-                    rs.getString("contrasena"),
-                    tipoUsuario.desc_tipo()
+                    rs.getString("contrasena")
             );
         });
     }

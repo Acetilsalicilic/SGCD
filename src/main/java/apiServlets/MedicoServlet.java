@@ -35,7 +35,7 @@ public class MedicoServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        
+        ProcessRequest.deleteMedico.process(request, response);
     }
 
     @Override

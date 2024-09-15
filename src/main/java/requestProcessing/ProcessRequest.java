@@ -92,10 +92,10 @@ public final class ProcessRequest {
                 System.out.println("User foundÑ " + usuario);
 
                 var session = req.getSession(true);
-                session.setAttribute("auth", usuario.desc_tipo());
+                session.setAttribute("auth", usuario.tipoUsuario().desc_tipo());
 
                 setResponse(res);
-                String response = "{\"auth_correct\":\"" + usuario.desc_tipo() + "\"}";
+                String response = "{\"auth_correct\":\"" + usuario.tipoUsuario().desc_tipo() + "\"}";
                 System.out.println(response);
                 try (var out = res.getWriter()) {
                     out.print(response);
@@ -169,7 +169,7 @@ public final class ProcessRequest {
         var json = mapper.readValue(req.getReader(), jsonReference);
 
         var usuario = new Usuario(
-                pool.getTipoUsuarioDAO().getIdByDesc(json.get("tipo_usuario")),
+                pool.getTipoUsuarioDAO().getByDesc(json.get("tipo_usuario")),
                 json.get("usuario"),
                 json.get("contrasena")
         );
@@ -227,7 +227,7 @@ public final class ProcessRequest {
         }
 
         var paciente = pool.getPacienteDAO().getById(Integer.parseInt(id_paciente));
-        var rs = pool.getPacienteDAO().deleteById(Integer.parseInt(id_paciente));
+        var rs = pool.getPacienteDAO().deletePacienteById(Integer.parseInt(id_paciente));
         var rsUst = pool.getUsuarioDAO().deleteById(paciente.usuario().id_usuario());
 
         try (var out = res.getWriter()) {
@@ -310,12 +310,12 @@ public final class ProcessRequest {
 
         var rsUs = pool.getUsuarioDAO().update(new Usuario(
                 usuario.id_usuario(),
-                usuario.id_tipo_usuario(),
+                usuario.tipoUsuario(),
                 datos[4],
                 datos[5]
         ));
 
-        var rs = dao.update(paciente);
+        var rs = dao.updatePaciente(paciente);
 
         try (var out = res.getWriter()) {
             if (rs != 1) {
@@ -354,7 +354,7 @@ public final class ProcessRequest {
         if (type.equals("name")) {
             medicos = pool.getMedicoDAO().getByNombre(query);
         } else {
-            medicos = pool.getMedicoDAO().getByEspecialidad(query);
+            medicos = pool.getMedicoDAO().getBySpeciality(query);
         }
 
         try (var out = res.getWriter()) {
@@ -383,7 +383,7 @@ public final class ProcessRequest {
         }
 
         Usuario usuario = new Usuario(
-                pool.getTipoUsuarioDAO().getIdByDesc(json.get("desc_tipo")),
+                pool.getTipoUsuarioDAO().getByDesc(json.get("desc_tipo")),
                 json.get("nombre_usuario"),
                 json.get("contrasena")
         );
@@ -402,7 +402,7 @@ public final class ProcessRequest {
                 json.get("apellidos")
         );
 
-        var rsMd = pool.getMedicoDAO().create(medico);
+        var rsMd = pool.getMedicoDAO().createMedico(medico);
 
         if (rsUs < 0 || rsMd < 0) {
             try (var out = res.getWriter()) {
@@ -413,6 +413,43 @@ public final class ProcessRequest {
             try (var out = res.getWriter()) {
                 out.print("{\"status\":\"ok\"}");
             }
+        }
+    };
+
+    public static ProcessRequestMethod deleteMedico = (req, res) -> {
+        setResponse(res);
+        if (!authAccess(req, res, "admin")) {
+            return;
+        }
+
+        var json = mapper.readValue(req.getReader(), jsonReference);
+
+        Integer id = Integer.parseInt(json.get("id"));
+
+        if (id == null) {
+            try (var out = res.getWriter()) {
+                out.print("{\"error\":\"invalid id\"}");
+                return;
+            }
+        }
+
+        var medico = pool.getMedicoDAO().getById(id);
+        int id_usuario = medico.usuario().id_usuario();
+
+        var rsMd = pool.getMedicoDAO().delete(id);
+        var rsUs = pool.getUsuarioDAO().deleteById(id_usuario);
+
+        try (var out = res.getWriter()) {
+            if (rsMd < 0) {
+                out.print("{\"error\":\"couldn't delete medico\"}");
+                return;
+            }
+            if (rsUs < 0) {
+                out.print("{\"error\":\"couldn't delete user\"}");
+                return;
+            }
+
+            out.print("{\"status\":\"ok\"}");
         }
     };
     //--------------------------CITA METHODS---------------------

@@ -82,6 +82,29 @@ function createButton() {
         });
 }
 
+function deleteButton(el) {
+    const id = el.getAttribute("data-id");
+    const nombre = el.getAttribute("data-name");
+
+    const rs = confirm(
+        `Estas seguro de eliminar al medico con nombre ${nombre}?`
+    );
+
+    if (!rs) return;
+    console.log("Let's delete some folks");
+
+    deleteMedico(id).then((json) => {
+        if (json.status) {
+            alert("El medico se elimino con exito");
+            loadInfo();
+        } else {
+            alert("Hubo un error");
+            loadInfo();
+            console.error(json);
+        }
+    });
+}
+
 //-----------------DATA MANIPULATION
 function convertMedicos(raw) {
     const medicos = [];
@@ -196,6 +219,12 @@ async function addMedicoElement(medico) {
     $element
         .querySelector(".medicos-button-eliminar")
         .setAttribute("data-id", medico.id);
+    $element
+        .querySelector(".medicos-button-eliminar")
+        .setAttribute("data-name", medico.nombre);
+    $element
+        .querySelector(".medicos-button-eliminar")
+        .setAttribute("onclick", "deleteButton(this)");
 
     // Set the data in the element
     $element.querySelector("#display-nombre").textContent = medico.nombre;

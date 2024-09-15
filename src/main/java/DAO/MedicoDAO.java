@@ -53,7 +53,9 @@ public class MedicoDAO extends AbstractEntityDAO {
     // Get Medico By ID or All (Read)
     public Medico getById(Integer id_medico) {
         return (Medico) inStatementQuery((st) -> {
+
             String medicoByIdQuery = "SELECT * FROM medicos WHERE id_medico = ?;";
+
             try (PreparedStatement medicoByIdStmt = st.getConnection().prepareStatement(medicoByIdQuery)) {
                 medicoByIdStmt.setInt(1, id_medico);
                 try (var medicoById = medicoByIdStmt.executeQuery()) {
@@ -198,6 +200,15 @@ public class MedicoDAO extends AbstractEntityDAO {
                 e.printStackTrace();
                 return -1; // Error SQL
             }
+        });
+    }
+
+    public int delete(int id) {
+        return preparedUpdate((con) -> {
+            var st = con.prepareStatement("DELETE FROM medicos WHERE id_medico=?;");
+            st.setInt(1, id);
+
+            return 1;
         });
     }
 }
