@@ -128,9 +128,38 @@ function createButton() {
 
     console.log(cita);
 
-    postCita(cita).then((json) => {
-        console.log(json);
-    });
+    postCita(cita)
+        .then((json) => {
+            console.log(json);
+            if (json.status) {
+                alert("La cita se agendo correctamente");
+            }
+            if (json.error) {
+                alert("Hubo un error");
+            }
+        })
+        .finally(() => {
+            loadInfo();
+            hideCrear();
+        });
+}
+function eliminarButton(el) {
+    const res = confirm("Estas seguro de eliminar la cita?");
+    if (!res) return;
+
+    const id_cita = el.getAttribute("data-id");
+    deleteCita(id_cita)
+        .then((json) => {
+            if (json.status) {
+                alert("La cita se elimino con exito");
+            }
+            if (json.error) {
+                alert("Hubo un error");
+            }
+        })
+        .finally(() => {
+            loadInfo();
+        });
 }
 
 //------------------DATA FETCHING
@@ -169,6 +198,13 @@ async function fetchAllCitas() {
     return await res.json();
 }
 
+async function deleteCita(id) {
+    const res = await fetch(`/api/citas?id=${id}`, {
+        method: "delete",
+    });
+    return await res.json();
+}
+
 //-------------------LIST UPDATES
 
 function showNoCitasAvailable() {
@@ -202,6 +238,11 @@ function addCitaElement(cita) {
         ).innerText = `${cita.paciente.nombre} ${cita.paciente.nombre.apellidos}`;
         $element.querySelector("#display-servicio").innerText =
             cita.servicio.desc_servicio;
+        $element
+            .querySelector(".cita-button")
+            .setAttribute("data-id", cita.id_cita);
+
+        // Add the thing
         $list.appendChild($element);
     });
 }

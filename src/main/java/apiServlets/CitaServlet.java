@@ -35,7 +35,7 @@ public class CitaServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        
+        ProcessRequest.deleteCita.process(request, response);
     }
 
     @Override

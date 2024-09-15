@@ -630,4 +630,27 @@ public final class ProcessRequest {
             }
         }
     };
+
+    public static ProcessRequestMethod deleteCita = (req, res) -> {
+        setResponse(res);
+        if (!authAccess(req, res, "paciente")) {
+            return;
+        }
+
+        int cita_id = Integer.parseInt(req.getParameter("id"));
+
+        var rs = pool.getCitaDAO().deleteCitaById(cita_id);
+
+        if (rs < 0) {
+
+            try (var out = res.getWriter()) {
+                out.print("{\"error\":\"couldn't delete cita\"}");
+                return;
+            }
+        }
+
+        try (var out = res.getWriter()) {
+            out.print("{\"status\":\"ok\"}");
+        }
+    };
 }
