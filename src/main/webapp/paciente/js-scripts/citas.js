@@ -12,6 +12,13 @@ function showCrear() {
     });
 }
 
+function hideCrear() {
+    if (!floatingShown) return;
+    floatingShown = false;
+    const $element = document.body.querySelector(".crear-floating");
+    document.body.removeChild($element);
+}
+
 //------------------DATA FETCHING
 async function fetchFragment(link) {
     const response = await fetch(link);

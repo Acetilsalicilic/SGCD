@@ -10,6 +10,10 @@
         <servlet-name>InicioPaciente</servlet-name>
         <jsp-file>/paciente/InicioPaciente.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>Citas</servlet-name>
+        <jsp-file>/paciente/Citas.jsp</jsp-file>
+    </servlet>
     <!--                  ADMIN                      -->
     
     <servlet>
@@ -37,6 +41,10 @@
     <servlet-mapping>
         <servlet-name>InicioPaciente</servlet-name>
         <url-pattern>/paciente</url-pattern> <!-- Any URL you want here -->
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Citas</servlet-name>
+        <url-pattern>/paciente/citas</url-pattern> <!-- Any URL you want here -->
     </servlet-mapping>
     
     <!--                  ADMIN                      -->

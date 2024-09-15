@@ -1,39 +1,35 @@
-<div class="crear-floating">
-    <div class="crear-header">
-        <h1 class="crear-title">Agendar cita</h1>
-        <button
-            id="crear-cerrar"
-            class="crear-button"
-            onclick="hideCrear(this)"
-        >
-            X
-        </button>
-    </div>
-    <div class="form-container">
-        <label for="crear-fecha">Fecha</label>
-        <input class="crear-input" type="text" id="crear-fecha" />
+<!-- <div class="crear-floating">
+</div> -->
+<div class="crear-header">
+    <h1 class="crear-title">Agendar cita</h1>
+    <button id="crear-cerrar" class="crear-button" onclick="hideCrear()">
+        X
+    </button>
+</div>
+<div class="form-container">
+    <label for="crear-fecha">Fecha</label>
+    <input class="crear-input" type="date" id="crear-fecha" />
 
-        <label for="crear-medico">Medico</label>
-        <input class="crear-input" type="text" id="crear-medico" />
+    <label for="crear-medico">Medico</label>
+    <input class="crear-input" type="text" id="crear-medico" />
 
-        <datalist id="time-options">
-            <!-- <option value="Dentista ayudante">Dentista ayudante</option> -->
-        </datalist>
-        <label for="crear-hora">Hora</label>
-        <input
-            class="crear-input"
-            type="text"
-            id="crear-hora"
-            list="time-options"
-        />
-    </div>
-    <div class="crear-enviar">
-        <button
-            class="crear-button"
-            id="crear-enviar-button"
-            onclick="createButton(this)"
-        >
-            Agendar
-        </button>
-    </div>
+    <datalist id="time-options">
+        <!-- <option value="Dentista ayudante">Dentista ayudante</option> -->
+    </datalist>
+    <label for="crear-hora">Hora</label>
+    <input
+        class="crear-input"
+        type="text"
+        id="crear-hora"
+        list="time-options"
+    />
+</div>
+<div class="crear-enviar">
+    <button
+        class="crear-button"
+        id="crear-enviar-button"
+        onclick="createButton(this)"
+    >
+        Agendar
+    </button>
 </div>
