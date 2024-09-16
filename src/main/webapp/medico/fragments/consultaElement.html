@@ -1,0 +1,29 @@
+<!-- <div class="cita-element"></div> -->
+<div class="cita-col-wrapper">
+    <div class="cita-label-col">
+        <label class="data-label" for="display-fecha">Fecha</label>
+        <label class="data-label" for="display-hora">Hora</label>
+        <label class="data-label" for="display-medico">Medico</label>
+        <label class="data-label" for="display-paciente">Paciente</label>
+        <label class="data-label" for="display-servicio">Servicio</label>
+    </div>
+
+    <div class="cita-data-col">
+        <p class="data-display" id="display-fecha">${nombre}</p>
+        <p class="data-display" id="display-hora">${apellidos}</p>
+        <p class="data-display" id="display-medico">${medico}</p>
+        <p class="data-display" id="display-paciente">paciente</p>
+        <p class="data-display" id="display-servicio">servicio</p>
+    </div>
+</div>
+
+<div class="cita-buttons-container">
+    <button
+        type="button"
+        class="cita-button cita-button-eliminar"
+        onclick="eliminarButton(this)"
+        data-id="${id}"
+    >
+        Eliminar
+    </button>
+</div>

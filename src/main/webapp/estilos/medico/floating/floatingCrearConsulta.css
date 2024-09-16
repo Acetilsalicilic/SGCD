@@ -1,0 +1,87 @@
+.crear-floating {
+    z-index: 20;
+    position: fixed;
+
+    top: 5rem;
+    left: calc(50% - 30vw);
+
+    width: 60vw;
+    height: 500px;
+
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+
+    background-color: rgba(6, 82, 168, 0.744);
+    backdrop-filter: blur(5px);
+
+    padding: 2rem;
+
+    font-family: sans-serif;
+
+    color: white;
+}
+
+.crear-header {
+    display: flex;
+    justify-content: space-between;
+
+    color: white;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    height: 70%;
+
+    justify-content: space-around;
+}
+
+.crear-input {
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+    border-style: solid;
+    border-color: white;
+
+    font-size: 1rem;
+}
+
+.crear-input:focus {
+    background-color: rgba(42, 77, 117, 0.471);
+    border-style: dotted;
+    outline: none;
+}
+
+.crear-enviar {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.crear-button {
+    background-color: transparent;
+    color: white;
+
+    border-style: solid;
+
+    border-color: white;
+
+    padding: 1rem;
+    font-size: 1.2rem;
+}
+
+.crear-button:active {
+    background-color: rgba(42, 77, 117, 0.471);
+    border-style: dotted;
+    outline: none;
+}
+
+#crear-cerrar {
+    height: 2.5rem;
+    text-align: center;
+    padding: 0.5rem;
+
+    background-color: rgba(176, 0, 53, 0.7);
+}
+
+#crear-cerrar:active {
+    background-color: rgba(111, 54, 71, 0.8);
+}

@@ -3,14 +3,14 @@
 function loadInfo() {
     console.log("loading info");
 
-    document.querySelector(".citas-list").innerHTML = "";
+    document.querySelector(".consultas-list").innerHTML = "";
 
-    const $list = document.querySelector(".citas-list");
-    fetchAllCitas().then((json) => {
+    const $list = document.querySelector(".consultas-list");
+    fetchAllconsultas().then((json) => {
         console.log(json);
 
         if (json.length == 0) {
-            showNoCitasAvailable();
+            showNoconsultasAvailable();
         } else {
             json.forEach((cita) => addCitaElement(cita));
         }
@@ -23,40 +23,42 @@ var floatingShown = false;
 function showCrear() {
     if (floatingShown) return;
     floatingShown = true;
-    fetchFragment("/paciente/fragments/floatingCrearCita.html").then((html) => {
-        const $element = document.createElement("div");
-        $element.setAttribute("class", "crear-floating");
-        $element.innerHTML = html;
-        $element.querySelector("#crear-hora").setAttribute("disabled", "");
+    fetchFragment("/medico/fragments/floatingCrearConsulta.html").then(
+        (html) => {
+            const $element = document.createElement("div");
+            $element.setAttribute("class", "crear-floating");
+            $element.innerHTML = html;
+            $element.querySelector("#crear-hora").setAttribute("disabled", "");
 
-        // Set the available medicos
-        const $options = $element.querySelector("#medico-options");
-        const $servicesOptions = $element.querySelector("#servicio-options");
-        console.log($options);
+            // Set the available medicos
+            const $options = $element.querySelector("#paciente-options");
+            const $servicesOptions =
+                $element.querySelector("#servicio-options");
 
-        fetchAvailableDoctors()
-            .then((json) => {
-                console.log(json);
-                let optionElements = "";
-                for (key in json) {
-                    optionElements += `<option data-name="${json[key].nombre_medico}" data-id="${json[key].id_medico}" value="${json[key].nombre_medico}">${json[key].nombre_medico}</option>`;
-                }
-                $options.innerHTML = optionElements;
-                return fetchAvailableServices();
-            })
-            .then((json) => {
-                // Set the available services
-                console.log(json);
-                let servicesOptions = "";
-                for (key in json) {
-                    servicesOptions += `<option data-desc="${json[key].desc_servicio}" data-id="${json[key].id_servicio}" value="${json[key].desc_servicio}">${json[key].desc_servicio}</option>`;
-                }
-                $servicesOptions.innerHTML = servicesOptions;
-            })
-            .finally(() => {
-                document.body.appendChild($element);
-            });
-    });
+            fetchAvailablePacientes()
+                .then((json) => {
+                    let optionElements = "";
+                    for (key in json) {
+                        console.log(json);
+
+                        optionElements += `<option data-name="${json[key].nombre}" data-id="${json[key].id_paciente}" value="${json[key].nombre}">${json[key].nombre}</option>`;
+                    }
+                    $options.innerHTML = optionElements;
+                    return fetchAvailableServices(); // Fetch available services
+                })
+                .then((json) => {
+                    // Set the available services
+                    let servicesOptions = "";
+                    for (key in json) {
+                        servicesOptions += `<option data-desc="${json[key].desc_servicio}" data-id="${json[key].id_servicio}" value="${json[key].desc_servicio}">${json[key].desc_servicio}</option>`;
+                    }
+                    $servicesOptions.innerHTML = servicesOptions;
+                })
+                .finally(() => {
+                    document.body.appendChild($element);
+                });
+        }
+    );
 }
 
 function hideCrear() {
@@ -70,10 +72,6 @@ function hideCrear() {
 function allowTimes() {
     console.log("let's see available times");
 
-    const medico = document.querySelector("#crear-medico").value;
-    const id_medico = document
-        .querySelector(`[data-name="${medico}"]`)
-        .getAttribute("data-id");
     const date = new Date(document.querySelector("#crear-fecha").value);
     console.log(date);
     const sendDate = {
@@ -83,7 +81,7 @@ function allowTimes() {
     };
     console.log(sendDate);
 
-    fetchAvailableTimes(id_medico, sendDate).then((json) => {
+    fetchAvailableTimes(sendDate).then((json) => {
         console.log(json);
         const $options = document.querySelector("#time-options");
         let options = "";
@@ -99,9 +97,9 @@ function createButton() {
     const $floating = document.querySelector(".crear-floating");
     const date = $floating.querySelector("#crear-fecha").value;
     const time = $floating.querySelector("#crear-hora").value;
-    const nombre_medico = $floating.querySelector("#crear-medico").value;
-    const id_medico = $floating
-        .querySelector(`[data-name="${nombre_medico}"]`)
+    const nombre_paciente = $floating.querySelector("#crear-paciente").value;
+    const id_paciente = $floating
+        .querySelector(`[data-name="${nombre_paciente}"]`)
         .getAttribute("data-id");
 
     const [hour, minute] = time.split(":");
@@ -112,12 +110,17 @@ function createButton() {
         .getAttribute("data-id");
 
     const fecha = new Date(date);
-    fecha.setDate(fecha.getDate() + 1);
     fecha.setHours(hour);
     fecha.setMinutes(minute);
 
-    if (fecha.toLocaleString("default", { weekday: "short" }) == "dom") {
-        alert("No hay citas el domingo!");
+    fecha.setDate(fecha.getDate() + 1);
+
+    if (
+        fecha.toLocaleString("default", {
+            weekday: "short",
+        }) == "dom"
+    ) {
+        alert("No hay consultas los domingos!");
         return;
     }
 
@@ -127,7 +130,7 @@ function createButton() {
         day: fecha.getDate(),
         hour: fecha.getHours(),
         minutes: fecha.getMinutes(),
-        id_medico,
+        id_paciente,
         id_servicio,
     };
 
@@ -137,7 +140,7 @@ function createButton() {
         .then((json) => {
             console.log(json);
             if (json.status) {
-                alert("La cita se agendo correctamente");
+                alert("La consulta se agendo correctamente");
             }
             if (json.error) {
                 alert("Hubo un error");
@@ -153,10 +156,10 @@ function eliminarButton(el) {
     if (!res) return;
 
     const id_cita = el.getAttribute("data-id");
-    deleteCita(id_cita)
+    deleteConsulta(id_cita)
         .then((json) => {
             if (json.status) {
-                alert("La cita se elimino con exito");
+                alert("La consulta se elimino con exito");
             }
             if (json.error) {
                 alert("Hubo un error");
@@ -173,38 +176,38 @@ async function fetchFragment(link) {
     return await response.text();
 }
 
-async function fetchAvailableTimes(id_medico, { year, month, day }) {
+async function fetchAvailableTimes({ year, month, day }) {
     const res = await fetch(
-        `/api/citas?type=available-times&id_medico=${id_medico}&year=${year}&month=${month}&day=${day}`
+        `/api/consultas?type=available-times&year=${year}&month=${month}&day=${day}`
     );
     return await res.json();
 }
 
-async function fetchAvailableDoctors() {
-    const res = await fetch("/api/citas?type=available-medicos");
+async function fetchAvailablePacientes() {
+    const res = await fetch("/api/consultas?type=available-pacientes");
     return await res.json();
 }
 
 async function fetchAvailableServices() {
-    const res = await fetch("/api/citas?type=available-services");
+    const res = await fetch("/api/consultas?type=available-services");
     return await res.json();
 }
 
 async function postCita(cita) {
-    const res = await fetch("/api/citas", {
+    const res = await fetch("/api/consultas", {
         method: "post",
         body: JSON.stringify(cita),
     });
     return await res.json();
 }
 
-async function fetchAllCitas() {
-    const res = await fetch(`/api/citas?type=all-citas`);
+async function fetchAllconsultas() {
+    const res = await fetch(`/api/consultas?type=all-consultas`);
     return await res.json();
 }
 
-async function deleteCita(id) {
-    const res = await fetch(`/api/citas?id=${id}`, {
+async function deleteConsulta(id) {
+    const res = await fetch(`/api/consultas?id=${id}`, {
         method: "delete",
     });
     return await res.json();
@@ -212,40 +215,43 @@ async function deleteCita(id) {
 
 //-------------------LIST UPDATES
 
-function showNoCitasAvailable() {
-    const $list = document.querySelector(".citas-list");
+function showNoconsultasAvailable() {
+    const $list = document.querySelector(".consultas-list");
     const $warn = document.createElement("div");
     $warn.setAttribute("class", "cita-element");
-    $warn.innerText = "No hay citas que mostrar";
+    $warn.innerText = "No hay consultas que mostrar";
     $list.appendChild($warn);
 }
 
 function addCitaElement(cita) {
-    const $list = document.querySelector(".citas-list");
+    const $list = document.querySelector(".consultas-list");
     const $element = document.createElement("div");
     $element.setAttribute("class", "cita-element");
+
+    console.log("cita");
+    console.log(cita);
 
     fetchFragment("/paciente/fragments/citaElement.html").then((html) => {
         $element.innerHTML = html;
 
         $element.querySelector(
             "#display-hora"
-        ).innerText = `${cita.fecha_cita[3]}:${cita.fecha_cita[4]}`;
+        ).innerText = `${cita.fecha_consulta[3]}:${cita.fecha_consulta[4]}`;
         $element.querySelector(
             "#display-fecha"
-        ).innerText = `${cita.fecha_cita[0]}/${cita.fecha_cita[1]}/${cita.fecha_cita[2]}`;
+        ).innerText = `${cita.fecha_consulta[0]}/${cita.fecha_consulta[1]}/${cita.fecha_consulta[2]}`;
 
         $element.querySelector(
             "#display-medico"
         ).innerText = `${cita.medico.nombre_medico} ${cita.medico.apellidos_medico}`;
         $element.querySelector(
             "#display-paciente"
-        ).innerText = `${cita.paciente.nombre} ${cita.paciente.nombre.apellidos}`;
+        ).innerText = `${cita.paciente.nombre} ${cita.paciente.apellidos}`;
         $element.querySelector("#display-servicio").innerText =
             cita.servicio.desc_servicio;
         $element
             .querySelector(".cita-button")
-            .setAttribute("data-id", cita.id_cita);
+            .setAttribute("data-id", cita.id_consulta);
 
         // Add the thing
         $list.appendChild($element);

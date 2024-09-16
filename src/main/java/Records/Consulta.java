@@ -12,4 +12,15 @@ import java.time.LocalDateTime;
  */
 public record Consulta(Integer id_consulta, Medico medico, Paciente paciente, Servicio servicio, LocalDateTime fecha_consulta) {
 
+    public Consulta(Integer id_consulta, Medico medico, Paciente paciente, Servicio servicio, LocalDateTime fecha_consulta) {
+        this.id_consulta = id_consulta;
+        this.medico = medico;
+        this.paciente = paciente;
+        this.servicio = servicio;
+        this.fecha_consulta = fecha_consulta;
+    }
+
+    public Consulta(Medico medico, Paciente paciente, Servicio servicio, LocalDateTime fecha_consulta) {
+        this(null, medico, paciente, servicio, fecha_consulta);
+    }
 }

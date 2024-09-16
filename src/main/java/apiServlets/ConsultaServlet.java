@@ -5,41 +5,43 @@
 
 package apiServlets;
 
-import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import requestProcessing.ProcessRequest;
 
 /**
  *
  * @author W10
  */
-@WebServlet(name="UsuarioServlet", urlPatterns={"/api/usuario"})
-public class UsuarioServlet extends HttpServlet {
+@WebServlet(name = "ConsultaServlet", urlPatterns = {"/api/consultas"})
+public class ConsultaServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        ProcessRequest.getUsuario.process(request, response);
+        ProcessRequest.getConsulta.process(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        throw new UnsupportedOperationException("Not suppoerted yet");
+        ProcessRequest.postConsulta.process(request, response);
     }
-    
-//    @Override
-//    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-//    throws ServletException, IOException {
-//        ProcessRequest.deleteUsuario.process(request, response);
-//    }
 
     @Override
-    public String getServletInfo() {
-        return "Short description";
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        ProcessRequest.deleteConsulta.process(request, response);
     }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+        
+    }
+
 }

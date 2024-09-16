@@ -1,0 +1,59 @@
+<!-- <div class="crear-floating">
+</div> -->
+<div class="crear-header">
+    <h1 class="crear-title">Agendar consulta</h1>
+    <button id="crear-cerrar" class="crear-button" onclick="hideCrear()">
+        X
+    </button>
+</div>
+<div class="form-container">
+    <label for="crear-fecha">Fecha</label>
+    <input
+        class="crear-input"
+        type="date"
+        id="crear-fecha"
+        onblur="allowTimes(this)"
+    />
+
+    <datalist id="servicio-options">
+        <!-- <option value="Dentista ayudante">Dentista ayudante</option> -->
+    </datalist>
+    <label for="crear-servicio">Servicio</label>
+    <input
+        class="crear-input"
+        type="text"
+        id="crear-servicio"
+        list="servicio-options"
+    />
+
+    <datalist id="paciente-options">
+        <!-- <option value="Dentista ayudante">Dentista ayudante</option> -->
+    </datalist>
+    <label for="crear-paciente">Paciente</label>
+    <input
+        class="crear-input"
+        type="text"
+        id="crear-paciente"
+        list="paciente-options"
+    />
+
+    <datalist id="time-options">
+        <!-- <option value="Dentista ayudante">Dentista ayudante</option> -->
+    </datalist>
+    <label for="crear-hora">Hora</label>
+    <input
+        class="crear-input"
+        type="text"
+        id="crear-hora"
+        list="time-options"
+    />
+</div>
+<div class="crear-enviar">
+    <button
+        class="crear-button"
+        id="crear-enviar-button"
+        onclick="createButton(this)"
+    >
+        Agendar
+    </button>
+</div>

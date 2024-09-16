@@ -7,6 +7,7 @@ package requestProcessing;
 import static Auth.Authorize.authPermission;
 import DAO.EntityDAOPool;
 import Records.Cita;
+import Records.Consulta;
 import Records.Medico;
 import Records.Paciente;
 import Records.Usuario;
@@ -115,6 +116,20 @@ public final class ProcessRequest {
                     session.setAttribute("paciente_id", id);
                 }
 
+                //Adding medico's id in session
+                if (usuario.tipoUsuario().desc_tipo().equals("medico")) {
+                    var medicos = pool.getMedicoDAO().getAll();
+                    Integer id = -1;
+
+                    for (var medico : medicos) {
+                        if (medico.usuario().equals(usuario)) {
+                            id = medico.id_medico();
+                            break;
+                        }
+                    }
+                    session.setAttribute("medico_id", id);
+                }
+
                 setResponse(res);
                 String response = "{\"auth_correct\":\"" + usuario.tipoUsuario().desc_tipo() + "\"}";
                 System.out.println(response);
@@ -131,53 +146,53 @@ public final class ProcessRequest {
         }
     };
 
-    //---------------------USUARIOS METHODS--------------
-    public static ProcessRequestMethod getUsuario = (request, response) -> {
-        setResponse(response);
-        
-        if (!authAccess(request, response, "admin")) {
-            return;
-        }
-
-        
-        try (var out = response.getWriter()) {
-            int id;
-            
-            try {
-                id = Integer.parseInt(request.getParameter("id"));
-            } catch (Exception e) {
-                out.print("null");
-                return;
-            }
-            
-            Usuario usuario = pool.getUsuarioDAO().getById(id);
-
-            String json = mapper.writeValueAsString(usuario);
-            out.print(json);
-        }
-    };
-    
-    public static ProcessRequestMethod deleteUsuario = (req, res) -> {
-        setResponse(res);
-
-        if (!authAccess(req, res, "admin")) {
-            return;
-        }
-        
-        try (var out = res.getWriter()) {
-            String id = req.getParameter("id");
-
-            int rs = pool.getUsuarioDAO().deleteById(Integer.parseInt(id));
-            
-            if (rs == -1) {
-                out.print("{\"error\":\"couldn't delete\"}");
-            } else if (rs == 0) {
-                out.print("{\"error\":\"no rows deleted\"}");
-            } else {
-                out.print("{\"success\":\"" + rs + "\"}");
-            }
-        }
-    };
+//    ---------------------USUARIOS METHODS--------------
+//    public static ProcessRequestMethod getUsuario = (request, response) -> {
+//        setResponse(response);
+//
+//        if (!authAccess(request, response, "admin")) {
+//            return;
+//        }
+//
+//
+//        try (var out = response.getWriter()) {
+//            int id;
+//
+//            try {
+//                id = Integer.parseInt(request.getParameter("id"));
+//            } catch (Exception e) {
+//                out.print("null");
+//                return;
+//            }
+//
+//            Usuario usuario = pool.getUsuarioDAO().getById(id);
+//
+//            String json = mapper.writeValueAsString(usuario);
+//            out.print(json);
+//        }
+//    };
+//
+//    public static ProcessRequestMethod deleteUsuario = (req, res) -> {
+//        setResponse(res);
+//
+//        if (!authAccess(req, res, "admin")) {
+//            return;
+//        }
+//
+//        try (var out = res.getWriter()) {
+//            String id = req.getParameter("id");
+//
+//            int rs = pool.getUsuarioDAO().deleteById(Integer.parseInt(id));
+//
+//            if (rs == -1) {
+//                out.print("{\"error\":\"couldn't delete\"}");
+//            } else if (rs == 0) {
+//                out.print("{\"error\":\"no rows deleted\"}");
+//            } else {
+//                out.print("{\"success\":\"" + rs + "\"}");
+//            }
+//        }
+//    };
 
     //---------------------------PACIENTES METHODS--------------
     public static ProcessRequestMethod postPaciente = (req, res) -> {
@@ -622,7 +637,6 @@ public final class ProcessRequest {
             var citas = pool.getCitaDAO().getAllCitas(id_paciente);
 
             var resJson = mapper.writeValueAsString(citas);
-            System.out.println(resJson);
 
             try (var out = res.getWriter()) {
                 out.print(resJson);
@@ -651,6 +665,122 @@ public final class ProcessRequest {
 
         try (var out = res.getWriter()) {
             out.print("{\"status\":\"ok\"}");
+        }
+    };
+
+    //-------------------------------CONSULTA METHODS----------------
+    public static ProcessRequestMethod getConsulta = (req, res) -> {
+        setResponse(res);
+        if (!authAccess(req, res, "medico")) {
+            return;
+        }
+
+        String type = req.getParameter("type");
+
+        if (type.equals("all-consultas")) {
+            var consultas = pool.getConsultaDAO().getAllConsultas((Integer) req.getSession(false).getAttribute("medico_id"));
+
+            var resJson = mapper.writeValueAsString(consultas);
+
+            try (var out = res.getWriter()) {
+                out.print(resJson);
+                return;
+            }
+        }
+
+        if (type.equals("available-pacientes")) {
+            var pacientes = pool.getPacienteDAO().getAll();
+            var resJson = mapper.writeValueAsString(pacientes);
+
+            try (var out = res.getWriter()) {
+                out.print(resJson);
+                return;
+            }
+        }
+
+        if (type.equals("available-services")) {
+            var servicios = pool.getServicioDAO().getAll();
+            var resJson = mapper.writeValueAsString(servicios);
+
+            try (var out = res.getWriter()) {
+                out.print(resJson);
+                return;
+            }
+        }
+
+        if (type.equals("available-times")) {
+            Integer[] dateData = new Integer[3];
+
+            dateData[0] = Integer.parseInt(req.getParameter("year"));
+            dateData[1] = Integer.parseInt(req.getParameter("month"));
+            dateData[2] = Integer.parseInt(req.getParameter("day"));
+
+            var date = LocalDate.of(dateData[0], dateData[1], dateData[2]);
+
+            var times = pool.getConsultaDAO().horasDisponiblesCitas((Integer) req.getSession(false).getAttribute("medico_id"), date);
+
+            var resJson = mapper.writeValueAsString(times);
+            try (var out = res.getWriter()) {
+                out.print(resJson);
+                return;
+            }
+        }
+    };
+
+    public static ProcessRequestMethod postConsulta = (req, res) -> {
+        setResponse(res);
+        if (!authAccess(req, res, "medico")) {
+            return;
+        }
+
+        var json = mapper.readValue(req.getReader(), jsonReference);
+
+        var medico = pool.getMedicoDAO().getById((Integer) req.getSession(false).getAttribute("medico_id"));
+        var paciente = pool.getPacienteDAO().getById(Integer.parseInt(json.get("id_paciente")));
+        var servicio = pool.getServicioDAO().getTypeService(Integer.parseInt(json.get("id_servicio")));
+        var dateTime = LocalDateTime.of(
+                Integer.parseInt(json.get("year")),
+                Integer.parseInt(json.get("month")),
+                Integer.parseInt(json.get("day")),
+                Integer.parseInt(json.get("hour")),
+                Integer.parseInt(json.get("minutes"))
+        );
+        var consulta = new Consulta(
+                medico,
+                paciente,
+                servicio,
+                dateTime
+        );
+
+        var rs = pool.getConsultaDAO().createConsulta(consulta);
+
+        try (var out = res.getWriter()) {
+            if (rs < 0) {
+                out.print("{\"error\":\"couldn't create consulta\"}");
+            } else {
+                out.print("{\"status\":\"ok\"}");
+            }
+            return;
+        }
+    };
+
+    public static ProcessRequestMethod deleteConsulta = (req, res) -> {
+        setResponse(res);
+        if (!authAccess(req, res, "medico")) {
+            return;
+        }
+
+        int id = Integer.parseInt(req.getParameter("id"));
+
+        var rs = pool.getConsultaDAO().deleteById(id);
+
+        try (var out = res.getWriter()) {
+            if (rs < 0) {
+                out.print("{\"error\":\"couldn't delete consulta\"}");
+            } else {
+                out.print("{\"status\":\"ok\"}");
+            }
+            return;
         }
     };
 }

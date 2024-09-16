@@ -120,7 +120,7 @@ public class ConsultaDAO extends AbstractEntityDAO {
         });
     }
     
-    public ArrayList<Consulta> getAllConsultas(Integer id_usuario) {
+    public ArrayList<Consulta> getAllConsultas(Integer id_medico) {
         return (ArrayList<Consulta>) inStatementQuery((st) -> {
             var consultas = new ArrayList<Consulta>();
             String consultaUsuarioQuery = 
@@ -137,11 +137,10 @@ public class ConsultaDAO extends AbstractEntityDAO {
                 "FROM consulta " + 
                 "INNER JOIN medicos ON consulta.id_medico = medicos.id_medico " + 
                 "INNER JOIN pacientes ON consulta.id_paciente = pacientes.id_paciente " + 
-                "WHERE medicos.id_usuario = ? OR pacientes.id_usuario = ?;"
-            ;
+ "WHERE medicos.id_medico = ? OR pacientes.id_usuario = ?;"            ;
             try (PreparedStatement consultasUsuarioStmt = st.getConnection().prepareStatement(consultaUsuarioQuery)) {
-                consultasUsuarioStmt.setInt(1, id_usuario);
-                consultasUsuarioStmt.setInt(2, id_usuario);
+                consultasUsuarioStmt.setInt(1, id_medico);
+                consultasUsuarioStmt.setInt(2, id_medico);
                 try (var consultasUsuario = consultasUsuarioStmt.executeQuery()) {
                     while (consultasUsuario.next()) {
                         var medico = EntityDAOPool.instance().getMedicoDAO().getById(consultasUsuario.getInt("id_medico"));
