@@ -137,10 +137,9 @@ public class ConsultaDAO extends AbstractEntityDAO {
                 "FROM consulta " + 
                 "INNER JOIN medicos ON consulta.id_medico = medicos.id_medico " + 
                 "INNER JOIN pacientes ON consulta.id_paciente = pacientes.id_paciente " + 
- "WHERE medicos.id_medico = ? OR pacientes.id_usuario = ?;"            ;
+ "WHERE medicos.id_medico = ?;";
             try (PreparedStatement consultasUsuarioStmt = st.getConnection().prepareStatement(consultaUsuarioQuery)) {
                 consultasUsuarioStmt.setInt(1, id_medico);
-                consultasUsuarioStmt.setInt(2, id_medico);
                 try (var consultasUsuario = consultasUsuarioStmt.executeQuery()) {
                     while (consultasUsuario.next()) {
                         var medico = EntityDAOPool.instance().getMedicoDAO().getById(consultasUsuario.getInt("id_medico"));
@@ -155,6 +154,38 @@ public class ConsultaDAO extends AbstractEntityDAO {
                             consultasUsuario.getTimestamp("fecha_consulta").toLocalDateTime()
                         );
                         
+                        consultas.add(consulta);
+                    }
+                    return consultas;
+                }
+            }
+        });
+    }
+
+    public ArrayList<Consulta> getAllConsultasPaciente(Integer id_paciente) {
+        return (ArrayList<Consulta>) inStatementQuery((st) -> {
+            var consultas = new ArrayList<Consulta>();
+            String consultaUsuarioQuery
+                    = "SELECT * FROM consulta "
+                    + "INNER JOIN medicos ON medicos.id_medico = consulta.id_medico "
+                    + "INNER JOIN pacientes ON pacientes.id_paciente = consulta.id_paciente "
+                    + "WHERE consulta.id_paciente = ?;";
+            try (PreparedStatement consultasUsuarioStmt = st.getConnection().prepareStatement(consultaUsuarioQuery)) {
+                consultasUsuarioStmt.setInt(1, id_paciente);
+                try (var consultasUsuario = consultasUsuarioStmt.executeQuery()) {
+                    while (consultasUsuario.next()) {
+                        var medico = EntityDAOPool.instance().getMedicoDAO().getById(consultasUsuario.getInt("id_medico"));
+                        var paciente = EntityDAOPool.instance().getPacienteDAO().getById(consultasUsuario.getInt("id_paciente"));
+                        var servicio = EntityDAOPool.instance().getServicioDAO().getTypeService(consultasUsuario.getInt("id_servicio"));
+
+                        Consulta consulta = new Consulta(
+                                consultasUsuario.getInt("id_consulta"),
+                                medico,
+                                paciente,
+                                servicio,
+                                consultasUsuario.getTimestamp("fecha_consulta").toLocalDateTime()
+                        );
+
                         consultas.add(consulta);
                     }
                     return consultas;

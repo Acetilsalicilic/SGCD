@@ -671,14 +671,27 @@ public final class ProcessRequest {
     //-------------------------------CONSULTA METHODS----------------
     public static ProcessRequestMethod getConsulta = (req, res) -> {
         setResponse(res);
-        if (!authAccess(req, res, "medico")) {
-            return;
+        var auth = authPermission(req.getSession(false), "medico") || authPermission(req.getSession(false), "paciente");
+
+        if (!auth) {
+            try (var out = res.getWriter()) {
+                out.print("{\"error\":\"no auth\"}");
+                return;
+            }
         }
 
         String type = req.getParameter("type");
 
         if (type.equals("all-consultas")) {
-            var consultas = pool.getConsultaDAO().getAllConsultas((Integer) req.getSession(false).getAttribute("medico_id"));
+            var consultas = new ArrayList<Consulta>();
+
+            if (req.getParameter("for").equals("medico")) {
+                consultas = pool.getConsultaDAO().getAllConsultas((Integer) req.getSession(false).getAttribute("medico_id"));
+            }
+
+            if (req.getParameter("for").equals("paciente")) {
+                consultas = pool.getConsultaDAO().getAllConsultasPaciente((Integer) req.getSession(false).getAttribute("paciente_id"));
+            }
 
             var resJson = mapper.writeValueAsString(consultas);
 

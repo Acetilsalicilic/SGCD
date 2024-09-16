@@ -14,6 +14,10 @@
         <servlet-name>Citas</servlet-name>
         <jsp-file>/paciente/Citas.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>Consultas</servlet-name>
+        <jsp-file>/paciente/VerConsultas.jsp</jsp-file>
+    </servlet>
     <!--                  Medicos                  -->
     <servlet>
         <servlet-name>InicioMedico</servlet-name>
@@ -55,7 +59,10 @@
         <servlet-name>Citas</servlet-name>
         <url-pattern>/paciente/citas</url-pattern> <!-- Any URL you want here -->
     </servlet-mapping>
-    
+    <servlet-mapping>
+        <servlet-name>Consultas</servlet-name>
+        <url-pattern>/paciente/consultas</url-pattern> <!-- Any URL you want here -->
+    </servlet-mapping>
     <!--                  MEDICOS                  -->
     <servlet-mapping>
         <servlet-name>InicioMedico</servlet-name>

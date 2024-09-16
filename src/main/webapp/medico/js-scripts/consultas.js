@@ -202,7 +202,7 @@ async function postCita(cita) {
 }
 
 async function fetchAllconsultas() {
-    const res = await fetch(`/api/consultas?type=all-consultas`);
+    const res = await fetch(`/api/consultas?type=all-consultas&for=medico`);
     return await res.json();
 }
 

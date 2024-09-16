@@ -1,10 +1,8 @@
-<%@page import="DAO.EntityDAOPool"%>
-<%@page import="Auth.Authorize"%>
+<%@page import="DAO.EntityDAOPool"%> <%@page import="Auth.Authorize"%>
 <!DOCTYPE html>
 <% //-----------AUTH------------- 
 if (!Authorize.authPermission(session,
-"paciente")) { response.sendRedirect("/"); } 
-%>
+"paciente")) { response.sendRedirect("/"); } %>
 <html>
     <head>
         <link rel="stylesheet" href="/estilos/navbar.css" />
@@ -27,13 +25,22 @@ if (!Authorize.authPermission(session,
                 <div class="nav-element">
                     <a href="/paciente/citas" class="nav-link">Ver citas</a>
                 </div>
+                <div class="nav-element">
+                    <a href="/paciente/consultas" class="nav-link"
+                        >Ver consultas</a
+                    >
+                </div>
             </div>
         </div>
 
         <div class="page-container">
             <div class="center-element">
                 <h1 class="title">Inicio paciente</h1>
-                <p id="welcome-parag">Bienvenido, <%= EntityDAOPool.instance().getPacienteDAO().getById((Integer)session.getAttribute("paciente_id")).nombre() %>.</p>
+                <p id="welcome-parag">
+                    Bienvenido, <%=
+                    EntityDAOPool.instance().getPacienteDAO().getById((Integer)session.getAttribute("paciente_id")).nombre()
+                    %>.
+                </p>
             </div>
         </div>
     </body>
