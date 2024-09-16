@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<%
+    if (!Auth.Authorize.authPermission(session, "paciente")) {
+        response.sendRedirect("/");
+    }
+%>
 <html lang="en">
     <head>
         <link rel="stylesheet" href="/estilos/navbar.css" />
